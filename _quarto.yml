@@ -3,22 +3,32 @@ project:
   output-dir: docs
 
 website:
-  title: "Sofia Sarak" # also acts as another home button! 
+  title: "Sofia Sarak" # also acts as another home button!
+  # favicon: images/favicon.png
   navbar:
+    # logo: images/logo.png
+    # logo-alt: "description of my logo"
+    # title: false ; use if logo and name is repetitive
     left:
       - href: index.qmd
         text: Home
       # - about.qmd
-      # - href: resources.qmd
+      - href: resources.qmd
+      - icon: github
+        href: https://github.com/sofiasarak
       #   text: Resources # makes it "Resources" in taskbar even if page title is different 
+  page-footer: 
+    left: Copyright 2025, Sofia Sarak
+    right:
+      - icon: github
+        href: https://github.com/sofiasarak/sofiasarak.github.io 
 
 format:
   html:
-    theme: minty
-      - brand
-    css: styles.css
+    theme: styles.scss
     toc: true
     page-layout: full # makes it so the text uses the whole screen
+    mainfont: Manrope
 
 
 

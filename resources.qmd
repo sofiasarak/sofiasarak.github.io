@@ -2,4 +2,39 @@
 title: "Resources"
 format: html
 ---
+## Fake resource number one
 
+resource description
+
+## fake resource numbebr two
+
+resource description
+
+<h1> this is an h1 element </h1>
+
+<h1 class="title">this is an h1 element with the title class</h1>
+
+<p class="orange-text">this paragraph is orange</p>
+
+<p class="center-text">this text is centered</p>
+
+<p class="center-text orange-text"> this text is both centered and orange</p>
+
+---
+describing [something fun]{.orange-text} that I enjoy doing
+
+[Here's a full line]{.orange-text}
+
+
+::: {.orange-text}
+Here's one time line
+
+Here's another line
+
+:::
+
+::: {.center-text}
+This is centered
+:::
+
+<!-- command shift c to comment out highlighted text -->

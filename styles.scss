@@ -1,0 +1,47 @@
+/*-- scss:defaults --*/
+
+// import google fonts
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Manrope:wght@200..800&display=swap');
+
+// fonts
+$bricolage: "Bricolage Grotesque", sans-serif;
+
+// colors
+$darkyellow: #fcc765;
+$mediumgreen: #5a9e6b;
+$lightgreen: #8ed483;
+$cream: #fff9e8ff;
+$lightyellow: #fff2c0ff;
+$darkgreen: #396845ff;
+
+
+// define quarto variables
+$body-bg: $lightyellow;
+$navbar-bg: $darkgreen;
+$navbar-fg: $cream;
+$navbar-hl: $lightgreen;
+$link-color: $lightgreen;
+$body-color: $darkgreen;
+
+/*-- scss:rules --*/
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $bricolage;
+}
+
+h1, h2 {
+  letter-spacing: 5px;
+  font-weight: 800;
+}
+
+.title{
+  color: $darkyellow;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.orange-text {
+  color: orange;
+}
