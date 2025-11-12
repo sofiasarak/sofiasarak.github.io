@@ -1,0 +1,22 @@
+---
+title: "My first blog post!"
+description: "a short description of this blog post"
+date: 2025-11-12
+categories: [Career Development, R]
+image: mangroves.png
+citation: 
+  url: https://sofiasarak.github.io/blog/my-first-blog-post
+bibliography: references.bib
+draft: true
+draft-mode: linked
+---
+
+This is where the body of my blog post begins! I'm going to add a footnote here[^1] Here's an inline footnote[^2]. (written inline and not actually separated out)
+
+[^1]: Here is some additional context that might be helpful.
+
+[^2]: here's my inline note
+
+This blog was created with the help of MEDS Career Development Workshops [@shanny-csik2022].
+
+Let's cite a paper using its DOI [@broman2018].

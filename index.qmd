@@ -1,9 +1,9 @@
 ---
 title: "Sofia Sarak"
-image: sarak_headshot.jpg
+image: headshot_cropped.jpg
 about:
   template: jolla
-  image-shape: rounded
+  image-shape: round
   #image-width: 
   links:
     - text: LinkedIn
