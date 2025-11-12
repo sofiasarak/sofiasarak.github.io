@@ -1,10 +1,31 @@
 [
   {
+    "objectID": "resources.html",
+    "href": "resources.html",
+    "title": "Resources",
+    "section": "",
+    "text": "resource description"
+  },
+  {
+    "objectID": "resources.html#fake-resource-number-one",
+    "href": "resources.html#fake-resource-number-one",
+    "title": "Resources",
+    "section": "",
+    "text": "resource description"
+  },
+  {
+    "objectID": "resources.html#fake-resource-numbebr-two",
+    "href": "resources.html#fake-resource-numbebr-two",
+    "title": "Resources",
+    "section": "fake resource numbebr two",
+    "text": "fake resource numbebr two\nresource description\n\nthis is an h1 element\n\n\nthis is an h1 element with the title class\n\n\nthis paragraph is orange\n\n\nthis text is centered\n\n\nthis text is both centered and orange\n\n\ndescribing something fun that I enjoy doing\nHere’s a full line\n\nHere’s one time line\nHere’s another line\n\n\nThis is centered"
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Sofia Sarak",
     "section": "",
-    "text": "Hello! I do environmental data science!\nWhile this website contains code and projects that I am proud to share with the world, I like doing stuff away from a computer screen, too! My greatest experiences have been studying abroad on the Galapagos Islands and New Zealand, as well as a week spent doing field work in Puerto Rico. In my hometown community, I have worked as a water quality monitoring intern and volunteer at my local urban farm whenever I can. I also have roots in Eastern Europe (Latvia and Ukraine), and I often try to integrate those places into my coursework!\nI am interested in research (especially pertaining to ecological, marine, and climate topics), but I have yet to find my exact niche. I love the environment, how do I only pick one thing?!\nFeel free to navigate around my website to see more about my field work, my abroad experiences, what I do for fun, and of course, my data science and all of the technical skills that come with it."
+    "text": "Hello! I do environmental data science!\nWhile this website contains code and projects that I am proud to share with the world, I like doing stuff away from a computer screen, too! My greatest experiences have been studying abroad on the Galapagos Islands and New Zealand, as well as a week spent doing field work in Puerto Rico. In my hometown community, I have worked as a water quality monitoring intern and volunteer at my local urban farm whenever I can. I also have roots in Eastern Europe (Latvia and Ukraine), and I often try to integrate those places into my coursework!\nFeel free to navigate around my website to see more about my field work, my abroad experiences, what I do for fun, and of course, my data science and all of the technical skills that come with it."
   },
   {
     "objectID": "about.html",
