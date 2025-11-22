@@ -20,9 +20,13 @@ $darkgreen: #396845ff;
 $body-bg: $lightyellow2;
 $navbar-bg: $darkgreen;
 $navbar-fg: $cream;
-$navbar-hl: $lightgreen;
+$navbar-hl: $lightyellow;
 $link-color: $lightgreen;
 $body-color: $mediumgreen;
+//$btn-primary-color: $lightyellow;
+//$btn-primary-bg: $lightyellow;
+//$btn-primary-border-color: $lightyellow;
+//$btn-primary-color: $darkgreen;
 
 /*-- scss:rules --*/
 
@@ -42,7 +46,7 @@ h1, h2 {
 }
 
 .title{
-  color: $darkyellow;
+  color: $darkgreen;
 }
 
 .center-text {
@@ -55,4 +59,8 @@ h1, h2 {
 
 .yellow-text {
   color: $darkyellow;
+}
+
+.darkgreen-text {
+  color: $darkgreen;
 }
