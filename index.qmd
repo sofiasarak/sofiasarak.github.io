@@ -1,9 +1,9 @@
 ---
 title: "Sofia Sarak"
-image: headshot_cropped.jpg
+image: images/sarak_headshot.jpg
 about:
-  template: jolla
-  image-shape: round
+  template: trestles
+  image-shape: rounded
   #image-width: 
   links:
     - text: LinkedIn
@@ -19,8 +19,8 @@ about:
       href: mailto:sarak@ucsb.edu
 ---
 
-Hello! I do environmental data science!
+<h1>Hello, I do environmental data science!</h1>
 
-While this website contains code and projects that I am proud to share with the world, I like doing stuff away from a computer screen, too! My greatest experiences have been studying abroad on the Galapagos Islands and New Zealand, as well as a week spent doing field work in Puerto Rico. In my hometown community, I have worked as a water quality monitoring intern and volunteer at my local urban farm whenever I can. I also have roots in Eastern Europe (Latvia and Ukraine), and I often try to integrate those places into my coursework!
+<h3>This website is currently under partial construction (data analysis projects coming soon!).
 
-Feel free to navigate around my website to see more about my field work, my abroad experiences, what I do for fun, and of course, my data science and all of the technical skills that come with it.
+For now, please feel free to browse through my Github and LinkedIn for more on what I do.</h3>

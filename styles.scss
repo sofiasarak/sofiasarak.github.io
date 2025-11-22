@@ -22,12 +22,18 @@ $navbar-bg: $darkgreen;
 $navbar-fg: $cream;
 $navbar-hl: $lightgreen;
 $link-color: $lightgreen;
-$body-color: $darkgreen;
+$body-color: $mediumgreen;
 
 /*-- scss:rules --*/
 
-h1, h2, h3, h4, h5, h6 {
+h3, h4, h5, h6 {
   font-family: $bricolage;
+  color:$mediumgreen;
+}
+
+h1, h2 {
+  font-family: $bricolage;
+  color:$darkgreen;
 }
 
 h1, h2 {
@@ -45,4 +51,8 @@ h1, h2 {
 
 .orange-text {
   color: orange;
+}
+
+.yellow-text {
+  color: $darkyellow;
 }

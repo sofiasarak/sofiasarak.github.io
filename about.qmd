@@ -2,8 +2,26 @@
 title: "About"
 ---
 
-About this site
+<h2>Education</h2>
 
-```{r}
-1 + 1
-```
+<p class="yellow-text">**University of California, Santa Barbara (2026),** Master of Environmental Data Science</p>
+
+Group Capstone Project: TBD
+
+<p class="yellow-text">**Wesleyan University (2025),** Bachelor of Arts in Earth & Environmental Sciences, Economics</p>
+
+Group Capstone Project: "Ants, Plants, and Isotopes: Investigating the Trophic Levels of Guanica Dry Forest"
+
+Relevant Coursework: Soils, Sedimentology, Renewable Energy, Environmental and Resource Economics
+
+<h2>Study Abroad</h2>
+
+<p class="yellow-text">**University of Otago (Fall 2024)**</p>
+
+Courses:
+
+<p class="yellow-text">**La Universidad del San Francisco de Quito (January 2024)**</p>
+
+Course:
+
+<h2>Research and Professional Experience</h2>

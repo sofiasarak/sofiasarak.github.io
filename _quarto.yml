@@ -12,9 +12,9 @@ website:
     left:
       - href: index.qmd
         text: Home
-      # - about.qmd
+      - about.qmd
       - posts.qmd
-      - href: resources.qmd
+      #- href: resources.qmd
       - icon: github
         href: https://github.com/sofiasarak
       #   text: Resources # makes it "Resources" in taskbar even if page title is different 
