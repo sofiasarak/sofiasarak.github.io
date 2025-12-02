@@ -1,0 +1,408 @@
+---
+title: "index"
+format: html
+---
+
+# Exploring Trace-Element Accumulation in Invertebrate Based on Water Concentrations
+
+The following blog post narrates a statistical analysis performed on water-quality, bed-sediment, and invertebrate tissue trace-element concentrations for tributaries in the Clark Fork Basin, Montana. The use of the gamma and segmented statistical models aims to confirm or deny the presence of a break-point at which the relationship between invertebrate and water trace-element concentrations changes. 
+
+Results such as these have the potential to influence policy decisions regarding water ecosystem rehabilitation after years of mining and industry pollution. 
+
+## Clark Fork Basin Data
+
+This data set is sourced from the [USGS National Water Information System database](https://doi.org/10.5066/F7P55KJN). It contains trace-element concentration values of water, sediment, and species of small invertebrates (caddisflies and stone flies) along the tributaries of the Clark Fork Basin, Montana (July 2021).
+
+![](images/stats_proj_map.png)
+Map of study area (CITE SOURCE)
+
+These data were collected as part of a monitoring effort. Water, bed sediment, and invertebrate tissue were sampled in streams that contain trace elements associated with historical mining and smelting activities. Large-scale mining and smelting were prevalent in the basin for more than 100 years but are now either discontinued or reduced in scale. Current (as of 2020) land uses are primarily cattle production, logging, mining, residential development, and recreation.
+
+Concern about the toxicity of trace elements to the aquatic ecosystem and human health has resulted in a comprehensive effort by State, Federal, Tribal, and private entities to characterize the aquatic resources in the Clark Fork Basin. This effort was designed to guide and monitor remedial activities and to evaluate the effectiveness of remediation and cleanup.
+
+Sampling methods for the three elements can be found in the [original report](https://pubs.usgs.gov/publication/ofr20221090/full). In this analysis, we use [insert final number] elements that were tested across water, sediment, and invertebrate tissue, in an effort to explore the impact of water contamination level on trace-element accumulation in tissue. 
+
+Trace-element concentration in water is treated as the main predictor variable for the concentration of the corresponding trace-element in invertebrate tissue. This is because the species tested (as most marine invertebrates generally) obtain oxygen through gills filtration. This involves the direct input of water, causing the accumulation of pollutant is tissue (cite). 
+
+![](images/dag.png)
+Directed Acyclic Graph depicting the relationship between our variables of interest.
+
+Sediment concentration acts as both a source and sink of trace-elements in relation to water, as it both takes up and stores over the long term (potentially later releasing) trace-elements. Species may have an effect on trace-element accumulation as it may intrdouce differences in metabolic function, but it will not be explored in this analysis.
+
+### Data Exploration
+
+The following figures are useful to visualize the similarities and differences in distribution of trace-elements across the three sinks (water, sediment, and invertebrate tissue) tested, as well as provide a quick overview of the range that each trace-element spans.
+
+```{r}
+#| message: false
+#| echo: false
+library(here)
+library(tidyverse)
+library(janitor)
+library(ggplot2)
+library(segmented)
+library(patchwork)
+```
+
+```{r}
+#| message: false
+#| echo: false
+# Loading in data
+biota <- read_csv(here("blog/stats-proj/data/biota.csv")) %>% 
+  clean_names()
+sediment <- read_csv(here("blog/stats-proj/data/sediment.csv")) %>% 
+  clean_names()
+waterquality <- read_csv(here("blog/stats-proj/data/waterquality.csv")) %>% 
+  clean_names()
+```
+
+```{r}
+#| warning: false
+#| echo: false
+waterquality <- waterquality %>% 
+  mutate(date = mdy(date), 
+         month = month(date, label = TRUE),
+         year = year(date)) %>% 
+  relocate(c(month, year), .after = date) %>% 
+  filter(month == "Jul") %>% 
+  filter(year == 2021) %>% 
+  dplyr::select(-contains("rc_")) %>% 
+  pivot_longer(cols = nitrate_plus_nitrite:suspended_sediment_concentration,
+               names_to = "constituent",
+               values_to = "concentration_water") %>% 
+   mutate(station_id = as.character(station_id))
+
+waterquality$constituent <- gsub("_wf$", "", waterquality$constituent)
+waterquality$constituent <- gsub("_wu$", "", waterquality$constituent)
+
+sediment <- sediment %>% 
+  dplyr::select(-contains(c("rc_", "flag"))) %>% 
+  pivot_longer(cols = arsenic:zinc,
+               names_to = "constituent",
+               values_to = "concentration_sediment") %>% 
+  mutate(station_id = as.character(station_id))
+
+biota <- biota %>% 
+  dplyr::select(-contains(c("rc_", "flag"))) %>% 
+  mutate(lead = as.numeric(lead)) %>% 
+  pivot_longer(cols = arsenic:zinc,
+               names_to = "constituent",
+               values_to = "concentration_biota") %>% 
+  mutate(station_id = as.character(station_id))
+```
+
+```{r}
+#| echo: false
+waterquality_filtered <- waterquality %>%
+  filter(constituent %in% sediment$constituent)
+
+enviro <- inner_join(waterquality_filtered, sediment, by = c("constituent", "station_id"), 
+                     relationship = "many-to-many")
+conc <- inner_join(enviro, biota, by = c("constituent", "station_id"),
+                   relationship = "many-to-many")
+```
+
+```{r}
+#| echo: false
+conc_arsenic <- conc %>% 
+  filter(constituent == "arsenic")
+
+conc_arsenic <- conc_arsenic %>% 
+  mutate(sediment_conc_bins = cut(conc_arsenic$concentration_sediment,breaks = c(0, 50, 100, 150)))
+```
+
+```{r}
+#| echo: false
+#| warning: false
+water_plot <- ggplot(data = conc, aes(x = constituent, y = concentration_water)) +
+  geom_boxplot(aes(fill = constituent)) +
+  theme_minimal() +
+  labs(x = "Trace-Element",
+       y = "Concentration (µg/L)",
+       title = "Water Quality") +
+  scale_fill_brewer(name = "Trace-Element", palette = "Blues")
+                                   
+sediment_plot <- ggplot(data = conc, aes(x = constituent, y = concentration_sediment)) +
+  geom_boxplot(aes(fill = constituent)) +
+  theme_minimal() +
+  labs(x = "Trace-Element",
+       y = "Concentration (µg/L)",
+       title = "Sediment") +
+  scale_fill_brewer(name = "Trace-Element", palette = "Blues") 
+
+invert_plot <- ggplot(data = conc, aes(x = constituent, y = concentration_biota)) +
+  geom_boxplot(aes(fill = constituent)) +
+  theme_minimal() +
+  labs(x = "Trace-Element",
+       y = "Concentration (µg/L)",
+       title = "Invertebrate Tissue") +
+  scale_fill_brewer(name = "Trace-Element", palette = "Blues")
+
+all_plots <- water_plot / sediment_plot / invert_plot +
+  plot_layout(axis_titles = 'collect',
+              guides = 'collect')
+
+all_plots
+```
+
+It appears that out of all of the trace-elements we have data on, iron and manganese have the have the highest concentration across water, sediment, and invertebrate tissue. Invertebrate tissue holds the highest concentrations of trace-elements, following the logic that solutes accumulate in tissue.
+
+```{r}
+#| echo: false
+#| warning: false
+water_conc_plot <- ggplot(data = conc, aes(x = concentration_water, y = concentration_biota)) + 
+  geom_point(size = 0.75) +
+  facet_wrap(~constituent, ncol = 4, scales = "free") +
+  theme_minimal() +
+  theme(strip.background = element_rect("#acd0f2")) +
+  labs(x = "Water (µg/L)",
+       y = "Biota (µg/L)",
+       title = "Trace-Element Concentrations: Water") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+water_conc_plot
+```
+
+Considering the axes of our plots, we can see that all of our trace-elements exist at varying ranges of concentration in both water and invertebrate tissue. There appears to be a visual positive relationship in some of the facets -- such as arsenic, copper, and zinc.
+
+```{r}
+#| echo: false
+#| warning: false
+sed_conc_plot <- ggplot(data = conc, aes(x = concentration_sediment, y = concentration_biota)) + 
+  geom_point(size = 0.75) +
+  facet_wrap(~constituent, ncol = 4, scales = "free") +
+  theme_minimal() +
+  theme(strip.background = element_rect("#acd0f2")) +
+  labs(x = "Sediment (µg/g)",
+       y = "Biota (µg/L)",
+       title = "Trace-Element Concentrations: Bed Sediment") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+sed_conc_plot
+```
+
+Similar to the previous figure, we can come to the conclusion that trace-elements occur at different scales. The visual positive relationship between sediment and invertegrate tissue is more frequent across trace-elements than between water and invertebrate tissue.
+
+## Why Gamma and Segmented/Breakpoint Models?
+
+### Model 1: Segmented
+
+The **segmented/break-point** (or sometimes referred to as **broken-line**) statistical model is a regression analysis where the relationship between the response and one or more predictor variables contain a break-point at which the relationship between the response and predictor variables changes. This sort of model is common in fields such as epidemiology, occupational medicine, toxicology, and ecology, where it is of interest to assess threshold value where the effect of the covariate changes.
+
+We will will use model in our analysis to explore whether their is a threshold value(s) at which the relationship between trace-element concentration in water and trace-element accumulation in invertebrates changes.
+
+To test this analysis on simulated data, we can do so by feeding it data that has a known break-point, such as that below.
+
+```{r}
+#| warning: false
+#| echo: false
+# Simulate data frame with known break-point of 50
+sample_data <- data.frame(x = seq(1:100))
+
+sample_data <- sample_data %>% 
+  mutate(y = if_else(x < 50, true = x, false = x*2-50))
+
+ggplot(data = sample_data, aes(x = x, y = y)) +
+  geom_line(color = "#acd0f2",
+            lwd = 1.5) +
+  geom_vline(xintercept = 50, color = "gray", linetype = "dashed") + 
+  theme_light() +
+  labs(title = "Simulated Data with Known Breakpoint at x = 50")
+```
+
+To follow the steps of a segmented model, we first apply a linear regression model to the data, then the segmented model.
+
+```{r}
+#| echo: false
+# Simulate data frame with known break-point of 50
+sample_data <- data.frame(x = seq(1:100))
+
+sample_data <- sample_data %>% 
+  mutate(y = if_else(x < 50, true = x, false = x*2-50))
+```
+
+```{r}
+#| warning: false
+# Run lm model on it
+sample_model_seg_1 <- lm(data = sample_data, y~x)
+
+# Run segmented model on lm (note: function comes from the R package "segmented")
+sample_model_seg_2 <- segmented(sample_model_seg_1, seg.Z = ~x)
+```
+
+If we were successful, the summary should return an estimated breakpoint at x = 50.
+```{r}
+#| warning: false
+# Does it return a break-point of 50?
+summary(sample_model_seg_2)$psi
+```
+
+It does!
+
+### Model 2: Gamma
+
+Y∼Gamma(μ, k),log(μ)=β0​+β1​x+β2​(x−τ)
+
+The segmented model must be applied to an already existing linear regression model, as it builds off of an already-analyzed relationship between the response and predictor variable(s) -- segmented analysis simply determines where the analyzed relationship changes.
+
+Therefore, for the first step of our analysis we will use a **gamma distribution** statistical model. It is appropriate for data that contains continuous variables that are always positive and have skewed distributions. Our data matches this description, as trace-element concentrations are never negative (and our data contains no values of 0), and higher concentrations occur less frequently than lower ones.
+
+The gamma distribution is made up of the parameters shape and scale, which relate to the mean and variance of the data through the following formulas.
+
+To test this analysis on simulated data, we can do so by feeding it data that has a known gamma distribution, simulated using the `rgamma` function. We can then confirm that our analysis worked by returning the shape and scale of the gamma model (related to dispersion, formulas below), and seeing if they match.
+
+```{r}
+m <- 50 # true mean
+v <- 25  # true variance
+simulated_data <- data.frame(y = rgamma(n = 100, shape = (m^2)/v, scale = v/m))
+```
+
+```{r}
+#| echo: false
+m <- 50 # true mean
+v <- 25  # true variance
+simulated_data <- data.frame(y = rgamma(n = 100, shape = (m^2)/v, scale = v/m))
+
+ggplot(data = simulated_data, aes(x = y)) +
+  geom_density(color = "#acd0f2",
+               lwd = 1.5) +
+  geom_vline(xintercept = 50, color = "gray", linetype = "dashed") + 
+  theme_light() +
+  labs(title = "Simulated Data, Gamma Distribution")
+```
+
+```{r}
+model <- glm(y ~ 1, 
+          data = simulated_data,
+          family = Gamma(link = "identity"))
+```
+
+## Hypotheses
+
+Through our multi-step analysis, we aim to answer the following questions:
+
+1. Does trace-element concentration in water increase trace-element concentration in macroinvertebrates?
+2. Is the risk of trace-element contamination/ingestion constant across the whole range of concentrations in sediment and water?
+3. If the risk is sediment/water-concentration dependent, does a threshold value exist?
+
+**Null Hypothesis:** There is no relationship between trace-element concentration in water and biota, and therefore a breakpoint doesn't exist.
+
+**Alternative Hypthesis:** There is a positive relationship between trace-element concentration in water and biota, and a breakpoint does exist.
+
+## The Analysis
+
+This blog post will only feature the code for the trace-element arsenic, but the same steps can be applied to each trace-element (with the exception of values that correspond to range), and will be included in the interpretation section below.
+
+As stated above, we explore the effect of trace-element concentration in water on the corresponding concentration in biota tissue, controlling for sediment concentration.
+
+**Step 1:** Generating models from original data.
+```{r}
+# Run gamma model on arsenic data
+conc_model_gamma <- glm(concentration_biota ~ concentration_water + concentration_sediment, 
+                   data = conc_arsenic, 
+                   family = Gamma(link = "log")) # Log as link function to account for exponential nature of data
+
+# Run segmented model on gamma model (note: segmented function comes from the "segmented" R package)
+conc_model_seg <- segmented(obj = conc_model_gamma, seg.Z = ~concentration_water + concentration_sediment)
+```
+
+**Step 2:** Applying models to generated values.
+```{r}
+# Create prediction grid with levels of water and sediment concentrations
+pred_grid <- expand_grid(concentration_water = 0:30,
+                         concentration_sediment = 0:150)
+
+# Applying gamma model to simulated values
+conc_model_gamma_se <- predict(object = conc_model_gamma,
+                          newdata = pred_grid,
+                          type = "link", # stay in link space
+                          se.fit = TRUE)
+
+# Apply segmented model to simulated values
+conc_model_seg_se<- predict(object = conc_model_seg,
+                          newdata = pred_grid,
+                          type = "link", # stay in link space
+                          se.fit = TRUE)
+```
+
+**Step 3:** Using predicted values to plot Gamma distribution.
+
+The following code extracts the predicted concentrations from `conc_model_gamma_se` results, as well as the 95% confidence intervals for both the predicted values and our real data.
+```{r}
+#| label: gamma-model
+
+# Add data columns corresponding to predicted values
+# Starting in link space and then using exp() to get to response space
+concentration_pred <- pred_grid %>% 
+  mutate(
+    # log of predicted concentration values
+    log_conc = conc_model_gamma_se$fit,
+    
+    # 95% CI of concentration predictionvalues in link space
+    log_conc_se = conc_model_gamma_se$se.fit,
+    log_conc_lwr = qnorm(0.025, mean = log_conc, sd = log_conc_se),
+    log_conc_upr = qnorm(0.975, mean = log_conc, sd = log_conc_se),
+    
+    # undo the link function -- in this case log --  using exp()
+    conc = exp(log_conc),
+    conc_lwr = exp(log_conc_lwr),
+    conc_upr = exp(log_conc_upr))
+    
+# Calculate shape and scale for gamma distribution ribbons in plot
+shape <- (concentration_pred$conc^2)/var(concentration_pred$conc)
+scale <- var(concentration_pred$conc)/concentration_pred$conc
+
+# 95% CI of actual data (using gamma distribution)
+concentration_pred <- pred_grid %>% 
+  mutate(
+    conc_lwr_gamma = qgamma(0.025, shape = shape, scale = scale),
+    conc_upr_gamma = qgamma(0.975, shape = shape, scale = scale))
+```
+
+The plots below are an intermediary step before the application and plotting of the segmented model.
+
+![](images/gamma_plot_norm.png)
+![](images/gamma_plot_gamma.png)
+
+**Step 4:** Use predicted values to plot segmented distribution.
+
+In a similar manner to the code above, columns are added to the prediction grid using the results of `conc_model_seg_se`. The following plot is created, with a break-point at x = 11.
+
+The segmented model is typically presented in log space, as it is the log of the response variable that appears like linear piece-wise function (ie., as a break-point).
+
+![](images/seg_plot_log.png)
+
+To better visualize the gamma relationship we are exporing, response space is plotted below (the same breakpoint is visible, but now the relationship between predictor and response is not linear, but exponential).
+
+![](images/seg_plot_response.png)
+
+## Interpretation
+
+Visually, it appears that both a positive relationship and a break-point exist between arsenic concentration in water and biota. To confirm, we can take a look at the model summary outputs.
+
+```{r}
+# Return the coefficients and their statistical significance
+conc_model_gamma$coefficients
+
+# Return break-points
+conc_model_seg$psi
+
+# Return coefficients before and after breakpoints
+conc_model_seg$coefficients
+```
+
+These outputs correspond to the questions we asked at the beginning:
+
+1. Does trace-element concentration in water increase trace-element concentration in invertebrates?
+
+The `concentration_water` coefficient of our gamma model returns a value of 0.08, which is significant at a 99% confidence level. We can reject our null hypothesis that there is no relationship between water and invertebrate trace-element concentration.
+
+2. Is the risk of trace-element contamination/ingestion constant across the whole range of concentrations in sediment and water?
+3. If the risk is sediment/water-concentration dependent, does a threshold value exist?
+
+Our segmented model returns a break-point of `concentration_water` = 11. Additionally, the slopes before and after the break-point (-0.03 and 0.23 respectively) are both significant at the 99% confidence level. Thus, we can reject the second part of our null hypothesis, that the relationship between trace-element water and invertebrate concentration stays consistent across all values.
+
+## Other Trace-Elements
+
+Plots of the remaining trace-elements -- copper, iron, lead, manganese, and zinc -- are below with their corresponding break-point and gamma coefficient values.
