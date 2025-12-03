@@ -1,11 +1,16 @@
 ---
-title: "Los Angeles Fires (False Color Imagery, Socioeconomic Analysis)"
+title: "Los Angeles Fires: Vegetation Health & Socioeconomic Analysis"
 format: html
 ---
 
+
+![Destroyed homes in Altadena, CA](images/la_fires.png){fig-align="center", width = 80%}
+
+[Philip Cheung for The New York Times](https://www.nytimes.com/article/california-eaton-palisades-deadliest-fire-worst.html)
+
 This blog post summarizes anlyses involving the Eaton and Palisades Fires that took place in Los Angeles County during January 2025. It will speficially highlight the vegetation damage through false color imagery (part 1) and explore internet availability of census blocks affected by the fires (part 2).
 
-*Complete code for the analyses can be found in the following Github repositories:* [part 1](https://github.com/sofiasarak/eds220-hwk4); part 2
+*Complete code for the analyses can be found in the following Github repositories:* [part 1](https://github.com/sofiasarak/eds220-hwk4) & [part 2](https://github.com/sofiasarak/eds220-sections) (see week8_la_fires notebook).
 
 ## Overview 
 
@@ -33,8 +38,7 @@ Palisades and Eaton fire perimeter data were sourced from [LA County's GIS hub](
 
 **EJI**
 
-The Environmental Justice Index uses data from the U.S. Census Bureau, the U.S. Environmental Protection Agency, the U.S. Mine Safety and Health Administration, the U.S. Geological Survey, OpenStreetMap, the U.S. Department of Transportation, and the U.S. Centers for Disease Control and Prevention to rank the cumulative impacts of environmental injustice on health for every census tract. Census tracts are subdivisions of counties for which the Census collects statistical data. The EJI ranks each tract on 36 environmental, social, and health factors and groups them into three overarching modules and ten different domains. This data was sourced from [Centers for Disease Control and Prevention and Agency for Toxic Substances Disease Registry](https://www.atsdr.cdc.gov/place-health/php/eji/eji-data-download.html).
-
+The Environmental Justice Index aims to summarize the cumulative impacts of environmental injustice by census tract in the United States. The index considers 36 different environmental, social, and health factors, with data from a variety of sources (including but not limited to the U.S. Census Bureau, the U.S. Environmental Protection Agency, U.S. Geological Survey, and OpenStreetMap). The data in this analysis was sourced from [Centers for Disease Control and Prevention and Agency for Toxic Substances Disease Registry](https://www.atsdr.cdc.gov/place-health/php/eji/eji-data-download.html).
 
 ## Analysis
 
@@ -104,13 +108,19 @@ fp = os.path.join('data', 'landsat8-2025-02-23-palisades-eaton.nc')
 landsat = xr.open_dataset(fp, engine="netcdf4")
 ```
 
+Let's take a look at the `xarray` object itself.
 ```{python}
-print(landsat.coords, landsat.dims, "Size of dimensions: ", dict(landsat.sizes))
-
 landsat
 ```
 
-This data currently has no geographic information, however it is stored within the `spatial_ref` variable. We can restore it by doing the following.
+From this output, we can see the five reflectance bands that our data has stored. We also see that there are three coordinates: x, y, and datetime. We now also know the size of our coordinates and the data type of each variable.
+
+We can check the geographic information of our data using the `rio` accessor...
+```{python}
+print('CRS: ', landsat.rio.crs)
+```
+
+... but get nothing back. This is because this data currently has no geographic information, as it is stored within the `spatial_ref` variable. We can restore it by doing the following.
 
 ```{python}
 # Access CRS through `spatial_ref` variable
@@ -123,6 +133,8 @@ landsat_geo = landsat.rio.write_crs(landsat_crs)
 # Print new CRS info
 print(f"The CRS of the landsat raster data is {landsat_geo.rio.crs}.")
 ```
+
+Success!
 
 #### False Color Image
 
@@ -137,7 +149,7 @@ eaton_perimeter = eaton_perimeter.to_crs(landsat_crs)
 palisades_perimeter = palisades_perimeter.to_crs(landsat_crs)
 ```
 
-Then, we can plot them all together!
+Then, we can plot them all together.
 
 **Note:** To plot a raster image, we select the bands we want to plot in RGB order from the dataset using `[[]]`. The method `.plot.imshow(robust = True)` is used to plot. `imshow()` is helpful for rasters as it tells the "image to show", and the argument `robust = True` indicates to only plot values from the 2nd to 98th percentile. This helpful avoid outliers that are results of inaccurate or incorrect data (for example: 0 or very high values that correspond to cloud cover), and can skew the appearance of the image, sometimes inhibitting it from plotting at all.
 
@@ -170,7 +182,7 @@ ax.text(x = 345000, y = 3775000, s = "Palisades", color = "black", fontsize = 8)
 ax.axis('off')
 
 # Plot title and description
-plt.title("Los Angeles County, Post January 2025 Fires (False Color Image)")
+plt.title("False Color Image of Los Angeles County, Post January 2025 Fires")
 plt.figtext(x = 0.5, y = 0, s= "Description: False color imagery, overlayed with known fire perimeters, "
                                 "is used to highlight the effects of wildfires on LA county." \
                                 " By plotting short-wave infrared (swir22), near-infrared, and red reflectance bands," \
@@ -268,7 +280,7 @@ ax2.set_title('Eaton Fire')
 ax2.axis('off')
 
 # Add overall title
-fig.suptitle('Persons with No Internet - Fire Areas Comparison')
+fig.suptitle('Persons with No Internet - Fire Areas Comparison', fontsize = 16)
 
 # Add shared colorbar at the bottom
 sm = plt.cm.ScalarMappable( norm=plt.Normalize(vmin=vmin, vmax=vmax))
@@ -280,8 +292,6 @@ plt.show()
 ```
 
 To do:
- - update EJI data description
- - update xarray df exploration steps
  - individualize last code chunk with eji plot (make image smaller)
  - add conclusion/summary
 
