@@ -1,9 +1,7 @@
 ---
-title: "index"
+title: "Trace-Element Accumulation in Invertebrate Tissue Based on Water Concentrations"
 format: html
 ---
-
-# Exploring Trace-Element Accumulation in Invertebrate Based on Water Concentrations
 
 The following blog post narrates a statistical analysis performed on water-quality, bed-sediment, and invertebrate tissue trace-element concentrations for tributaries in the Clark Fork Basin, Montana. The use of the gamma and segmented statistical models aims to confirm or deny the presence of a break-point at which the relationship between invertebrate and water trace-element concentrations changes. 
 
@@ -11,10 +9,35 @@ Results such as these have the potential to influence policy decisions regarding
 
 ## Clark Fork Basin Data
 
-This data set is sourced from the [USGS National Water Information System database](https://doi.org/10.5066/F7P55KJN). It contains trace-element concentration values of water, sediment, and species of small invertebrates (caddisflies and stone flies) along the tributaries of the Clark Fork Basin, Montana (July 2021).
+This data set is sourced from the [USGS National Water Information System database](https://doi.org/10.5066/F7P55KJN). It contains trace-element concentration values of water, sediment, and species of small invertebrates (caddisflies and stone flies) along the tributaries of the Clark Fork Basin, Montana (collected in July 2021).
 
-![](images/stats_proj_map.png)
-Map of study area (CITE SOURCE)
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-6}
+```{r}
+#| eval: true
+#| echo: false
+#| fig-align: "center"
+#| fig-alt: "tbd"
+knitr::include_graphics("images/caddisfly_larvae.png")
+```
+:::
+
+::: {.g-col-12 .g-col-md-6}
+```{r}
+#| eval: true
+#| echo: false
+#| fig-align: "center"
+#| fig-alt: "tbd"
+knitr::include_graphics("images/stats_proj_map.png")
+```
+:::
+
+:::
+::: {.center-text .small-text}
+**Left:** Caddisfly larvae underwater. Caddisflies are freshwater insects, spending their larval stage in freshwater bodies of water.  (Image Source: Shuttershock) **Right:** Clark Fork Basin tributaries in Montana, where data for the subsequent analysis was collected. (Image Source: USGS)
+:::
+
 
 These data were collected as part of a monitoring effort. Water, bed sediment, and invertebrate tissue were sampled in streams that contain trace elements associated with historical mining and smelting activities. Large-scale mining and smelting were prevalent in the basin for more than 100 years but are now either discontinued or reduced in scale. Current (as of 2020) land uses are primarily cattle production, logging, mining, residential development, and recreation.
 
@@ -22,10 +45,12 @@ Concern about the toxicity of trace elements to the aquatic ecosystem and human 
 
 Sampling methods for the three elements can be found in the [original report](https://pubs.usgs.gov/publication/ofr20221090/full). In this analysis, we use [insert final number] elements that were tested across water, sediment, and invertebrate tissue, in an effort to explore the impact of water contamination level on trace-element accumulation in tissue. 
 
-Trace-element concentration in water is treated as the main predictor variable for the concentration of the corresponding trace-element in invertebrate tissue. This is because the species tested (as most marine invertebrates generally) obtain oxygen through gills filtration. This involves the direct input of water, causing the accumulation of pollutant is tissue (cite). 
+Trace-element concentration in water is treated as the main predictor variable for the concentration of the corresponding trace-element in invertebrate tissue. This relationship was determined based on past research which used element accumulation in aquatic larvae as an indicator for water quality. 
 
-![](images/dag.png)
+![](images/dag.png){fig-align="center", width=75%}
+::: {.center-text .small-text}
 Directed Acyclic Graph depicting the relationship between our variables of interest.
+:::
 
 Sediment concentration acts as both a source and sink of trace-elements in relation to water, as it both takes up and stores over the long term (potentially later releasing) trace-elements. Species may have an effect on trace-element accumulation as it may intrdouce differences in metabolic function, but it will not be explored in this analysis.
 
@@ -100,6 +125,7 @@ enviro <- inner_join(waterquality_filtered, sediment, by = c("constituent", "sta
                      relationship = "many-to-many")
 conc <- inner_join(enviro, biota, by = c("constituent", "station_id"),
                    relationship = "many-to-many")
+conc$constituent <- as.factor(conc$constituent)
 ```
 
 ```{r}
@@ -109,7 +135,46 @@ conc_arsenic <- conc %>%
 
 conc_arsenic <- conc_arsenic %>% 
   mutate(sediment_conc_bins = cut(conc_arsenic$concentration_sediment,breaks = c(0, 50, 100, 150)))
+
+conc_copper <- conc %>% 
+  filter(constituent == "copper") %>% 
+  mutate(sediment_conc_bins = cut(conc_arsenic$concentration_sediment,breaks = c(0, 50, 100, 150)))
+
+conc_model_gamma <- glm(concentration_biota ~ concentration_water + concentration_sediment, 
+                   data = conc_copper, 
+                   family = Gamma(link = "log")) # Log as link function to account for exponential nature of data
+
+# Run segmented model on gamma model (note: segmented function comes from the "segmented" R package)
+conc_model_seg <- segmented(obj = conc_model_gamma, seg.Z = ~ concentration_water + concentration_sediment)
 ```
+
+
+```{r}
+conc_iron <- conc %>% 
+  filter(constituent == "iron") %>% 
+  mutate(sediment_conc_bins = cut(conc_arsenic$concentration_sediment,breaks = c(0, 50, 100, 150)))
+
+conc_model_gamma <- glm(concentration_biota ~ concentration_water + concentration_sediment, 
+                   data = conc_iron, 
+                   family = Gamma(link = "log")) # Log as link function to account for exponential nature of data
+
+# Run segmented model on gamma model (note: segmented function comes from the "segmented" R package)
+conc_model_seg <- segmented(obj = conc_model_gamma, seg.Z = ~ concentration_water + concentration_sediment)
+```
+
+```{r}
+conc_cad <- conc %>% 
+  filter(constituent == "cadmium") %>% 
+  mutate(sediment_conc_bins = cut(conc_arsenic$concentration_sediment,breaks = c(0, 50, 100, 150)))
+
+conc_model_gamma <- glm(concentration_biota ~ concentration_water + concentration_sediment, 
+                   data = conc_cad, 
+                   family = Gamma(link = "log")) # Log as link function to account for exponential nature of data
+
+# Run segmented model on gamma model (note: segmented function comes from the "segmented" R package)
+conc_model_seg <- segmented(obj = conc_model_gamma, seg.Z = ~ concentration_water + concentration_sediment)
+```
+
 
 ```{r}
 #| echo: false
@@ -304,7 +369,7 @@ conc_model_gamma <- glm(concentration_biota ~ concentration_water + concentratio
                    family = Gamma(link = "log")) # Log as link function to account for exponential nature of data
 
 # Run segmented model on gamma model (note: segmented function comes from the "segmented" R package)
-conc_model_seg <- segmented(obj = conc_model_gamma, seg.Z = ~concentration_water + concentration_sediment)
+conc_model_seg <- segmented(obj = conc_model_gamma, seg.Z = ~ concentration_water + concentration_sediment)
 ```
 
 **Step 2:** Applying models to generated values.
@@ -348,22 +413,93 @@ concentration_pred <- pred_grid %>%
     conc = exp(log_conc),
     conc_lwr = exp(log_conc_lwr),
     conc_upr = exp(log_conc_upr))
-    
+```
+
+```{r}
+#| echo: false
+#| warning: false
+conc_model_pred_filtered <- concentration_pred %>% 
+  filter(concentration_sediment %in% c(50, 100, 150)) 
+
+ggplot(conc_model_pred_filtered, aes(x = concentration_water, y = conc)) +
+  
+  # Predicted values as a line, colored by sediment concentration
+  geom_line(aes(color = as_factor(as.factor(concentration_sediment)))) +
+  
+  # 95% CIs as ribbon, colored by sediment concentration
+  geom_ribbon(aes(ymin = conc_lwr, ymax = conc_upr, 
+                 fill = as_factor(concentration_sediment)), alpha = 0.2) + 
+  
+  # Raw data as points, colored by sediment concentration bins
+  geom_point(data = conc_arsenic, aes(x = concentration_water, 
+                                      y = concentration_biota, 
+                                      color = sediment_conc_bins)) +
+  
+  # Aesthetics
+  scale_color_manual(name = "Sediment (µg/g)", values = c("seagreen", "goldenrod", "mediumorchid4", 
+                                                          "seagreen", "goldenrod", "mediumorchid4")) +
+  scale_fill_manual(values = c("seagreen", "goldenrod", "mediumorchid4")) +
+  labs(x = "Water (µg/L)",
+       y = "Biota (µg/L)",
+       title = "Arsenic Concentrations (Gamma Model Predictions)",
+       subtitle = "CI: 95% Gamma Distrubution for Biota (µg/L) Predictions",
+       color = "Sediment (µg/g) Bins") +
+  guides(fill = "none") +
+  xlim(c(0, 25)) +
+  ylim(c(0, 100)) +
+  theme_minimal()
+```
+
+
+```{r}
 # Calculate shape and scale for gamma distribution ribbons in plot
 shape <- (concentration_pred$conc^2)/var(concentration_pred$conc)
 scale <- var(concentration_pred$conc)/concentration_pred$conc
 
 # 95% CI of actual data (using gamma distribution)
-concentration_pred <- pred_grid %>% 
+concentration_pred <- concentration_pred %>% 
   mutate(
     conc_lwr_gamma = qgamma(0.025, shape = shape, scale = scale),
     conc_upr_gamma = qgamma(0.975, shape = shape, scale = scale))
 ```
 
+```{r}
+#| echo: false
+#| warning: false
+conc_model_pred_filtered <- concentration_pred %>% 
+  filter(concentration_sediment %in% c(50, 100, 150))
+
+ggplot(conc_model_pred_filtered, aes(x = concentration_water, y = conc)) +
+  
+  # Predicted values as a line, colored by sediment concentration
+  geom_line(aes(color = as_factor(concentration_sediment))) +
+  
+  # 95% CIs as ribbon, colored by sediment concentration
+  geom_ribbon(aes(ymin = conc_lwr_gamma, ymax = conc_upr_gamma, 
+                  fill = as_factor(concentration_sediment)), alpha = 0.2) + 
+  
+  # Raw data as points, colored by sediment concentration bins
+  geom_point(data = conc_arsenic, aes(x = concentration_water, 
+                                      y = concentration_biota, 
+                                      color = sediment_conc_bins)) +
+  
+  # Aesthetics
+  scale_color_manual(name = "Sediment (µg/g)", values = c("seagreen", "goldenrod", "mediumorchid4", 
+                                                          "seagreen", "goldenrod", "mediumorchid4")) +
+  scale_fill_manual(values = c("seagreen", "goldenrod", "mediumorchid4")) +
+  labs(x = "Water (µg/L)",
+       y = "Biota (µg/L)",
+       title = "Arsenic Concentrations (Gamma Model Predictions)",
+       subtitle = "CI: 95% Gamma Distrubution for Biota (µg/L)",
+       color = "Sediment (µg/g) Bins") +
+  guides(fill = "none") +
+ # xlim(c(0, 25)) +
+ # ylim(c(0, 100)) +
+  theme_minimal()
+```
+
 The plots below are an intermediary step before the application and plotting of the segmented model.
 
-![](images/gamma_plot_norm.png)
-![](images/gamma_plot_gamma.png)
 
 **Step 4:** Use predicted values to plot segmented distribution.
 
@@ -371,11 +507,80 @@ In a similar manner to the code above, columns are added to the prediction grid 
 
 The segmented model is typically presented in log space, as it is the log of the response variable that appears like linear piece-wise function (ie., as a break-point).
 
-![](images/seg_plot_log.png)
+```{r}
+#| echo: false
+#| warning: false
+conc_model_seg_se<- predict(object = conc_model_seg,
+                          newdata = pred_grid,
+                          type = "link", # stay in link space
+                          se.fit = TRUE)
+
+concentration_pred_seg <- pred_grid %>% 
+  mutate(log_conc_seg = conc_model_seg_se$fit,
+    # 95% CI in link space
+    log_conc_seg_se = conc_model_seg_se$se.fit,
+    log_conc_seg_lwr = qnorm(0.025, mean = log_conc_seg, sd = log_conc_seg_se),
+    log_conc_seg_upr = qnorm(0.975, mean = log_conc_seg, sd = log_conc_seg_se),
+    # undo the link function -- in this case log --  using exp()
+    conc = exp(log_conc_seg),
+    conc_lwr = exp(log_conc_seg_lwr),
+    conc_upr = exp(log_conc_seg_upr))
+```
+
+```{r}
+#| echo: false
+#| warning: false
+conc_pred_seg_filtered <- concentration_pred_seg %>% 
+  filter(concentration_sediment %in% c(50, 100, 150))
+
+ggplot(data = conc_pred_seg_filtered, aes(x = concentration_water, y = log_conc_seg)) +
+  geom_line(aes(color = as_factor(concentration_sediment))) +
+  geom_point(data = conc_arsenic, aes(x = concentration_water, y = concentration_biota, color = sediment_conc_bins)) +
+  
+  geom_vline(xintercept = 11, color = "gray", linetype = "dashed") + 
+  
+  scale_color_manual(name = "Sediment (µg/g)", values = c("seagreen", "goldenrod", "mediumorchid4", 
+                                                          "seagreen", "goldenrod", "mediumorchid4")) +
+  scale_fill_manual(values = c("seagreen", "goldenrod", "mediumorchid4")) +
+  labs(x = "Water (µg/L)",
+       y = "log(Biota (µg/L))",
+       title = "Predicted Arsenic Concentrations (Break-Point Model)",
+       subtitle = "Link space",
+       color = "Sediment (µg/g) Bins") +
+  guides(fill = "none") +
+  xlim(0, 25) +
+  ylim(0, 25) +
+  theme_minimal()
+```
 
 To better visualize the gamma relationship we are exporing, response space is plotted below (the same breakpoint is visible, but now the relationship between predictor and response is not linear, but exponential).
 
-![](images/seg_plot_response.png)
+```{r}
+#| echo: false
+#| warning: false
+conc_pred_seg_filtered <- concentration_pred_seg %>% 
+  filter(concentration_sediment %in% c(50, 100, 150))
+
+ggplot(data = conc_pred_seg_filtered, aes(x = concentration_water, y = conc)) +
+  geom_line(aes(color = as_factor(concentration_sediment))) +
+  geom_point(data = conc_arsenic, aes(x = concentration_water, y = concentration_biota, color = sediment_conc_bins)) +
+  geom_ribbon(data = conc_pred_seg_filtered, aes(ymin = conc_lwr, ymax = conc_upr, fill = as_factor(concentration_sediment)),
+              alpha = 0.2) +
+  geom_vline(xintercept = 11, color = "gray", linetype = "dashed") + 
+  
+  scale_color_manual(name = "Sediment (µg/g)", values = c("seagreen", "goldenrod", "mediumorchid4", 
+                                                          "seagreen", "goldenrod", "mediumorchid4")) +
+  scale_fill_manual(values = c("seagreen", "goldenrod", "mediumorchid4")) +
+  labs(x = "Water (µg/L)",
+       y = "Biota (µg/L)",
+       title = "Predicted Arsenic Concentrations (Break-Point Model)",
+       subtitle = "CI: 95% Gamma Distrubution for Biota (µg/L) Predictions",
+       color = "Sediment (µg/g) Bins") +
+  guides(fill = "none") +
+  xlim(0, 25) +
+  ylim(0, 100) +
+  theme_minimal()
+```
 
 ## Interpretation
 
@@ -406,3 +611,135 @@ Our segmented model returns a break-point of `concentration_water` = 11. Additio
 ## Other Trace-Elements
 
 Plots of the remaining trace-elements -- copper, iron, lead, manganese, and zinc -- are below with their corresponding break-point and gamma coefficient values.
+
+```{r}
+#| echo: false
+# copper data
+conc_copper <- conc %>% 
+  filter(constituent == "copper") %>% 
+  mutate(sediment_conc_bins = cut(conc_arsenic$concentration_sediment,breaks = c(0, 60, 120, 180)))
+
+conc_model_gamma <- glm(concentration_biota ~ concentration_water + concentration_sediment, 
+                   data = conc_copper, 
+                   family = Gamma(link = "log")) # Log as link function to account for exponential nature of data
+
+# Run segmented model on gamma model (note: segmented function comes from the "segmented" R package)
+conc_model_seg <- segmented(obj = conc_model_gamma, seg.Z = ~ concentration_water + concentration_sediment)
+```
+
+```{r}
+#| echo: false
+# Create prediction grid with levels of water and sediment concentrations
+pred_grid <- expand_grid(concentration_water = seq(0, 12, length.out = 100),
+                         concentration_sediment = 0:180)
+
+# Applying gamma model to simulated values
+conc_model_gamma_se <- predict(object = conc_model_gamma,
+                          newdata = pred_grid,
+                          type = "link", # stay in link space
+                          se.fit = TRUE)
+
+# Apply segmented model to simulated values
+conc_model_seg_se<- predict(object = conc_model_seg,
+                          newdata = pred_grid,
+                          type = "link", # stay in link space
+                          se.fit = TRUE)
+```
+
+```{r}
+#| echo: false
+# Add data columns corresponding to predicted values
+# Starting in link space and then using exp() to get to response space
+
+concentration_pred <- pred_grid %>% 
+  mutate(
+    # log of predicted concentration values
+    log_conc = conc_model_gamma_se$fit,
+    
+    # 95% CI of concentration predictionvalues in link space
+    log_conc_se = conc_model_gamma_se$se.fit,
+    log_conc_lwr = qnorm(0.025, mean = log_conc, sd = log_conc_se),
+    log_conc_upr = qnorm(0.975, mean = log_conc, sd = log_conc_se),
+    
+    # undo the link function -- in this case log --  using exp()
+    conc = exp(log_conc),
+    conc_lwr = exp(log_conc_lwr),
+    conc_upr = exp(log_conc_upr))
+```
+
+
+```{r}
+#| echo: false
+#| warning: false
+conc_model_pred_filtered <- concentration_pred %>% 
+  filter(concentration_sediment %in% c(60, 120, 180)) 
+
+ggplot(conc_model_pred_filtered, aes(x = concentration_water, y = conc)) +
+  
+  # Predicted values as a line, colored by sediment concentration
+  geom_line(aes(color = as_factor(as.factor(concentration_sediment)))) +
+  
+  # 95% CIs as ribbon, colored by sediment concentration
+  geom_ribbon(aes(ymin = conc_lwr, ymax = conc_upr, 
+                 fill = as_factor(concentration_sediment)), alpha = 0.2) + 
+  
+  # Raw data as points, colored by sediment concentration bins
+  geom_point(data = conc_copper, aes(x = concentration_water, 
+                                      y = concentration_biota, 
+                                      color = sediment_conc_bins)) +
+  
+  # Aesthetics
+  scale_color_manual(name = "Sediment (µg/g)", values = c("seagreen", "goldenrod", "mediumorchid4", 
+                                                          "seagreen", "goldenrod", "mediumorchid4")) +
+  scale_fill_manual(values = c("seagreen", "goldenrod", "mediumorchid4")) +
+  labs(x = "Water (µg/L)",
+       y = "Biota (µg/L)",
+       title = "Copper Concentrations (Gamma Model Predictions)",
+       subtitle = "CI: 95% Gamma Distrubution for Biota (µg/L) Predictions",
+       color = "Sediment (µg/g) Bins") +
+  guides(fill = "none") +
+  theme_minimal()
+```
+
+```{r}
+conc_model_seg_se<- predict(object = conc_model_seg,
+                          newdata = pred_grid,
+                          type = "link", # stay in link space
+                          se.fit = TRUE)
+
+concentration_pred_seg <- pred_grid %>% 
+  mutate(log_conc_seg = conc_model_seg_se$fit,
+    # 95% CI in link space
+    log_conc_seg_se = conc_model_seg_se$se.fit,
+    log_conc_seg_lwr = qnorm(0.025, mean = log_conc_seg, sd = log_conc_seg_se),
+    log_conc_seg_upr = qnorm(0.975, mean = log_conc_seg, sd = log_conc_seg_se),
+    # undo the link function -- in this case log --  using exp()
+    conc = exp(log_conc_seg),
+    conc_lwr = exp(log_conc_seg_lwr),
+    conc_upr = exp(log_conc_seg_upr))
+```
+
+```{r}
+conc_pred_seg_filtered <- concentration_pred_seg %>% 
+  filter(concentration_sediment %in% c(50, 100, 150))
+
+ggplot(data = conc_pred_seg_filtered, aes(x = concentration_water, y = conc)) +
+  geom_line(aes(color = as_factor(concentration_sediment))) +
+  geom_point(data = conc_copper, aes(x = concentration_water, y = concentration_biota, color = sediment_conc_bins)) +
+  geom_ribbon(data = conc_pred_seg_filtered, aes(ymin = conc_lwr, ymax = conc_upr, fill = as_factor(concentration_sediment)),
+              alpha = 0.2) +
+  geom_vline(xintercept = 11, color = "gray", linetype = "dashed") + 
+  
+  scale_color_manual(name = "Sediment (µg/g)", values = c("seagreen", "goldenrod", "mediumorchid4", 
+                                                          "seagreen", "goldenrod", "mediumorchid4")) +
+  scale_fill_manual(values = c("seagreen", "goldenrod", "mediumorchid4")) +
+  labs(x = "Water (µg/L)",
+       y = "Biota (µg/L)",
+       title = "Predicted Copper Concentrations (Break-Point Model)",
+       subtitle = "CI: 95% Gamma Distrubution for Biota (µg/L) Predictions",
+       color = "Sediment (µg/g) Bins") +
+  guides(fill = "none") +
+  xlim(0, 12) +
+  ylim(0, 160) +
+  theme_minimal()
+```
