@@ -1,5 +1,5 @@
 ---
-title: "Trace-Element Accumulation in Invertebrate Tissue Based on Water Concentrations"
+title: "Trace-Element Accumulation in Invertebrate Tissue"
 format: html
 ---
 
@@ -19,6 +19,7 @@ This data set is sourced from the [USGS National Water Information System databa
 #| echo: false
 #| fig-align: "center"
 #| fig-alt: "tbd"
+#| fig-cap: "Caddisfly larvae underwater. Caddisflies are freshwater insects, spending their larval stage in freshwater bodies of water.  (Image Source: Shuttershock)"
 knitr::include_graphics("images/caddisfly_larvae.png")
 ```
 :::
@@ -29,13 +30,11 @@ knitr::include_graphics("images/caddisfly_larvae.png")
 #| echo: false
 #| fig-align: "center"
 #| fig-alt: "tbd"
+#| fig-cap: "Clark Fork Basin tributaries in Montana, where data for the subsequent analysis was collected. (Image Source: USGS)"
 knitr::include_graphics("images/stats_proj_map.png")
 ```
 :::
 
-:::
-::: {.center-text .small-text}
-**Left:** Caddisfly larvae underwater. Caddisflies are freshwater insects, spending their larval stage in freshwater bodies of water.  (Image Source: Shuttershock) **Right:** Clark Fork Basin tributaries in Montana, where data for the subsequent analysis was collected. (Image Source: USGS)
 :::
 
 
