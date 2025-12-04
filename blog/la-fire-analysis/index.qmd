@@ -1,12 +1,17 @@
 ---
 title: "Los Angeles Fires: Vegetation Health & Socioeconomic Analysis"
 format: html
+python: /opt/anaconda3/bin/python
+jupyter: eds220-env
 ---
 
 
-![Destroyed homes in Altadena, CA](images/la_fires.png){fig-align="center", width = 80%}
+![](images/la_fires.png){fig-align="center", width=75%}
 
-[Philip Cheung for The New York Times](https://www.nytimes.com/article/california-eaton-palisades-deadliest-fire-worst.html)
+::: {.center-text .small-text}
+Image Source: [Philip Cheung for The New York Times](https://www.nytimes.com/article/california-eaton-palisades-deadliest-fire-worst.html)
+:::
+
 
 This blog post summarizes anlyses involving the Eaton and Palisades Fires that took place in Los Angeles County during January 2025. It will speficially highlight the vegetation damage through false color imagery (part 1) and explore internet availability of census blocks affected by the fires (part 2).
 
@@ -20,7 +25,7 @@ We overlay the fire perimeters onto to remote sensing and Environmental Justice 
 
 ### Analysis Highlights: 
 
-1. **Using `xarray` and NetCDF data formats.** Our primary dataset comes from landsat, and must be read in using the `xarray` package.
+1. **Using `xarray` and NetCDF data formats.** Our primary dataset comes from the [NASA/USGS Landsat](https://landsat.gsfc.nasa.gov/) program, and must be read in using the `xarray` package.
 2. **Plotting raster data as false color.** The combination `.plot.imshow` ensures that our raster image plots, arguments like `robust` ensure accurate plotting, and selecting reflectance bands other than true color are important steps to the process.
 3. **Clipping raster data to a polygon.** `geopandas` functionality is used to accurately clip EJI data to our area of interest.
 
@@ -36,15 +41,14 @@ The data was retrieved from the [Microsoft Planetary Computer data catalogue](ht
 
 Palisades and Eaton fire perimeter data were sourced from [LA County's GIS hub](https://egis-lacounty.hub.arcgis.com/maps/ad51845ea5fb4eb483bc2a7c38b2370c/about). It contains dissolved fire boundaries for Eaton and Palisades fires. It is a public data set, published January 21, 2025 and last updated on February 26, 2025. 
 
-**EJI**
+**Environmental Justice Index (EJI)**
 
-The Environmental Justice Index aims to summarize the cumulative impacts of environmental injustice by census tract in the United States. The index considers 36 different environmental, social, and health factors, with data from a variety of sources (including but not limited to the U.S. Census Bureau, the U.S. Environmental Protection Agency, U.S. Geological Survey, and OpenStreetMap). The data in this analysis was sourced from [Centers for Disease Control and Prevention and Agency for Toxic Substances Disease Registry](https://www.atsdr.cdc.gov/place-health/php/eji/eji-data-download.html).
+EJI aims to summarize the cumulative impacts of environmental injustice by census tract in the United States. The index considers 36 different environmental, social, and health factors, with data from a variety of sources (including but not limited to the U.S. Census Bureau, the U.S. Environmental Protection Agency, U.S. Geological Survey, and OpenStreetMap). The data in this analysis was sourced from [Centers for Disease Control and Prevention and Agency for Toxic Substances Disease Registry](https://www.atsdr.cdc.gov/place-health/php/eji/eji-data-download.html).
 
 ## Analysis
 
-### False Color Image
-
 #### Setup
+
 ```{python}
 # Import necessary libraries
 import os
@@ -53,6 +57,8 @@ import xarray as xr
 import matplotlib.pyplot as plt
 
 ```
+
+### False Color Image
 
 #### Fire Perimeter Data Exploration
 
@@ -70,9 +76,10 @@ fp = os.path.join('data','Palisades_Perimeter_20250121','Palisades_Perimeter_202
 palisades_perimeter = gpd.read_file(fp)
 ```
 
-Data loaded in successfully!
+Data loaded in successfully! Now we can plot them to visualize what we are working with.
 
 ```{python}
+#| echo: false
 # Plot perimeter data to visualize its contents
 
 # Initialize figure with two axes (so can plot each perimeter on a separate plot)
@@ -155,6 +162,7 @@ Then, we can plot them all together.
 
 
 ```{python}
+#| echo: false
 # Initialize figure with one axes
 fig, ax = plt.subplots(figsize = (9,5))
 
@@ -225,6 +233,7 @@ clipped_eaton = gpd.clip(eji, eaton_perimeter)
 To ensure that our clipping was successful, we can plot our new clipped data with our fire perimeters.
 
 ```{python}
+#| echo: false
 # Initialize plot with two axes, plot eaton and palisades on each
 ig, ax = plt.subplots(figsize=(9,5), nrows = 1, ncols = 2)
 
@@ -245,16 +254,18 @@ eaton_perimeter.boundary.plot(ax = ax[1],
 
 #### Visualizing EJI Data
 
-From our EJI data, we will select our variable of interest -- internet availability. The variable name was found in the metadata.
-
+We can select our variable of interest  -- internet availability -- from the EJI data. We can take then plot our clipped `eji` datasets (`clipped_eaton` and `clipped_palisades`), and specify `column = [variable of choice]` to color each census block by socioeconomic information.
 ```{python}
+#| echo: false
 # Create dataset just containing internet availability information
 eji_variable = 'E_NOINT'
 ```
 
 ```{python}
+#| echo: false
 # Initilaize figure
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 5))
+
 # Find common min/max for legend range
 vmin = min(clipped_palisades['E_NOINT'].min(), clipped_eaton['E_NOINT'].min())
 vmax = max(clipped_palisades['E_NOINT'].max(), clipped_eaton['E_NOINT'].max())
@@ -264,8 +275,8 @@ clipped_palisades.plot(
     column= eji_variable,
     vmin=vmin, vmax=vmax,
     legend=False,
-    ax=ax1,
-)
+    ax=ax1)
+
 ax1.set_title('Palisades Fire')
 ax1.axis('off')
 
@@ -274,8 +285,8 @@ clipped_eaton.plot(
     column=eji_variable,
     vmin=vmin, vmax=vmax,
     legend=False,
-    ax=ax2,
-)
+    ax=ax2)
+
 ax2.set_title('Eaton Fire')
 ax2.axis('off')
 
@@ -291,11 +302,17 @@ cbar.set_label('Persons with No Internet (%)')
 plt.show()
 ```
 
-To do:
- - individualize last code chunk with eji plot (make image smaller)
- - add conclusion/summary
+From this plot, we can see that there are few census tract with a significant percentage of individuals who do not have internet access. The left-most census tract of the Eaton fire -- colored in yellow -- is perhaps of concern. 
 
-**References:** 
+We can ask the question, why is internet availability lower there than in the surrounding areas? And, how did that affect their response to the LA fires?
+
+## Conclusion
+
+This blog post used Python libraries such as `xarray` and `geopandas` to perform spatial analyses related to the Los Angeles County fires of January 2025. The images produced revealed the intensity of vegetation damage on the affected area, as well as raised questions regarding resource access inequality in areas impacted by the fires.
+
+Thank you for reading!
+
+## References
 
 Earth Resources Observation and Science (EROS) Center. (2020). Landsat 8–9 Operational Land Imager / Thermal Infrared Sensor Level-2, Collection 2 [Dataset]. U.S. Geological Survey. Accessed November 15, 2025. https://doi.org/10.5066/P9OGBGM6
 
