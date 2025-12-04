@@ -1,6 +1,9 @@
 [
   {
     "listing": "/posts.html",
-    "items": []
+    "items": [
+      "/blog/stats-proj/index.html",
+      "/blog/la-fire-analysis/index.html"
+    ]
   }
 ]

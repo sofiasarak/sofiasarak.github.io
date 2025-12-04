@@ -1,21 +1,20 @@
 ---
 title: "Los Angeles Fires: Vegetation Health & Socioeconomic Analysis"
+author: "Sofia Sarak"
+date: "December 3, 2025"
 format: html
 python: /opt/anaconda3/bin/python
 jupyter: eds220-env
 ---
 
 
-![](images/la_fires.png){fig-align="center", width=75%}
-
-::: {.center-text .small-text}
-Image Source: [Philip Cheung for The New York Times](https://www.nytimes.com/article/california-eaton-palisades-deadliest-fire-worst.html)
+::: {#fig-altadena .figure fig-align="center" fig-cap="Destroyed homes in Altadena, CA (Image Source: [Philip Cheung for The New York Times](https://www.nytimes.com/article/california-eaton-palisades-deadliest-fire-worst.html))"}
+![](images/la_fires.png)
 :::
-
 
 This blog post summarizes anlyses involving the Eaton and Palisades Fires that took place in Los Angeles County during January 2025. It will speficially highlight the vegetation damage through false color imagery (part 1) and explore internet availability of census blocks affected by the fires (part 2).
 
-*Complete code for the analyses can be found in the following Github repositories:* [part 1](https://github.com/sofiasarak/eds220-hwk4) & [part 2](https://github.com/sofiasarak/eds220-sections) (see week8_la_fires notebook).
+*Complete code can be found in the following Github repositories:* [part 1](https://github.com/sofiasarak/eds220-hwk4) & [part 2](https://github.com/sofiasarak/eds220-sections) (see week8_la_fires notebook).
 
 ## Overview 
 
@@ -158,7 +157,9 @@ palisades_perimeter = palisades_perimeter.to_crs(landsat_crs)
 
 Then, we can plot them all together.
 
-**Note:** To plot a raster image, we select the bands we want to plot in RGB order from the dataset using `[[]]`. The method `.plot.imshow(robust = True)` is used to plot. `imshow()` is helpful for rasters as it tells the "image to show", and the argument `robust = True` indicates to only plot values from the 2nd to 98th percentile. This helpful avoid outliers that are results of inaccurate or incorrect data (for example: 0 or very high values that correspond to cloud cover), and can skew the appearance of the image, sometimes inhibitting it from plotting at all.
+**Note:** To plot a raster image, we select the bands we want to plot in RGB order from the dataset using `[[]]`. The method `.plot.imshow(robust = True)` is used to plot. 
+
+`imshow()` is useful for raster data as it tells the "image to show", and the argument `robust = True` indicates to only plot values from the 2nd to 98th percentile. This helps to avoid outliers that are results of inaccurate or incorrect data (for example: 0 or very high values that correspond to cloud cover), and can skew the appearance of the image, sometimes inhibiting it from plotting at all.
 
 
 ```{python}
@@ -223,8 +224,8 @@ palisades_perimeter = palisades_perimeter.to_crs(eji.crs)
 eaton_perimeter = eaton_perimeter.to_crs(eji.crs)
 ```
 
+Clipping:
 ```{python}
-## Clipping
 # First arg: what we want to clip; Second arg: what polygon we want to clip to
 clipped_palisades = gpd.clip(eji, palisades_perimeter)
 clipped_eaton = gpd.clip(eji, eaton_perimeter)
@@ -254,7 +255,7 @@ eaton_perimeter.boundary.plot(ax = ax[1],
 
 #### Visualizing EJI Data
 
-We can select our variable of interest  -- internet availability -- from the EJI data. We can take then plot our clipped `eji` datasets (`clipped_eaton` and `clipped_palisades`), and specify `column = [variable of choice]` to color each census block by socioeconomic information.
+We can select our variable of interest  -- internet availability -- from the EJI data. We can take then plot our clipped `eji` datasets (`clipped_eaton` and `clipped_palisades`), and specify `column = ['variable of choice']` to color each census block by socioeconomic information.
 ```{python}
 #| echo: false
 # Create dataset just containing internet availability information
@@ -314,10 +315,10 @@ Thank you for reading!
 
 ## References
 
+Centers for Disease Control and Prevention and Agency for Toxic Substances Disease Registry. (2024). Environmental Justice Index. Accessed November 21, 2025. https://atsdr.cdc.gov/place-health/php/eji/eji-data-download.html 
+
 Earth Resources Observation and Science (EROS) Center. (2020). Landsat 8–9 Operational Land Imager / Thermal Infrared Sensor Level-2, Collection 2 [Dataset]. U.S. Geological Survey. Accessed November 15, 2025. https://doi.org/10.5066/P9OGBGM6
 
 Los Angeles County Enterprise GIS. (2025). Palisades and Eaton Dissolved Fire Perimeters [Dataset]. Los Angeles County. Accessed November 21, 2025. https://egis-lacounty.hub.arcgis.com/maps/ad51845ea5fb4eb483bc2a7c38b2370c/about
 
-https://www.lewis.ucla.edu/research/the-palisades-and-eaton-fires-neighborhood-data-and-potential-housing-market-effects/ 
-
-Centers for Disease Control and Prevention and Agency for Toxic Substances Disease Registry. (2024). Environmental Justice Index. Accessed November 21, 2025. https://atsdr.cdc.gov/place-health/php/eji/eji-data-download.html 
+Phillips, S. (2025, February). The Palisades and Eaton Fires: Neighborhood Data and Potential Housing Market Effects. UCLA Lewis Center for Regional Policy Studies.
