@@ -1,5 +1,7 @@
 ---
 title: "Trace-Element Accumulation in Invertebrate Tissue"
+author: "Sofia Sarak"
+date: "December 4, 2025"
 format: html
 ---
 
@@ -352,14 +354,14 @@ $$
 \log(\mu) 
 = \beta_{0} 
 + \beta_{1}\,\text{WaterConc}
-+ \beta_{2}\,\text{WaterConc}\,\tau
-+ \beta_{3}\,\text{LeadConc}
++ \beta_{2}\,\tau\text{WaterConc}\, 
++ \beta_{3}\,\text{SedimentConc}
 $$
 
 In this case, $\tau$ represents the presence of break-point. It should also be noted that whereas a Gamma distribution uses the parameters shape and scale, a Gamma regression has the paremeters $\mu$ (mean) and $\sigma$ (variance). There relationships with shape and scale are:
 
-- $\mu$ = shape x scale
-- $\sigma$ = shape x (scale)²
+- $\mu$ = shape * scale
+- $\sigma$ = shape * (scale)²
 
 ## Hypotheses
 
@@ -984,7 +986,7 @@ ggplot(data = conc_pred_seg_filtered, aes(x = concentration_water, y = conc)) +
   theme_minimal()
 ```
 
-From these figures and the coefficients produced by the model, we fail reject our null hypothesis that there is *no* relationship between lead concentration in water and invertebrate tissue. However, we can reject the null hypothesis that there is *no* break-point at which the relationship between the response and predictor changes, as the segmented model still identified one. Because it was based on an insignificant model, we must be cautious using these results.
+From these figures and the coefficients produced by the model, we fail to reject our null hypothesis that there is *no* relationship between lead concentration in water and invertebrate tissue. However, we can reject the null hypothesis that there is no break-point at which the relationship between the response and predictor changes, as the segmented model still identified one. Because it was based on an insignificant model, we must be cautious using these results.
 
 ## Conclusion
 
@@ -996,10 +998,10 @@ In terms of habitat remediation, recommendations based on these results could in
 
 ## References
 
-Haas & Pánik 2025
+Clark, G., Hornberger, M., Hepler, E., & Heinert, T. (2022). Water-quality, bed-sediment, and invertebrate tissue trace-element concentrations for tributaries in the Clark Fork Basin, Montana, October 2019–September 2020 (Report 2022–1090; Open-File Report, p. 30). USGS Publications Warehouse. https://doi.org/10.3133/ofr20221090
 
-Pastorino et al. 2019
+Clark, G.D., Hornberger, M.I., Hepler, E.J., and Heinert, T.L., 2022, Water-Quality, Bed-Sediment, and Invertebrate Tissue Trace-Element Concentrations for Tributaries in the Clark Fork Basin, Montana, October 2019–September 2020: U.S. Geological Survey data release, https://doi.org/10.5066/P93BP9P8.
 
-The original paper
+Haas, M., Pánik, P. Long-Term and Seasonal Trends in the Mode of Accumulation of Elements in the Bodies of Aquatic Insect Larvae. Arch Environ Contam Toxicol 89, 136–153 (2025). https://doi.org/10.1007/s00244-025-01144-7
 
-database
+Pastorino, P., Bertoli, M., Squadrone, S., Brizio, P., Piazza, G., Oss Noser, A. G., Prearo, M., Abete, M. C., & Pizzul, E. (2019). Detection of trace elements in freshwater macrobenthic invertebrates of different functional feeding guilds: A case study in Northeast Italy. Ecohydrology & Hydrobiology, 19(3), 428–440. https://doi.org/10.1016/j.ecohyd.2019.04.006

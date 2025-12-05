@@ -53,7 +53,7 @@
     "href": "blog/stats-proj/index.html#statistical-model",
     "title": "Trace-Element Accumulation in Invertebrate Tissue",
     "section": "Statistical Model",
-    "text": "Statistical Model\nBased on what we know about the Gamma and segmented models, as well as the relationship we wish explore, our model is as follows:\n\\[\n\\text{InvertConc} \\sim \\text{Gamma}(\\mu, \\sigma)\n\\] \\[\n\\log(\\mu)\n= \\beta_{0}\n+ \\beta_{1}\\,\\text{WaterConc}\n+ \\beta_{2}\\,\\text{WaterConc}\\,\\tau\n+ \\beta_{3}\\,\\text{LeadConc}\n\\]\nIn this case, \\(\\tau\\) represents the presence of break-point. It should also be noted that whereas a Gamma distribution uses the parameters shape and scale, a Gamma regression has the paremeters \\(\\mu\\) (mean) and \\(\\sigma\\) (variance). There relationships with shape and scale are:\n\n\\(\\mu\\) = shape x scale\n\\(\\sigma\\) = shape x (scale)²"
+    "text": "Statistical Model\nBased on what we know about the Gamma and segmented models, as well as the relationship we wish explore, our model is as follows:\n\\[\n\\text{InvertConc} \\sim \\text{Gamma}(\\mu, \\sigma)\n\\] \\[\n\\log(\\mu)\n= \\beta_{0}\n+ \\beta_{1}\\,\\text{WaterConc}\n+ \\beta_{2}\\,\\tau\\text{WaterConc}\\,\n+ \\beta_{3}\\,\\text{SedimentConc}\n\\]\nIn this case, \\(\\tau\\) represents the presence of break-point. It should also be noted that whereas a Gamma distribution uses the parameters shape and scale, a Gamma regression has the paremeters \\(\\mu\\) (mean) and \\(\\sigma\\) (variance). There relationships with shape and scale are:\n\n\\(\\mu\\) = shape * scale\n\\(\\sigma\\) = shape * (scale)²"
   },
   {
     "objectID": "blog/stats-proj/index.html#hypotheses",
@@ -81,7 +81,7 @@
     "href": "blog/stats-proj/index.html#other-trace-elements",
     "title": "Trace-Element Accumulation in Invertebrate Tissue",
     "section": "Other Trace-Elements",
-    "text": "Other Trace-Elements\nPlots of the remaining trace-elements – copper and lead – are below with their corresponding break-point and gamma coefficient values.\n\nCopper\nGamma Model\n\n\n\n\n\n\n\n\n\nBreak-point Model\n\n\n\n\n\n\n\n\n\nFrom these figures and the coefficients produced by the model, we reject our null hypothesis that there is no relationship between copper concentration in water and invertebrate tissue. Additionally, we reject the null hypothesis that there is no break-point at which the relationship between the response and predictor changes.\nDue to the significance of our Gamma model coefficient, we can say that the probability that this relationship occurred by chance is incredibly low.\n\n\nLead\nGamma Model\n\n\n\n\n\n\n\n\n\nBreak-point Model\n\n\n\n\n\n\n\n\n\nFrom these figures and the coefficients produced by the model, we fail reject our null hypothesis that there is no relationship between lead concentration in water and invertebrate tissue. However, we can reject the null hypothesis that there is no break-point at which the relationship between the response and predictor changes, as the segmented model still identified one. Because it was based on an insignificant model, we must be cautious using these results."
+    "text": "Other Trace-Elements\nPlots of the remaining trace-elements – copper and lead – are below with their corresponding break-point and gamma coefficient values.\n\nCopper\nGamma Model\n\n\n\n\n\n\n\n\n\nBreak-point Model\n\n\n\n\n\n\n\n\n\nFrom these figures and the coefficients produced by the model, we reject our null hypothesis that there is no relationship between copper concentration in water and invertebrate tissue. Additionally, we reject the null hypothesis that there is no break-point at which the relationship between the response and predictor changes.\nDue to the significance of our Gamma model coefficient, we can say that the probability that this relationship occurred by chance is incredibly low.\n\n\nLead\nGamma Model\n\n\n\n\n\n\n\n\n\nBreak-point Model\n\n\n\n\n\n\n\n\n\nFrom these figures and the coefficients produced by the model, we fail to reject our null hypothesis that there is no relationship between lead concentration in water and invertebrate tissue. However, we can reject the null hypothesis that there is no break-point at which the relationship between the response and predictor changes, as the segmented model still identified one. Because it was based on an insignificant model, we must be cautious using these results."
   },
   {
     "objectID": "blog/stats-proj/index.html#conclusion",
@@ -95,7 +95,7 @@
     "href": "blog/stats-proj/index.html#references",
     "title": "Trace-Element Accumulation in Invertebrate Tissue",
     "section": "References",
-    "text": "References\nHaas & Pánik 2025\nPastorino et al. 2019\nThe original paper\ndatabase"
+    "text": "References\nClark, G., Hornberger, M., Hepler, E., & Heinert, T. (2022). Water-quality, bed-sediment, and invertebrate tissue trace-element concentrations for tributaries in the Clark Fork Basin, Montana, October 2019–September 2020 (Report 2022–1090; Open-File Report, p. 30). USGS Publications Warehouse. https://doi.org/10.3133/ofr20221090\nClark, G.D., Hornberger, M.I., Hepler, E.J., and Heinert, T.L., 2022, Water-Quality, Bed-Sediment, and Invertebrate Tissue Trace-Element Concentrations for Tributaries in the Clark Fork Basin, Montana, October 2019–September 2020: U.S. Geological Survey data release, https://doi.org/10.5066/P93BP9P8.\nHaas, M., Pánik, P. Long-Term and Seasonal Trends in the Mode of Accumulation of Elements in the Bodies of Aquatic Insect Larvae. Arch Environ Contam Toxicol 89, 136–153 (2025). https://doi.org/10.1007/s00244-025-01144-7\nPastorino, P., Bertoli, M., Squadrone, S., Brizio, P., Piazza, G., Oss Noser, A. G., Prearo, M., Abete, M. C., & Pizzul, E. (2019). Detection of trace elements in freshwater macrobenthic invertebrates of different functional feeding guilds: A case study in Northeast Italy. Ecohydrology & Hydrobiology, 19(3), 428–440. https://doi.org/10.1016/j.ecohyd.2019.04.006"
   },
   {
     "objectID": "index.html",
@@ -144,6 +144,6 @@
     "href": "posts.html",
     "title": "Blog",
     "section": "",
-    "text": "Trace-Element Accumulation in Invertebrate Tissue\n\n\n\n\n\n\nSofia Sarak\n\n\n\n\n\n\n\n\n\n\n\nLos Angeles Fires: Vegetation Health & Socioeconomic Analysis\n\n\n\n\n\n\nSofia Sarak\n\n\nDec 3, 2025\n\n\n\n\n\n\nNo matching items"
+    "text": "Trace-Element Accumulation in Invertebrate Tissue\n\n\n\n\n\n\nSofia Sarak\n\n\nDec 4, 2025\n\n\n\n\n\n\n\n\n\n\n\nLos Angeles Fires: Vegetation Health & Socioeconomic Analysis\n\n\n\n\n\n\nSofia Sarak\n\n\nDec 3, 2025\n\n\n\n\n\n\nNo matching items"
   }
 ]
