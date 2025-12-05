@@ -1,0 +1,464 @@
+---
+title: "Where Can I Farm this Marine Species?"
+description: "Building an R function to determine aquaculture suitability on the West Coast."
+date: "December 6, 2025"
+categories: [R, geospatial]
+---
+
+In the growing world of aquaculture, knowing where a species will thrive is vital. The subsequent analysis aims to determine which areas of the west coast of the United States are the best suited for a variety of aquaculture species. This is done through the utilization of spatial raster and vector data as well as species-specific requirements.
+
+The two main requirements that this analysis takes into consideration is depth and temperature (using sea surface temperature as a proxy), as many marine species can only thrive in certain conditions. Our area of interest is split into zones in order to rank which stretches of the coastline are best and worst suited to house certain species.
+
+This sort of analysis is significant in the face of the growing global population and climate change, which has placed a strain on agriculture worldwide. Aquaculture has been growing for years, and expanding development in a thoughtful and sustainable way could contribute to more efficient food production. EXTRA SENTENCE WITH SOURCE.
+
+In this blog post you will find an example analysis based on oysters, as well as the creation of a function that takes temperature and depth as arguments and can locate where those conditions are true.
+
+*Complete code for this analysis can be found in the corresponding [Github repository]().* 
+
+## Setup
+
+```{r}
+#| message: false
+library(terra)
+library(sf)
+library(here)
+library(tmap)
+library(tidyverse)
+```
+
+## Data Description and Import
+
+**Sea Surface Temperature**
+
+This analysis will use average annual sea surface temperature (SST) from the years 2008 to 2012. The data was originally generated from [NOAA’s 5km Daily Global Satellite Sea Surface Temperature Anomaly v3.1](https://coralreefwatch.noaa.gov/product/5km/index_5km_ssta.php).
+
+Each year of SST exists in its own raster file. In order to read them in at the same time, I created a for loop based on their standardized naming convention. It is also possible to simultaneously load in and stack multiple raster files using the `rast()` function, but I preferred the for loop method in my workflow!
+
+```{r}
+# Create a vector of the years we have rasters for (what we will iterate over)
+years <- c(2008, 2009, 2010, 2011, 2012)
+
+# Initialize empty vectors for for loop
+raster_names <- c()
+file_paths <- c()
+
+# for loop follows the following steps:
+#   - iterates over the sequence in years vector
+#   - for each year, creates a variable name including the year
+#   - for each year, creates a file path
+#   - assigns the variable name to the raster, which is read in via the created file path
+for (i in seq(years)){                                      
+  raster_names[i] <- paste0("sst_", years[i])
+  file_paths[i] <- paste0("blog/aquaculture-suitability/data/average_annual_sst_", years[i], ".tif")
+  
+  assign(raster_names[i], rast(here(file_paths[i])))
+}
+```
+
+**Bathymetry**
+
+Bathymetry, or ocean depth data, is provided in meters from the [General Bathymetric Chart of the Oceans (GEBCO)](https://www.gebco.net/data_and_products/gridded_bathymetry_data/#area). It exists as one raster.
+
+```{r}
+# Use terra package to load in raster
+depth <- rast(here("blog/aquaculture-suitability/data/depth.tif"))
+```
+
+**Exclusive Economic Zones**
+
+An Exclusive Economic Zone (EEZ) is "an area of coastal water and seabed within a certain distance of a country's coastline, to which the country claims exclusive rights for fishing, drilling, and other economic activities" ([Oxford Languages](https://languages.oup.com/dictionaries/)).
+
+Our EEZ data is specifically for the west coast of the United States and comes from [Marineregions.org](https://www.marineregions.org/eez.php), and contains polygons delineating each of the five zones. 
+
+```{r}
+# Use stars package to load in shape data frame
+# quiet = TRUE argument removes output/message
+eez <- st_read(here("blog/aquaculture-suitability/data/wc_regions_clean.shp"), quiet = TRUE)
+```
+
+## Preparing and Processing Data
+
+In order to proper perform analyses using all of data sets, we need to ensure that they all have matching CRSs.
+
+First, we are going to stack our five SST rasters into one. As they all come from the same source and only differ in year we can reasonably assume that they all have the same CRS, but stacking would also throw an error if that was not the case.
+
+```{r}
+# Create raster stack
+sst <- c(sst_2008, sst_2009, sst_2010, sst_2011, sst_2012)
+```
+
+We can now compare our 3 data frames to see if they all have the same CRSs, and transform them to match otherwise.
+
+```{r}
+#| warning: false
+#| message: false
+# Project depth raster to match CRS of sst raster
+depth <- project(depth, crs(sst))
+
+# Project (using the stars package) to match the CRS of sst raster
+eez <- st_transform(eez, crs(sst))
+```
+
+Find mean SST over the years 2008-2012 (as our analysis will use the average temperature across 5 years).
+
+```{r}
+# mean() operation on raster of multiple layers creates object with one raster layer
+mean_sst <- mean(sst)
+```
+
+From preliminary exploration, we know that SST is stored in Kelvin instead of Celsius. In order to make our results more comprehensible, we will convert our data to Celsius.
+
+```{r}
+# Subtract 273.15 (conversion from K to C) from all pixels
+mean_sst_c <- mean_sst - 273.15
+```
+
+We want to combine our sst and depth data, but in order to do so, we have to ensure they have the same extent, resolution, and position.
+
+To handle differences in the extent, we can crop `depth` to match `sst`.
+
+```{r}
+# Crop depth raster to limits of sst raster
+depth_cropped <- crop(depth, y = mean_sst_c)
+```
+
+And to fix the issue of mismatched resolutions, we can resample the depth data to match the resolution of `sst`.
+
+Resampling is the method by which we can compute values for new pixel locations in `depth` based on custom resolutions and origins. We will use the "nearest neighbor approach", a technique in which the value of each cell in the output raster (in this case, `depth_cropped`) is calculated using the value of the nearest cell in the input raster (`mean_sst`) ([ESRI GIS Dictionary](https://support.esri.com/en-us/gis-dictionary/nearest-neighbor-resampling)). This fills in the new cells that will be created in order for `depth` to match the resolution of `sst`.
+
+```{r}
+# Resample depth data to match specifications of sst data, specifying nearest neighbor method
+depth_cropped_resampled <- resample(depth_cropped, y = mean_sst_c, method = "near")
+```
+
+A way to know if we have succeeded in matching the extent, resolution, and position of our two rasters is by seeing if they will stack or not. If they do not completely match, an error will be thrown and stacking will fail.
+
+```{r}
+depth_sst <- c(depth_cropped_resampled, mean_sst_c)
+```
+
+We successfully stacked our two rasters!
+
+## Finding Areas with Suitable Growing Conditions: Oysters
+
+::: {#fig-oyster .figure fig-cap="Image Source: [Pangea Shellfish Company](https://www.pangeashellfish.com/blog/the-different-methods-of-growing-oysters)" fig-align="center"}
+![](images/oysters.jpeg)
+:::
+
+Research has shown that oysters need the following conditions for optimal growth:
+
+-   depth: 0-70 meters below sea level (or -70 in our data)
+-   sea surface temperature: 11-30°C
+
+These specifications come from the [EDS223 assignment description](https://eds-223-geospatial.github.io/assignments/HW4.html#fn3), but can also be retrieved from resources such as [SeaLifeBase](https://www.sealifebase.ca/search.php).
+
+In order to find the areas with suitable growing conditions for oysters, we will assign a value of 1 to each pixel that is within the suitable range and 0 otherwise, for both of our separate raster layers.
+
+```{r}
+# Change layer names to be more indicative ("mean" --> "sst_mean")
+names(depth_sst) <- c("depth", "sst_mean_c")
+
+# Create copy of data frame to serve as mask
+depth_sst_mask <- depth_sst
+```
+
+```{r}
+# Create suitability matrix based on min and max sst 
+sst_suitability <- matrix(c(-Inf, 11, 0,  # Will return 0 for values (-Inf, 11)
+                          11, 30, 1,      # Will return 1 for values (11, 30)
+                          30, Inf, 0),    # Will return 0 for values (30, Inf)
+                          nrow = 3, byrow = TRUE)
+
+# Classify sst layers using matrix
+depth_sst_mask[["sst_mean_c"]] <- classify(depth_sst_mask[["sst_mean_c"]], rcl = sst_suitability)
+
+# Create suitability matrix based on min and max sst 
+depth_suitability <- matrix(c(-Inf, -70, 0,
+                              -70, 0, 1,
+                              0, Inf, 0),
+                            nrow = 3, byrow = TRUE)
+
+# Classify depth layers using matrix
+depth_sst_mask[["depth"]] <- classify(depth_sst_mask[["depth"]], rcl = depth_suitability)
+```
+
+To create one suitability layer that contains suitability based on *both* variables, we will multiply the two layers, obtaining the following results:
+
+-   if a cell = 1, it is suitable based on both conditions
+-   if a cell = 0, it is not suitable (either based on one of or both conditions)
+
+This can be true because anything multiplied by 0 (not suitable in this case), will equal 0. If at least one of our layers contains 0, our new suitability layer will also contain the value 0. Cells that are suitable for both SST and depth will be the only ones that contain 1 as their value.
+
+```{r}
+# Multiple two layers and save as a new raster
+oyster_suitability <- depth_sst_mask[["depth"]] * depth_sst_mask[["sst_mean_c"]]
+
+# Rename raster layer to be more indicative ("depth" --> "suitable")
+names(oyster_suitability) <- c("suitable")
+```
+
+## Determining the Most Suitable EEZ
+
+We want to determine the total suitable area within each EEZ in order to rank zones by priority.
+
+This requires three distinct steps:
+
+1.  Find the number of cells within each zone that are deemed suitable (based on previous analysis).
+
+2.  Find the physical area that each cell represents (in km\^2).
+
+3.  Multiply number of cells by area that cells represent to get actual suitable area, by zone.
+
+```{r}
+# Create a raster of species suitability only within the EEZ boundaries
+suitable_westcoast <- mask(oyster_suitability, eez)
+
+# Rasterize EEZ (will allow for zonal operations)
+eez_rast <- rasterize(eez, suitable_westcoast,
+                      field = "rgn")      # Set region as the value we want populating the EEZ raster
+```
+
+We can find the number of suitable *cells* in each EEZ region by using the `terra::zonal` function. It summarizes values of one SpatRaster based on the zones provided by another. In our case, we will be summing the values of our suitable cells grouped by EEZ.
+
+Summation works to provide the number of suitable cells in this case because we had populated suitable with "1"s and unsuitable with "0"s.
+
+```{r}
+# Find the number of suitable cells per EEZ region
+suitable_per_region <- zonal(suitable_westcoast, eez_rast, fun = "sum", na.rm = TRUE)
+```
+
+**Results:**
+```{r}
+#| echo: false
+# Create clean table to view sums
+suitable_per_region %>% 
+  knitr::kable(col.names = c("EEZ Region", "# of Suitable Cells"))
+```
+
+
+
+
+
+
+
+
+
+Find area of each cell in square km by extracting cell size information.
+
+```{r}
+# cellSize() returns a SpatRaster object of information, we want to extract just cell area
+cell_area <- cellSize(suitable_westcoast, unit="km")[1]
+```
+
+Multiply the cell area by number of cells to get total area.
+
+```{r}
+# Multiply by each region by adding and specifying columns to data frame
+suitable_per_region <- suitable_per_region %>% 
+  mutate(cell_area = cell_area,
+         area_suitable = suitable * cell_area) %>% 
+  relocate(cell_area, .after = suitable) 
+```
+
+In order to produce a map of West Coast EEZs colored by amount of suitable species area in each region, we need to join our EEZ geometries to our `suitable_per_region` data frame.
+
+```{r}
+# Join EEZ data frame (with geometries) to data frame with suitable area by region
+eez_suitability_geom <- left_join(eez, suitable_per_region, by = "rgn")
+```
+
+The `eez_suitability_geom` now contains the five West Coast region polygons with their corresponding suitable areas for oysters.
+
+The final step of our oyster analysis is to create a map of EEZ regions colored by amount of suitable area. For this, we use our original depth raster to provide a background image (and general outlines of the California coast), overlayed with the 5 West Coast EEZs, colored by amount of suitable area.
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+#| fig-align: "center"
+
+# Turn off autoscale -- messes with font size
+tmap_options(component.autoscale = FALSE) 
+
+# Create map using tmap
+tm_shape(depth) +                                      # Plot depth raster as first layer
+  tm_raster(col.scale  = tm_scale(values = c("#1d3891", "#84d18d")),    
+            col.legend = tm_legend(show = FALSE)) +    # Hide depth legend because not of interest
+tm_shape(eez_suitability_geom) +                       # Plot EEZ polygons
+  tm_polygons(fill = "area_suitable",                  # Fill by suitable area
+              fill.scale = tm_scale(values = "brewer.yl_or_rd"),
+              fill.legend = tm_legend(title = "Suitable Area km^2"),
+              fill_alpha = 0.8,
+              lwd = 1.5) + 
+  tm_text(text = "rgn",                                # Add EEZ zone labels
+          size = 0.6,
+          xmod = -2.35,
+          col = "white",
+          fontface = "bold")+
+tm_grid(alpha = 0.5) +
+tm_title("Suitability of West Coast EEZs for Oyster Aquaculture",
+         size = 1)
+```
+
+From this visualization, we can see that -- based on suitable depth and sst -- Central and Southern California are the best suited for oyster aquaculture compared to the other EEZs of the US West Coast.
+
+## Generalizing Workflow (Creating Function)
+
+In the code above, we developed a method of extracting the most suitable regions for marine aquaculture based on just a few parameters: temperature range and depth range. By making our workflow generalizable, we can create a function that takes a handle of arguments and produces a map of suitable West Coast EEZs for any marine species.
+
+Our function will assume that the datasets/rasters `sst` (single layer), `depth`, and `eez` are pre-loaded and contain the correct attributes.
+
+The other thing to note is that when inputting minimum and maximum depth, we will input the absolute value of depth (so, no negatives), with the larger number being maximum depth. For example, a depth of 70 meters, or 70 meters below sea level, should be entered as 70.
+
+This blog post won't include the entirety of the code used in the function because it nearly perfectly mimics the analysis done on oysters. However, a quick summary is included here:
+
+**Function Structure**
+```{r}
+#| execute: false
+# Initialize function
+west_coast_suitability_map <- function(species, min_sst, max_sst, min_depth, max_depth){
+  
+# 1. Create depth and temperature suitability masks based on inputs
+  
+# 2. Multiply masks to get overall species suitability 
+  
+# 3. Rasterize eez and perform zonal operation to find total suitable area in each zone
+  
+# 4. Join eez geometries to data frame with suitable area by region
+
+# 5. Plot!
+}
+```
+
+
+```{r}
+#| echo: false
+# Initialize function
+west_coast_suitability_map <- function(species, min_sst, max_sst, min_depth, max_depth){
+
+# Creating depth and sst mask based on min and max values
+depth_sst_mask <- depth_sst
+
+# sst matrix and classification, using function arguments
+sst_suitability <- matrix(c(-Inf, min_sst, 0,
+                          min_sst, max_sst, 1, 
+                          max_sst, Inf, 0),
+                          nrow = 3, byrow = TRUE)
+
+depth_sst_mask[["sst_mean_c"]] <- classify(depth_sst_mask[["sst_mean_c"]], rcl = sst_suitability)
+
+# depth matrix and classification
+depth_suitability <- matrix(c(-Inf, -max_depth, 0,
+                              -max_depth, min_depth, 1,
+                               min_depth, Inf, 0),
+                               nrow = 3, byrow = TRUE)
+
+depth_sst_mask[["depth"]] <- classify(depth_sst_mask[["depth"]], rcl = depth_suitability)
+
+# Creating suitability raster
+suitability_raster <- depth_sst_mask[["depth"]] * depth_sst_mask[["sst_mean_c"]]
+
+# Renaming raster layer value to be more accurate
+names(suitability_raster) <- c("suitable")
+
+# Create a raster of species suitability only within the EEZ boundaries
+suitable_westcoast <- mask(suitability_raster, eez)
+
+# Rasterize EEZ (will allow for zonal operations)
+eez_rast <- rasterize(eez, suitable_westcoast,
+                      field = "rgn")      # Set region as the value we want populating the EEZ raster
+
+# Find the number of suitable cells per EEZ region
+suitable_per_region <- zonal(suitable_westcoast, eez_rast, fun = "sum", na.rm = TRUE)
+
+# cellSize() returns a SpatRaster object of information, we want to extract just area
+cell_area <- cellSize(suitable_westcoast, unit="km")[1]
+
+# Multiplying by each region by adding and specifying columns to data frame
+suitable_per_region <- suitable_per_region %>% 
+  mutate(cell_area = cell_area,
+         area_suitable = suitable * cell_area) %>% 
+  relocate(cell_area, .after = suitable) 
+
+# Join eez data frame (with geometries) to data frame with suitable area by region
+eez_suitability_geom <- left_join(eez, suitable_per_region, by = "rgn")
+
+# Turn off autoscale -- messes with font size
+tmap_options(component.autoscale = FALSE) 
+
+# Create map using tmap
+tm_shape(depth) +                                      # Plot depth raster as first layer
+  tm_raster(col.scale  = tm_scale(values = c("#1d3891", "#84d18d")),    
+            col.legend = tm_legend(show = FALSE)) +    # Hide depth legend because not of interest
+tm_shape(eez_suitability_geom) +                       # Plot EEZ polygons
+  tm_polygons(fill = "area_suitable",                  # Fill by suitable area
+              fill.scale = tm_scale(values = "brewer.yl_or_rd"),
+              fill.legend = tm_legend(title = "Suitable Area (km^2)"),
+              fill_alpha = 0.8,
+              lwd = 1.5) + 
+tm_grid(alpha = 0.5) + 
+   tm_text(text = "rgn",                                # Add EEZ zone labels
+          size = 0.6,
+          xmod = -2.35,
+          col = "white",
+          fontface = "bold")+
+tm_title(paste("Suitability of West Coast EEZs for", species, "Aquaculture"),
+         size = 1)
+}
+```
+
+## Running Function on New Species: Bull Kelp
+
+
+![](images/bull_kelp.jpg){fig-align="center" fig-cap="Image Source: [aquaculturenorthamerica.com](https://www.aquaculturenorthamerica.com/alaskas-vast-mariculture-potential/)"}
+
+Image Source: [aquaculturenorthamerica.com](https://www.aquaculturenorthamerica.com/alaskas-vast-mariculture-potential/)
+
+Bull kelp farming is a niche sector of seaweed aquaculture, especially small compared to the large seaweed operations taking place in Asia. Currently, there are only a few active, albeit experimental, bull kelp farms in Alaska and BC.
+
+This lack of development is partially due to the fact that bull kelp is not necessarily a commercial commodity in the same way other species of seaweed, such as sugar kelp (Sacharrina latissima) or ribbon kelp (Alaria marginata), are. Despite its challenges, bull kelp is essential for ocean health and biodiversity, so farming more of it could help with restoration efforts, as well as help fill knowledge gaps in its cultivation.
+
+Bull kelp's suitability conditions are as follows:
+
+-   depth: 17 to 40 meters
+-   sea surface temperature: 10 to 16 degrees Celsius
+
+```{r}
+#| message: false
+#| warning: false
+#| fig-align: "center"
+# Use function to plot regions with highest suitability
+west_coast_suitability_map(species = "Bull Kelp" ,
+                           min_sst = 10,
+                           max_sst = 16,
+                           min_depth = 40,
+                           max_depth = 17)
+```
+
+From this visualization, we can see that -- based on suitable depth and sea surface temperature -- the Washington region is by far the best suited for bull kelp aquaculture compared to the other EEZs of the US West Coast. This agrees with our previous research: if successful bull kelp farms are mostly in Alaska and Canada, it would make sense that the northernmost region would be the most suitable.
+
+## Conclusion
+
+This blog post used packages such as `terra` and `sf` to combine raster and vector data on ocean depth and temperature, and classify different zones along the cost based on specifications. In our case, we were able to determine that the southern California coast is the most suitable for oyster aquaculture whereas the northern coast -- specifically the Washington EEZ -- is best for bull kelp. 
+
+It is important to note, however, that sea surface temperature and depth are only two of the many factors that influence aquaculture success. Our analysis not only excludes other variables such as current strength, salinity, and water quality, but also fails to consider future changes to ocean temperature that may be crucial in the planning of aquaculture.
+
+Despite these caveats, this sort of code is generalizable first step to a variety of uses that involve finding most suitable areas -- not just for aquaculture. And especially with the creation of a function, the possibilities are endless.
+
+## References
+
+[CA.gov Marine Species Portal](https://marinespecies.wildlife.ca.gov/kelp/true/#:~:text=Bull%20kelp%20grows%20on%20similar,and%20on%20wave%2Dexposed%20reefs.)
+
+[bullkelp.info](https://bullkelp.info/aquaculture)
+
+Weigel, B. L., Small, S. L., Berry, H. D., & Dethier, M. N. (2023). Effects of temperature and nutrients on microscopic stages of the bull kelp (Nereocystis luetkeana, Phaeophyceae). Journal of phycology, 59(5), 893–907. https://doi.org/10.1111/jpy.13366
+
+
+To do w internet:
+- fix references
+- try to get rid of that loading line when transforming crs
+- how to get rid of "figure 1" under image caption?
+- space after kable?
+- get fig-align help?
+- add github link
+- add extra resource 

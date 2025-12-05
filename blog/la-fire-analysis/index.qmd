@@ -2,9 +2,11 @@
 title: "Los Angeles Fires: Vegetation Health & Socioeconomic Analysis"
 author: "Sofia Sarak"
 date: "December 3, 2025"
+description: "Using multispectral and EJI data to explore aspects of the Eaton and Palisades fires."
 format: html
 python: /opt/anaconda3/bin/python
 jupyter: eds220-env
+categories: [Python, geospatial]
 ---
 
 
