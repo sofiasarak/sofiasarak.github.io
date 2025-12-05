@@ -48,7 +48,7 @@ Sampling methods for the three elements can be found in the [original report](ht
 Trace-element concentration in water is treated as the main predictor variable for trace-element concentration in invertebrate tissue. This relationship was determined based on past research which used element accumulation in aquatic larvae as an indicator for water quality (Haas & Pánik 2025, Pastorino et al. 2019).
 
 ::: {#fig-altadena .figure fig-align="center" fig-cap="Directed Acyclic Graph depicting the relationship between our variables of interest."}
-![](images/dag.png){fig-align="center", width=75%}
+![](images/dag.png){fig-align="center", fig-width=4}
 :::
 
 Sediment concentration acts as a source of trace-element concentration, as it stores and has the potential to release it back into water over the long term (Horowitz 1991). Species may have an effect on trace-element accumulation as it can introduce differences in metabolic function, but this will not be explored in this analysis.
@@ -176,7 +176,7 @@ water_plot <- ggplot(data = conc, aes(x = constituent, y = concentration_water))
   theme_minimal() +
   labs(x = "Trace-Element",
        y = "Concentration (µg/L)",
-       title = "Water Quality") +
+       title = "Water") +
   scale_fill_brewer(name = "Trace-Element", palette = "Blues")
                                    
 sediment_plot <- ggplot(data = conc, aes(x = constituent, y = concentration_sediment)) +
@@ -202,13 +202,14 @@ all_plots <- water_plot / sediment_plot / invert_plot +
 all_plots
 ```
 
-It appears that out of all of the trace-elements we have data on, iron and manganese have the have the highest concentration across water, sediment, and invertebrate tissue. Invertebrate tissue holds the highest concentrations of trace-elements, following the logic that solutes accumulate in tissue.
+It appears that copper and lead have similar distributions between all three sinks, but on widely different scales (sediment holds the most, tissue the second most, and water the least). Arsenic has a wider distribution in water than in sediment and invertebrate tissue.
 
 ```{r}
 #| echo: false
 #| warning: false
-#| fig-width: 10
-#| fig-height: 6
+#| fig-width: 8
+#| fig-height: 4
+#| fig-align: "center"
 water_conc_plot <- ggplot(data = conc, aes(x = concentration_water, y = concentration_biota)) + 
   geom_point(size = 0.75) +
   facet_wrap(~constituent, ncol = 4, scales = "free") +
@@ -222,11 +223,14 @@ water_conc_plot <- ggplot(data = conc, aes(x = concentration_water, y = concentr
 water_conc_plot
 ```
 
-Considering the axes of our plots, we can see that all of our trace-elements exist at varying ranges of concentration in both water and invertebrate tissue. There appears to be a visual positive relationship in some of the facets -- such as arsenic, copper, and zinc.
+Considering the axes of our plots, we can see that all of our trace-elements exist at varying ranges of concentration in both water and invertebrate tissue. Generally, there appears to be a visual positive relationship (perhaps less so in lead).
 
 ```{r}
 #| echo: false
 #| warning: false
+#| fig-width: 8
+#| fig-height: 4
+#| fig-align: "center"
 sed_conc_plot <- ggplot(data = conc, aes(x = concentration_sediment, y = concentration_biota)) + 
   geom_point(size = 0.75) +
   facet_wrap(~constituent, ncol = 4, scales = "free") +
@@ -241,7 +245,7 @@ sed_conc_plot <- ggplot(data = conc, aes(x = concentration_sediment, y = concent
 sed_conc_plot
 ```
 
-Similar to the previous figure, we can come to the conclusion that trace-elements occur at different scales. The visual positive relationship between sediment and invertegrate tissue is more frequent across trace-elements than between water and invertebrate tissue.
+Similar to the previous figure, we can come to the conclusion that trace-elements occur at different scales. The visual positive relationship between sediment and invertegrate tissue is more obvious across trace-elements than between water and invertebrate tissue.
 
 ## Why Gamma and Segmented/Breakpoint Models?
 
@@ -336,6 +340,26 @@ model <- glm(y ~ 1,
           data = simulated_data,
           family = Gamma(link = "identity"))
 ```
+
+## Statistical Model
+
+Based on what we know about the Gamma and segmented models, as well as the relationship we wish explore, our model is as follows:
+
+$$
+\text{InvertConc} \sim \text{Gamma}(\mu, \sigma)
+$$
+$$
+\log(\mu) 
+= \beta_{0} 
++ \beta_{1}\,\text{WaterConc}
++ \beta_{2}\,\text{WaterConc}\,\tau
++ \beta_{3}\,\text{LeadConc}
+$$
+
+In this case, $\tau$ represents the presence of break-point. It should also be noted that whereas a Gamma distribution uses the parameters shape and scale, a Gamma regression has the paremeters $\mu$ (mean) and $\sigma$ (variance). There relationships with shape and scale are:
+
+- $\mu$ = shape x scale
+- $\sigma$ = shape x (scale)²
 
 ## Hypotheses
 
@@ -436,7 +460,7 @@ ggplot(conc_model_pred_filtered, aes(x = concentration_water, y = conc)) +
   labs(x = "Water (µg/L)",
        y = "Biota (µg/L)",
        title = "Arsenic Concentrations (Gamma Model Predictions)",
-       subtitle = "CI: 95% Gamma Distrubution for Biota (µg/L) Predictions",
+       subtitle = "CI: 95% Normal Distrubution for Biota (µg/L) Predictions",
        color = "Sediment (µg/g) Bins") +
   guides(fill = "none") +
   xlim(c(0, 25)) +
@@ -787,6 +811,10 @@ ggplot(data = conc_pred_seg_filtered, aes(x = concentration_water, y = conc)) +
   theme_minimal()
 ```
 
+From these figures and the coefficients produced by the model, we reject our null hypothesis that there is *no* relationship between copper concentration in water and invertebrate tissue. Additionally, we reject the null hypothesis that there is *no* break-point at which the relationship between the response and predictor changes.
+
+Due to the significance of our Gamma model coefficient, we can say that the probability that this relationship occurred by chance is incredibly low.
+
 ### Lead
 
 
@@ -956,8 +984,22 @@ ggplot(data = conc_pred_seg_filtered, aes(x = concentration_water, y = conc)) +
   theme_minimal()
 ```
 
-To do:
-- explain coloring of raw data
-- include statistical model
-- explain why these three trace-elements
-- summary and conclusions
+From these figures and the coefficients produced by the model, we fail reject our null hypothesis that there is *no* relationship between lead concentration in water and invertebrate tissue. However, we can reject the null hypothesis that there is *no* break-point at which the relationship between the response and predictor changes, as the segmented model still identified one. Because it was based on an insignificant model, we must be cautious using these results.
+
+## Conclusion
+
+In this blog post, we walked through how to simulate data for as well as run the gamma and segmented statistical models on trace-element data from the Clark Fork Basin in Montana. 
+
+In our analysis, we explored three elements -- arsenic, copper, and lead -- that when accumulated at high levels, have significant detrimental impact on aquatic ecosystems (especially as their concentrations increase up the food web). Our results that arsenic and copper both contain break-point values at which their accumulation in invertebrate tissue changes in rate based on their concentrations in water. In arsenic this change is a positive one, whereas in copper the relationship levels off. We found no significant relationship between lead concentration in water and invertebrate tissue.
+
+In terms of habitat remediation, recommendations based on these results could include paying particular attention to arsenic concentrations in the water.
+
+## References
+
+Haas & Pánik 2025
+
+Pastorino et al. 2019
+
+The original paper
+
+database
