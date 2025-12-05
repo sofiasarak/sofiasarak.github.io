@@ -203,7 +203,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#hypotheses" id="toc-hypotheses" class="nav-link" data-scroll-target="#hypotheses">Hypotheses</a></li>
   <li><a href="#the-analysis" id="toc-the-analysis" class="nav-link" data-scroll-target="#the-analysis">The Analysis</a></li>
   <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">Interpretation</a></li>
-  <li><a href="#other-trace-elements" id="toc-other-trace-elements" class="nav-link" data-scroll-target="#other-trace-elements">Other Trace-Elements</a></li>
+  <li><a href="#other-trace-elements" id="toc-other-trace-elements" class="nav-link" data-scroll-target="#other-trace-elements">Other Trace-Elements</a>
+  <ul class="collapse">
+  <li><a href="#copper" id="toc-copper" class="nav-link" data-scroll-target="#copper">Copper</a></li>
+  <li><a href="#lead" id="toc-lead" class="nav-link" data-scroll-target="#lead">Lead</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -214,8 +218,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p>The following blog post narrates a statistical analysis performed on water-quality, bed-sediment, and invertebrate tissue trace-element concentrations for tributaries in the Clark Fork Basin, Montana. The use of the gamma and segmented statistical models aims to confirm or deny the presence of a break-point at which the relationship between invertebrate and water trace-element concentrations changes.</p>
-<p>Results such as these have the potential to influence policy decisions regarding water ecosystem rehabilitation after years of mining and industry pollution.</p>
+<p>The following blog post narrates a statistical analysis performed on water-quality, bed-sediment, and invertebrate tissue trace-element concentrations for tributaries in the Clark Fork Basin, Montana. The use of the gamma and segmented statistical models aims to confirm or deny the presence of a break-point at which a potential relationship between invertebrate and water trace-element concentrations changes.</p>
+<p>Results such as these have the potential to influence policy decisions regarding water ecosystem rehabilitation, signficant after years of mining and industry pollution in the area.</p>
 <section id="clark-fork-basin-data" class="level2">
 <h2 class="anchored" data-anchor-id="clark-fork-basin-data">Clark Fork Basin Data</h2>
 <p>This data set is sourced from the <a href="https://doi.org/10.5066/F7P55KJN">USGS National Water Information System database</a>. It contains trace-element concentration values of water, sediment, and species of small invertebrates (caddisflies and stone flies) along the tributaries of the Clark Fork Basin, Montana (collected in July 2021).</p>
@@ -226,7 +230,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/caddisfly_larvae.png" class="img-fluid figure-img" alt="tbd" width="824"></p>
-<figcaption>Caddisfly larvae underwater. Caddisflies are freshwater insects, spending their larval stage in freshwater bodies of water. (Image Source: Shuttershock)</figcaption>
+<figcaption>Caddisflies are freshwater insects, spending their larval stage in freshwater bodies of water. (Image Source: Shuttershock)</figcaption>
 </figure>
 </div>
 </div>
@@ -245,44 +249,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>These data were collected as part of a monitoring effort. Water, bed sediment, and invertebrate tissue were sampled in streams that contain trace elements associated with historical mining and smelting activities. Large-scale mining and smelting were prevalent in the basin for more than 100 years but are now either discontinued or reduced in scale. Current (as of 2020) land uses are primarily cattle production, logging, mining, residential development, and recreation.</p>
-<p>Concern about the toxicity of trace elements to the aquatic ecosystem and human health has resulted in a comprehensive effort by State, Federal, Tribal, and private entities to characterize the aquatic resources in the Clark Fork Basin. This effort was designed to guide and monitor remedial activities and to evaluate the effectiveness of remediation and cleanup.</p>
-<p>Sampling methods for the three elements can be found in the <a href="https://pubs.usgs.gov/publication/ofr20221090/full">original report</a>. In this analysis, we use [insert final number] elements that were tested across water, sediment, and invertebrate tissue, in an effort to explore the impact of water contamination level on trace-element accumulation in tissue.</p>
-<p>Trace-element concentration in water is treated as the main predictor variable for the concentration of the corresponding trace-element in invertebrate tissue. This relationship was determined based on past research which used element accumulation in aquatic larvae as an indicator for water quality.</p>
-<p><img src="images/dag.png" class="img-fluid">{fig-align=“center”, width=75%} ::: {.center-text .small-text} Directed Acyclic Graph depicting the relationship between our variables of interest. :::</p>
-<p>Sediment concentration acts as both a source and sink of trace-elements in relation to water, as it both takes up and stores over the long term (potentially later releasing) trace-elements. Species may have an effect on trace-element accumulation as it may intrdouce differences in metabolic function, but it will not be explored in this analysis.</p>
+<p>Water, bed sediment, and invertebrate tissue were sampled in streams that contain trace elements associated with historical mining and smelting activities. Large-scale mining and smelting were prevalent in the basin for more than 100 years but are now either discontinued or reduced in scale. Current (as of 2020) land uses are primarily cattle production, logging, mining, residential development, and recreation.</p>
+<p>Concern about the toxicity of trace elements to the aquatic ecosystem and human health has resulted in a comprehensive monitoring effort by State, Federal, Tribal, and private entities to characterize the aquatic resources in the Clark Fork Basin. This effort was designed to guide and monitor remedial activities and to evaluate the effectiveness of remediation and cleanup.</p>
+<p>Sampling methods for the three elements can be found in the <a href="https://pubs.usgs.gov/publication/ofr20221090/full">original report</a>. In this analysis, we use three elements that were tested across water, sediment, and invertebrate tissue, in an effort to explore the impact of water contamination level on the ecology and food systems of the area.</p>
+<p>Trace-element concentration in water is treated as the main predictor variable for trace-element concentration in invertebrate tissue. This relationship was determined based on past research which used element accumulation in aquatic larvae as an indicator for water quality (Haas &amp; Pánik 2025, Pastorino et al.&nbsp;2019).</p>
+<div id="fig-altadena" class="figure quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-altadena-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/dag.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-altadena-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Directed Acyclic Graph depicting the relationship between our variables of interest.
+</figcaption>
+</figure>
+</div>
+<p>Sediment concentration acts as a source of trace-element concentration, as it stores and has the potential to release it back into water over the long term (Horowitz 1991). Species may have an effect on trace-element accumulation as it can introduce differences in metabolic function, but this will not be explored in this analysis.</p>
 <section id="data-exploration" class="level3">
 <h3 class="anchored" data-anchor-id="data-exploration">Data Exploration</h3>
 <p>The following figures are useful to visualize the similarities and differences in distribution of trace-elements across the three sinks (water, sediment, and invertebrate tissue) tested, as well as provide a quick overview of the range that each trace-element spans.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>conc_iron <span class="ot">&lt;-</span> conc <span class="sc">%&gt;%</span> </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(constituent <span class="sc">==</span> <span class="st">"iron"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sediment_conc_bins =</span> <span class="fu">cut</span>(conc_arsenic<span class="sc">$</span>concentration_sediment,<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">150</span>)))</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>conc_model_gamma <span class="ot">&lt;-</span> <span class="fu">glm</span>(concentration_biota <span class="sc">~</span> concentration_water <span class="sc">+</span> concentration_sediment, </span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> conc_iron, </span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> <span class="st">"log"</span>)) <span class="co"># Log as link function to account for exponential nature of data</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Run segmented model on gamma model (note: segmented function comes from the "segmented" R package)</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>conc_model_seg <span class="ot">&lt;-</span> <span class="fu">segmented</span>(<span class="at">obj =</span> conc_model_gamma, <span class="at">seg.Z =</span> <span class="sc">~</span> concentration_water <span class="sc">+</span> concentration_sediment)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>conc_cad <span class="ot">&lt;-</span> conc <span class="sc">%&gt;%</span> </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(constituent <span class="sc">==</span> <span class="st">"cadmium"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sediment_conc_bins =</span> <span class="fu">cut</span>(conc_arsenic<span class="sc">$</span>concentration_sediment,<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">150</span>)))</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>conc_model_gamma <span class="ot">&lt;-</span> <span class="fu">glm</span>(concentration_biota <span class="sc">~</span> concentration_water <span class="sc">+</span> concentration_sediment, </span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> conc_cad, </span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> <span class="st">"log"</span>)) <span class="co"># Log as link function to account for exponential nature of data</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Run segmented model on gamma model (note: segmented function comes from the "segmented" R package)</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>conc_model_seg <span class="ot">&lt;-</span> <span class="fu">segmented</span>(<span class="at">obj =</span> conc_model_gamma, <span class="at">seg.Z =</span> <span class="sc">~</span> concentration_water <span class="sc">+</span> concentration_sediment)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -292,7 +281,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="960"></p>
 </figure>
 </div>
 </div>
@@ -302,7 +291,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -321,23 +310,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>To follow the steps of a segmented model, we first apply a linear regression model to the data, then the segmented model.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run lm model on it</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sample_model_seg_1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> sample_data, y<span class="sc">~</span>x)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Run segmented model on lm (note: function comes from the R package "segmented")</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>sample_model_seg_2 <span class="ot">&lt;-</span> <span class="fu">segmented</span>(sample_model_seg_1, <span class="at">seg.Z =</span> <span class="sc">~</span>x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run lm model on data</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>sample_model_seg_1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> sample_data, y<span class="sc">~</span>x)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Run segmented model on lm (note: function comes from the R package "segmented")</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>sample_model_seg_2 <span class="ot">&lt;-</span> <span class="fu">segmented</span>(sample_model_seg_1, <span class="at">seg.Z =</span> <span class="sc">~</span>x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>If we were successful, the summary should return an estimated breakpoint at x = 50.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Does it return a break-point of 50?</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sample_model_seg_2)<span class="sc">$</span>psi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Does it return a break-point of 50?</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sample_model_seg_2)<span class="sc">$</span>psi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Initial Est.       St.Err
 psi1.x      NA   50 4.045619e-15</code></pre>
@@ -353,23 +342,23 @@ psi1.x      NA   50 4.045619e-15</code></pre>
 <p>The gamma distribution is made up of the parameters shape and scale, which relate to the mean and variance of the data through the following formulas.</p>
 <p>To test this analysis on simulated data, we can do so by feeding it data that has a known gamma distribution, simulated using the <code>rgamma</code> function. We can then confirm that our analysis worked by returning the shape and scale of the gamma model (related to dispersion, formulas below), and seeing if they match.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">50</span> <span class="co"># true mean</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="dv">25</span>  <span class="co"># true variance</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>simulated_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">rgamma</span>(<span class="at">n =</span> <span class="dv">100</span>, <span class="at">shape =</span> (m<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>v, <span class="at">scale =</span> v<span class="sc">/</span>m))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">50</span> <span class="co"># true mean</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="dv">25</span>  <span class="co"># true variance</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>simulated_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">rgamma</span>(<span class="at">n =</span> <span class="dv">100</span>, <span class="at">shape =</span> (m<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>v, <span class="at">scale =</span> v<span class="sc">/</span>m))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> <span class="dv">1</span>, </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> simulated_data,</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> <span class="st">"identity"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> <span class="dv">1</span>, </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> simulated_data,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> <span class="st">"identity"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </section>
@@ -390,77 +379,77 @@ psi1.x      NA   50 4.045619e-15</code></pre>
 <p>As stated above, we explore the effect of trace-element concentration in water on the corresponding concentration in biota tissue, controlling for sediment concentration.</p>
 <p><strong>Step 1:</strong> Generating models from original data.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run gamma model on arsenic data</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>conc_model_gamma <span class="ot">&lt;-</span> <span class="fu">glm</span>(concentration_biota <span class="sc">~</span> concentration_water <span class="sc">+</span> concentration_sediment, </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> conc_arsenic, </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> <span class="st">"log"</span>)) <span class="co"># Log as link function to account for exponential nature of data</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Run segmented model on gamma model (note: segmented function comes from the "segmented" R package)</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>conc_model_seg <span class="ot">&lt;-</span> <span class="fu">segmented</span>(<span class="at">obj =</span> conc_model_gamma, <span class="at">seg.Z =</span> <span class="sc">~</span> concentration_water <span class="sc">+</span> concentration_sediment)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run gamma model on arsenic data</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>conc_model_gamma <span class="ot">&lt;-</span> <span class="fu">glm</span>(concentration_biota <span class="sc">~</span> concentration_water <span class="sc">+</span> concentration_sediment, </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> conc_arsenic, </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> <span class="st">"log"</span>)) <span class="co"># Log as link function to account for exponential nature of data</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Run segmented model on gamma model (note: segmented function comes from the "segmented" R package)</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>conc_model_seg <span class="ot">&lt;-</span> <span class="fu">segmented</span>(<span class="at">obj =</span> conc_model_gamma, <span class="at">seg.Z =</span> <span class="sc">~</span> concentration_water <span class="sc">+</span> concentration_sediment)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>Step 2:</strong> Applying models to generated values.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create prediction grid with levels of water and sediment concentrations</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>pred_grid <span class="ot">&lt;-</span> <span class="fu">expand_grid</span>(<span class="at">concentration_water =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">30</span>,</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">concentration_sediment =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">150</span>)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Applying gamma model to simulated values</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>conc_model_gamma_se <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="at">object =</span> conc_model_gamma,</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                          <span class="at">newdata =</span> pred_grid,</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>                          <span class="at">type =</span> <span class="st">"link"</span>, <span class="co"># stay in link space</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>                          <span class="at">se.fit =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply segmented model to simulated values</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>conc_model_seg_se<span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="at">object =</span> conc_model_seg,</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>                          <span class="at">newdata =</span> pred_grid,</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>                          <span class="at">type =</span> <span class="st">"link"</span>, <span class="co"># stay in link space</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>                          <span class="at">se.fit =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create prediction grid with levels of water and sediment concentrations</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pred_grid <span class="ot">&lt;-</span> <span class="fu">expand_grid</span>(<span class="at">concentration_water =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">30</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">concentration_sediment =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">150</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Applying gamma model to simulated values</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>conc_model_gamma_se <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="at">object =</span> conc_model_gamma,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                          <span class="at">newdata =</span> pred_grid,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                          <span class="at">type =</span> <span class="st">"link"</span>, <span class="co"># stay in link space</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                          <span class="at">se.fit =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply segmented model to simulated values</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>conc_model_seg_se<span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="at">object =</span> conc_model_seg,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>                          <span class="at">newdata =</span> pred_grid,</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>                          <span class="at">type =</span> <span class="st">"link"</span>, <span class="co"># stay in link space</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>                          <span class="at">se.fit =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>Step 3:</strong> Using predicted values to plot Gamma distribution.</p>
 <p>The following code extracts the predicted concentrations from <code>conc_model_gamma_se</code> results, as well as the 95% confidence intervals for both the predicted values and our real data.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add data columns corresponding to predicted values</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Starting in link space and then using exp() to get to response space</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>concentration_pred <span class="ot">&lt;-</span> pred_grid <span class="sc">%&gt;%</span> </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># log of predicted concentration values</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc =</span> conc_model_gamma_se<span class="sc">$</span>fit,</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 95% CI of concentration predictionvalues in link space</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc_se =</span> conc_model_gamma_se<span class="sc">$</span>se.fit,</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc_lwr =</span> <span class="fu">qnorm</span>(<span class="fl">0.025</span>, <span class="at">mean =</span> log_conc, <span class="at">sd =</span> log_conc_se),</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc_upr =</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>, <span class="at">mean =</span> log_conc, <span class="at">sd =</span> log_conc_se),</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># undo the link function -- in this case log --  using exp()</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc =</span> <span class="fu">exp</span>(log_conc),</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc_lwr =</span> <span class="fu">exp</span>(log_conc_lwr),</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc_upr =</span> <span class="fu">exp</span>(log_conc_upr))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add data columns corresponding to predicted values</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Starting in link space and then using exp() to get to response space</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>concentration_pred <span class="ot">&lt;-</span> pred_grid <span class="sc">%&gt;%</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># log of predicted concentration values</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc =</span> conc_model_gamma_se<span class="sc">$</span>fit,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 95% CI of concentration predictionvalues in link space</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc_se =</span> conc_model_gamma_se<span class="sc">$</span>se.fit,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc_lwr =</span> <span class="fu">qnorm</span>(<span class="fl">0.025</span>, <span class="at">mean =</span> log_conc, <span class="at">sd =</span> log_conc_se),</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc_upr =</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>, <span class="at">mean =</span> log_conc, <span class="at">sd =</span> log_conc_se),</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># undo the link function -- in this case log --  using exp()</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc =</span> <span class="fu">exp</span>(log_conc),</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc_lwr =</span> <span class="fu">exp</span>(log_conc_lwr),</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc_upr =</span> <span class="fu">exp</span>(log_conc_upr))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate shape and scale for gamma distribution ribbons in plot</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>shape <span class="ot">&lt;-</span> (concentration_pred<span class="sc">$</span>conc<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">var</span>(concentration_pred<span class="sc">$</span>conc)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>scale <span class="ot">&lt;-</span> <span class="fu">var</span>(concentration_pred<span class="sc">$</span>conc)<span class="sc">/</span>concentration_pred<span class="sc">$</span>conc</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 95% CI of actual data (using gamma distribution)</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>concentration_pred <span class="ot">&lt;-</span> concentration_pred <span class="sc">%&gt;%</span> </span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc_lwr_gamma =</span> <span class="fu">qgamma</span>(<span class="fl">0.025</span>, <span class="at">shape =</span> shape, <span class="at">scale =</span> scale),</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc_upr_gamma =</span> <span class="fu">qgamma</span>(<span class="fl">0.975</span>, <span class="at">shape =</span> shape, <span class="at">scale =</span> scale))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate shape and scale for gamma distribution ribbons in plot</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>shape <span class="ot">&lt;-</span> (concentration_pred<span class="sc">$</span>conc<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">var</span>(concentration_pred<span class="sc">$</span>conc)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>scale <span class="ot">&lt;-</span> <span class="fu">var</span>(concentration_pred<span class="sc">$</span>conc)<span class="sc">/</span>concentration_pred<span class="sc">$</span>conc</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 95% CI of actual data (using gamma distribution)</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>concentration_pred <span class="ot">&lt;-</span> concentration_pred <span class="sc">%&gt;%</span> </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc_lwr_gamma =</span> <span class="fu">qgamma</span>(<span class="fl">0.025</span>, <span class="at">shape =</span> shape, <span class="at">scale =</span> scale),</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc_upr_gamma =</span> <span class="fu">qgamma</span>(<span class="fl">0.975</span>, <span class="at">shape =</span> shape, <span class="at">scale =</span> scale))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -473,7 +462,7 @@ psi1.x      NA   50 4.045619e-15</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -483,7 +472,7 @@ psi1.x      NA   50 4.045619e-15</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -493,21 +482,21 @@ psi1.x      NA   50 4.045619e-15</code></pre>
 <h2 class="anchored" data-anchor-id="interpretation">Interpretation</h2>
 <p>Visually, it appears that both a positive relationship and a break-point exist between arsenic concentration in water and biota. To confirm, we can take a look at the model summary outputs.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Return the coefficients and their statistical significance</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>conc_model_gamma<span class="sc">$</span>coefficients</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Return the coefficients and their statistical significance</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>conc_model_gamma<span class="sc">$</span>coefficients</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           (Intercept)    concentration_water concentration_sediment 
            0.892054351            0.080041313            0.007746623 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Return break-points</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>conc_model_seg<span class="sc">$</span>psi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Return break-points</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>conc_model_seg<span class="sc">$</span>psi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                            Initial     Est.    St.Err
 psi1.concentration_water         NA 11.00022 0.3708171
 psi1.concentration_sediment      NA 89.39980 4.9240715</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Return coefficients before and after breakpoints</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>conc_model_seg<span class="sc">$</span>coefficients</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Return coefficients before and after breakpoints</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>conc_model_seg<span class="sc">$</span>coefficients</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                (Intercept)         concentration_water 
                  1.21467466                 -0.02732520 
@@ -532,66 +521,56 @@ psi1.concentration_sediment
 </section>
 <section id="other-trace-elements" class="level2">
 <h2 class="anchored" data-anchor-id="other-trace-elements">Other Trace-Elements</h2>
-<p>Plots of the remaining trace-elements – copper, iron, lead, manganese, and zinc – are below with their corresponding break-point and gamma coefficient values.</p>
+<p>Plots of the remaining trace-elements – copper and lead – are below with their corresponding break-point and gamma coefficient values.</p>
+<section id="copper" class="level3">
+<h3 class="anchored" data-anchor-id="copper">Copper</h3>
+<p><strong>Gamma Model</strong></p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+<p><strong>Break-point Model</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>conc_model_seg_se<span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="at">object =</span> conc_model_seg,</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">newdata =</span> pred_grid,</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">type =</span> <span class="st">"link"</span>, <span class="co"># stay in link space</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">se.fit =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>concentration_pred_seg <span class="ot">&lt;-</span> pred_grid <span class="sc">%&gt;%</span> </span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">log_conc_seg =</span> conc_model_seg_se<span class="sc">$</span>fit,</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 95% CI in link space</span></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc_seg_se =</span> conc_model_seg_se<span class="sc">$</span>se.fit,</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc_seg_lwr =</span> <span class="fu">qnorm</span>(<span class="fl">0.025</span>, <span class="at">mean =</span> log_conc_seg, <span class="at">sd =</span> log_conc_seg_se),</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc_seg_upr =</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>, <span class="at">mean =</span> log_conc_seg, <span class="at">sd =</span> log_conc_seg_se),</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># undo the link function -- in this case log --  using exp()</span></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc =</span> <span class="fu">exp</span>(log_conc_seg),</span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc_lwr =</span> <span class="fu">exp</span>(log_conc_seg_lwr),</span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc_upr =</span> <span class="fu">exp</span>(log_conc_seg_upr))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>conc_pred_seg_filtered <span class="ot">&lt;-</span> concentration_pred_seg <span class="sc">%&gt;%</span> </span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(concentration_sediment <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">150</span>))</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> conc_pred_seg_filtered, <span class="fu">aes</span>(<span class="at">x =</span> concentration_water, <span class="at">y =</span> conc)) <span class="sc">+</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as_factor</span>(concentration_sediment))) <span class="sc">+</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> conc_copper, <span class="fu">aes</span>(<span class="at">x =</span> concentration_water, <span class="at">y =</span> concentration_biota, <span class="at">color =</span> sediment_conc_bins)) <span class="sc">+</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data =</span> conc_pred_seg_filtered, <span class="fu">aes</span>(<span class="at">ymin =</span> conc_lwr, <span class="at">ymax =</span> conc_upr, <span class="at">fill =</span> <span class="fu">as_factor</span>(concentration_sediment)),</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">11</span>, <span class="at">color =</span> <span class="st">"gray"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">name =</span> <span class="st">"Sediment (µg/g)"</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"seagreen"</span>, <span class="st">"goldenrod"</span>, <span class="st">"mediumorchid4"</span>, </span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>                                                          <span class="st">"seagreen"</span>, <span class="st">"goldenrod"</span>, <span class="st">"mediumorchid4"</span>)) <span class="sc">+</span></span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"seagreen"</span>, <span class="st">"goldenrod"</span>, <span class="st">"mediumorchid4"</span>)) <span class="sc">+</span></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Water (µg/L)"</span>,</span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Biota (µg/L)"</span>,</span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Predicted Copper Concentrations (Break-Point Model)"</span>,</span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"CI: 95% Gamma Distrubution for Biota (µg/L) Predictions"</span>,</span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">"Sediment (µg/g) Bins"</span>) <span class="sc">+</span></span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">12</span>) <span class="sc">+</span></span>
-<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">160</span>) <span class="sc">+</span></span>
-<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+</section>
+<section id="lead" class="level3">
+<h3 class="anchored" data-anchor-id="lead">Lead</h3>
+<p><strong>Gamma Model</strong></p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Break-point Model</strong></p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>To do: - explain coloring of raw data - include statistical model - explain why these three trace-elements - summary and conclusions</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
