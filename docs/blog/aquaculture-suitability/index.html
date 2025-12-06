@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-8fbd8b215ef2ad4288a87aba8b9a62f4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-f88286f0cd90ede3ab3f73dc2c13f047.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -229,9 +229,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p>In the growing world of aquaculture, knowing where a species will thrive is vital. The subsequent analysis aims to determine which areas of the west coast of the United States are the best suited for a variety of aquaculture species. This is done through the utilization of spatial raster and vector data as well as species-specific requirements.</p>
 <p>The two main requirements that this analysis takes into consideration is depth and temperature (using sea surface temperature as a proxy), as many marine species can only thrive in certain conditions. Our area of interest is split into zones in order to rank which stretches of the coastline are best and worst suited to house certain species.</p>
-<p>This sort of analysis is significant in the face of the growing global population and climate change, which has placed a strain on agriculture worldwide. Aquaculture has been growing for years, and expanding development in a thoughtful and sustainable way could contribute to more efficient food production. EXTRA SENTENCE WITH SOURCE.</p>
+<p>This sort of analysis is significant in the face of the growing global population and climate change, which has placed a strain on agriculture worldwide. Aquaculture has been growing for years, and expanding development in a thoughtful and sustainable way could contribute to more efficient food production. More production increases food security, as well as contributes to economic growth within communities (Subasinghe et al.&nbsp;2009).</p>
 <p>In this blog post you will find an example analysis based on oysters, as well as the creation of a function that takes temperature and depth as arguments and can locate where those conditions are true.</p>
-<p><em>Complete code for this analysis can be found in the corresponding <a href="">Github repository</a>.</em></p>
+<p><em>Complete code for this analysis can be found in the corresponding <a href="https://github.com/sofiasarak/west_coast_eez">Github repository</a>.</em></p>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <div class="cell">
@@ -293,53 +293,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>We can now compare our 3 data frames to see if they all have the same CRSs, and transform them to match otherwise.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Project depth raster to match CRS of sst raster</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>depth <span class="ot">&lt;-</span> <span class="fu">project</span>(depth, <span class="fu">crs</span>(sst))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-|---------|---------|---------|---------|
-=========================================
-                                          </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Project (using the stars package) to match the CRS of sst raster</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>eez <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(eez, <span class="fu">crs</span>(sst))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>depth <span class="ot">&lt;-</span> <span class="fu">project</span>(depth, <span class="fu">crs</span>(sst))</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Project (using the stars package) to match the CRS of sst raster</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>eez <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(eez, <span class="fu">crs</span>(sst))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Find mean SST over the years 2008-2012 (as our analysis will use the average temperature across 5 years).</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mean() operation on raster of multiple layers creates object with one raster layer</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>mean_sst <span class="ot">&lt;-</span> <span class="fu">mean</span>(sst)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mean() operation on raster of multiple layers creates object with one raster layer</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>mean_sst <span class="ot">&lt;-</span> <span class="fu">mean</span>(sst)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>From preliminary exploration, we know that SST is stored in Kelvin instead of Celsius. In order to make our results more comprehensible, we will convert our data to Celsius.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Subtract 273.15 (conversion from K to C) from all pixels</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>mean_sst_c <span class="ot">&lt;-</span> mean_sst <span class="sc">-</span> <span class="fl">273.15</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Subtract 273.15 (conversion from K to C) from all pixels</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>mean_sst_c <span class="ot">&lt;-</span> mean_sst <span class="sc">-</span> <span class="fl">273.15</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We want to combine our sst and depth data, but in order to do so, we have to ensure they have the same extent, resolution, and position.</p>
 <p>To handle differences in the extent, we can crop <code>depth</code> to match <code>sst</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crop depth raster to limits of sst raster</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>depth_cropped <span class="ot">&lt;-</span> <span class="fu">crop</span>(depth, <span class="at">y =</span> mean_sst_c)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crop depth raster to limits of sst raster</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>depth_cropped <span class="ot">&lt;-</span> <span class="fu">crop</span>(depth, <span class="at">y =</span> mean_sst_c)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>And to fix the issue of mismatched resolutions, we can resample the depth data to match the resolution of <code>sst</code>.</p>
 <p>Resampling is the method by which we can compute values for new pixel locations in <code>depth</code> based on custom resolutions and origins. We will use the “nearest neighbor approach”, a technique in which the value of each cell in the output raster (in this case, <code>depth_cropped</code>) is calculated using the value of the nearest cell in the input raster (<code>mean_sst</code>) (<a href="https://support.esri.com/en-us/gis-dictionary/nearest-neighbor-resampling">ESRI GIS Dictionary</a>). This fills in the new cells that will be created in order for <code>depth</code> to match the resolution of <code>sst</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Resample depth data to match specifications of sst data, specifying nearest neighbor method</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>depth_cropped_resampled <span class="ot">&lt;-</span> <span class="fu">resample</span>(depth_cropped, <span class="at">y =</span> mean_sst_c, <span class="at">method =</span> <span class="st">"near"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Resample depth data to match specifications of sst data, specifying nearest neighbor method</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>depth_cropped_resampled <span class="ot">&lt;-</span> <span class="fu">resample</span>(depth_cropped, <span class="at">y =</span> mean_sst_c, <span class="at">method =</span> <span class="st">"near"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A way to know if we have succeeded in matching the extent, resolution, and position of our two rasters is by seeing if they will stack or not. If they do not completely match, an error will be thrown and stacking will fail.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>depth_sst <span class="ot">&lt;-</span> <span class="fu">c</span>(depth_cropped_resampled, mean_sst_c)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>depth_sst <span class="ot">&lt;-</span> <span class="fu">c</span>(depth_cropped_resampled, mean_sst_c)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We successfully stacked our two rasters!</p>
 </section>
 <section id="finding-areas-with-suitable-growing-conditions-oysters" class="level2">
 <h2 class="anchored" data-anchor-id="finding-areas-with-suitable-growing-conditions-oysters">Finding Areas with Suitable Growing Conditions: Oysters</h2>
-<div id="fig-oyster" class="figure quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<div id="fig-oyster" class="figure quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-number="false">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-oyster-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="images/oysters.jpeg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-oyster-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Image Source: <a href="https://www.pangeashellfish.com/blog/the-different-methods-of-growing-oysters">Pangea Shellfish Company</a>
+Figure&nbsp;1: Cages are a method used for oyster farming (Image Source: <a href="https://www.pangeashellfish.com/blog/the-different-methods-of-growing-oysters">Pangea Shellfish Company</a>).
 </figcaption>
 </figure>
 </div>
@@ -351,30 +346,30 @@ Figure&nbsp;1: Image Source: <a href="https://www.pangeashellfish.com/blog/the-d
 <p>These specifications come from the <a href="https://eds-223-geospatial.github.io/assignments/HW4.html#fn3">EDS223 assignment description</a>, but can also be retrieved from resources such as <a href="https://www.sealifebase.ca/search.php">SeaLifeBase</a>.</p>
 <p>In order to find the areas with suitable growing conditions for oysters, we will assign a value of 1 to each pixel that is within the suitable range and 0 otherwise, for both of our separate raster layers.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Change layer names to be more indicative ("mean" --&gt; "sst_mean")</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(depth_sst) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"depth"</span>, <span class="st">"sst_mean_c"</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create copy of data frame to serve as mask</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>depth_sst_mask <span class="ot">&lt;-</span> depth_sst</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Change layer names to be more indicative ("mean" --&gt; "sst_mean")</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(depth_sst) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"depth"</span>, <span class="st">"sst_mean_c"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create copy of data frame to serve as mask</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>depth_sst_mask <span class="ot">&lt;-</span> depth_sst</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create suitability matrix based on min and max sst </span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>sst_suitability <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">11</span>, <span class="dv">0</span>,  <span class="co"># Will return 0 for values (-Inf, 11)</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                          <span class="dv">11</span>, <span class="dv">30</span>, <span class="dv">1</span>,      <span class="co"># Will return 1 for values (11, 30)</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                          <span class="dv">30</span>, <span class="cn">Inf</span>, <span class="dv">0</span>),    <span class="co"># Will return 0 for values (30, Inf)</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Classify sst layers using matrix</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>depth_sst_mask[[<span class="st">"sst_mean_c"</span>]] <span class="ot">&lt;-</span> <span class="fu">classify</span>(depth_sst_mask[[<span class="st">"sst_mean_c"</span>]], <span class="at">rcl =</span> sst_suitability)</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Create suitability matrix based on min and max sst </span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>depth_suitability <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="sc">-</span><span class="dv">70</span>, <span class="dv">0</span>,</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>                              <span class="sc">-</span><span class="dv">70</span>, <span class="dv">0</span>, <span class="dv">1</span>,</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>                              <span class="dv">0</span>, <span class="cn">Inf</span>, <span class="dv">0</span>),</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>                            <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Classify depth layers using matrix</span></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>depth_sst_mask[[<span class="st">"depth"</span>]] <span class="ot">&lt;-</span> <span class="fu">classify</span>(depth_sst_mask[[<span class="st">"depth"</span>]], <span class="at">rcl =</span> depth_suitability)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create suitability matrix based on min and max sst </span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>sst_suitability <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">11</span>, <span class="dv">0</span>,  <span class="co"># Will return 0 for values (-Inf, 11)</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                          <span class="dv">11</span>, <span class="dv">30</span>, <span class="dv">1</span>,      <span class="co"># Will return 1 for values (11, 30)</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                          <span class="dv">30</span>, <span class="cn">Inf</span>, <span class="dv">0</span>),    <span class="co"># Will return 0 for values (30, Inf)</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Classify sst layers using matrix</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>depth_sst_mask[[<span class="st">"sst_mean_c"</span>]] <span class="ot">&lt;-</span> <span class="fu">classify</span>(depth_sst_mask[[<span class="st">"sst_mean_c"</span>]], <span class="at">rcl =</span> sst_suitability)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Create suitability matrix based on min and max sst </span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>depth_suitability <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="sc">-</span><span class="dv">70</span>, <span class="dv">0</span>,</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>                              <span class="sc">-</span><span class="dv">70</span>, <span class="dv">0</span>, <span class="dv">1</span>,</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>                              <span class="dv">0</span>, <span class="cn">Inf</span>, <span class="dv">0</span>),</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>                            <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Classify depth layers using matrix</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>depth_sst_mask[[<span class="st">"depth"</span>]] <span class="ot">&lt;-</span> <span class="fu">classify</span>(depth_sst_mask[[<span class="st">"depth"</span>]], <span class="at">rcl =</span> depth_suitability)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>To create one suitability layer that contains suitability based on <em>both</em> variables, we will multiply the two layers, obtaining the following results:</p>
 <ul>
@@ -383,11 +378,11 @@ Figure&nbsp;1: Image Source: <a href="https://www.pangeashellfish.com/blog/the-d
 </ul>
 <p>This can be true because anything multiplied by 0 (not suitable in this case), will equal 0. If at least one of our layers contains 0, our new suitability layer will also contain the value 0. Cells that are suitable for both SST and depth will be the only ones that contain 1 as their value.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple two layers and save as a new raster</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>oyster_suitability <span class="ot">&lt;-</span> depth_sst_mask[[<span class="st">"depth"</span>]] <span class="sc">*</span> depth_sst_mask[[<span class="st">"sst_mean_c"</span>]]</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename raster layer to be more indicative ("depth" --&gt; "suitable")</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(oyster_suitability) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"suitable"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple two layers and save as a new raster</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>oyster_suitability <span class="ot">&lt;-</span> depth_sst_mask[[<span class="st">"depth"</span>]] <span class="sc">*</span> depth_sst_mask[[<span class="st">"sst_mean_c"</span>]]</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename raster layer to be more indicative ("depth" --&gt; "suitable")</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(oyster_suitability) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"suitable"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="determining-the-most-suitable-eez" class="level2">
@@ -400,18 +395,18 @@ Figure&nbsp;1: Image Source: <a href="https://www.pangeashellfish.com/blog/the-d
 <li><p>Multiply number of cells by area that cells represent to get actual suitable area, by zone.</p></li>
 </ol>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a raster of species suitability only within the EEZ boundaries</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>suitable_westcoast <span class="ot">&lt;-</span> <span class="fu">mask</span>(oyster_suitability, eez)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rasterize EEZ (will allow for zonal operations)</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>eez_rast <span class="ot">&lt;-</span> <span class="fu">rasterize</span>(eez, suitable_westcoast,</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">field =</span> <span class="st">"rgn"</span>)      <span class="co"># Set region as the value we want populating the EEZ raster</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a raster of species suitability only within the EEZ boundaries</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>suitable_westcoast <span class="ot">&lt;-</span> <span class="fu">mask</span>(oyster_suitability, eez)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rasterize EEZ (will allow for zonal operations)</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>eez_rast <span class="ot">&lt;-</span> <span class="fu">rasterize</span>(eez, suitable_westcoast,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">field =</span> <span class="st">"rgn"</span>)      <span class="co"># Set region as the value we want populating the EEZ raster</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can find the number of suitable <em>cells</em> in each EEZ region by using the <code>terra::zonal</code> function. It summarizes values of one SpatRaster based on the zones provided by another. In our case, we will be summing the values of our suitable cells grouped by EEZ.</p>
 <p>Summation works to provide the number of suitable cells in this case because we had populated suitable with “1”s and unsuitable with “0”s.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the number of suitable cells per EEZ region</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>suitable_per_region <span class="ot">&lt;-</span> <span class="fu">zonal</span>(suitable_westcoast, eez_rast, <span class="at">fun =</span> <span class="st">"sum"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the number of suitable cells per EEZ region</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>suitable_per_region <span class="ot">&lt;-</span> <span class="fu">zonal</span>(suitable_westcoast, eez_rast, <span class="at">fun =</span> <span class="st">"sum"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>Results:</strong></p>
 <div class="cell">
@@ -448,23 +443,24 @@ Figure&nbsp;1: Image Source: <a href="https://www.pangeashellfish.com/blog/the-d
 </table>
 </div>
 </div>
+<p><br></p>
 <p>Find area of each cell in square km by extracting cell size information.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cellSize() returns a SpatRaster object of information, we want to extract just cell area</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>cell_area <span class="ot">&lt;-</span> <span class="fu">cellSize</span>(suitable_westcoast, <span class="at">unit=</span><span class="st">"km"</span>)[<span class="dv">1</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cellSize() returns a SpatRaster object of information, we want to extract just cell area</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>cell_area <span class="ot">&lt;-</span> <span class="fu">cellSize</span>(suitable_westcoast, <span class="at">unit=</span><span class="st">"km"</span>)[<span class="dv">1</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Multiply the cell area by number of cells to get total area.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiply by each region by adding and specifying columns to data frame</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>suitable_per_region <span class="ot">&lt;-</span> suitable_per_region <span class="sc">%&gt;%</span> </span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cell_area =</span> cell_area,</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">area_suitable =</span> suitable <span class="sc">*</span> cell_area) <span class="sc">%&gt;%</span> </span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(cell_area, <span class="at">.after =</span> suitable) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiply by each region by adding and specifying columns to data frame</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>suitable_per_region <span class="ot">&lt;-</span> suitable_per_region <span class="sc">%&gt;%</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cell_area =</span> cell_area,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">area_suitable =</span> suitable <span class="sc">*</span> cell_area) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(cell_area, <span class="at">.after =</span> suitable) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In order to produce a map of West Coast EEZs colored by amount of suitable species area in each region, we need to join our EEZ geometries to our <code>suitable_per_region</code> data frame.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Join EEZ data frame (with geometries) to data frame with suitable area by region</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>eez_suitability_geom <span class="ot">&lt;-</span> <span class="fu">left_join</span>(eez, suitable_per_region, <span class="at">by =</span> <span class="st">"rgn"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Join EEZ data frame (with geometries) to data frame with suitable area by region</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>eez_suitability_geom <span class="ot">&lt;-</span> <span class="fu">left_join</span>(eez, suitable_per_region, <span class="at">by =</span> <span class="st">"rgn"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The <code>eez_suitability_geom</code> now contains the five West Coast region polygons with their corresponding suitable areas for oysters.</p>
 <p>The final step of our oyster analysis is to create a map of EEZ regions colored by amount of suitable area. For this, we use our original depth raster to provide a background image (and general outlines of the California coast), overlayed with the 5 West Coast EEZs, colored by amount of suitable area.</p>
@@ -472,7 +468,7 @@ Figure&nbsp;1: Image Source: <a href="https://www.pangeashellfish.com/blog/the-d
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -487,29 +483,33 @@ Figure&nbsp;1: Image Source: <a href="https://www.pangeashellfish.com/blog/the-d
 <p>This blog post won’t include the entirety of the code used in the function because it nearly perfectly mimics the analysis done on oysters. However, a quick summary is included here:</p>
 <p><strong>Function Structure</strong></p>
 <div class="cell" data-execute="false">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize function</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>west_coast_suitability_map <span class="ot">&lt;-</span> <span class="cf">function</span>(species, min_sst, max_sst, min_depth, max_depth){</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Create depth and temperature suitability masks based on inputs</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Multiply masks to get overall species suitability </span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Rasterize eez and perform zonal operation to find total suitable area in each zone</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Join eez geometries to data frame with suitable area by region</span></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Plot!</span></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize function</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>west_coast_suitability_map <span class="ot">&lt;-</span> <span class="cf">function</span>(species, min_sst, max_sst, min_depth, max_depth){</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Create depth and temperature suitability masks based on inputs</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Multiply masks to get overall species suitability </span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Rasterize eez and perform zonal operation to find total suitable area in each zone</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Join eez geometries to data frame with suitable area by region</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Plot!</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="running-function-on-new-species-bull-kelp" class="level2">
 <h2 class="anchored" data-anchor-id="running-function-on-new-species-bull-kelp">Running Function on New Species: Bull Kelp</h2>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/bull_kelp.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" data-fig-cap="Image Source: [aquaculturenorthamerica.com](https://www.aquaculturenorthamerica.com/alaskas-vast-mariculture-potential/)"></p>
+<div id="fig-bullkelp" class="figure quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" data-fig-number="false">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bullkelp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/bull_kelp.jpg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bullkelp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Bull kelp farming in Alaska (Image Source: <a href="https://www.aquaculturenorthamerica.com/alaskas-vast-mariculture-potential/">aquaculturenorthamerica.com</a>).
+</figcaption>
 </figure>
 </div>
-<p>Image Source: <a href="https://www.aquaculturenorthamerica.com/alaskas-vast-mariculture-potential/">aquaculturenorthamerica.com</a></p>
 <p>Bull kelp farming is a niche sector of seaweed aquaculture, especially small compared to the large seaweed operations taking place in Asia. Currently, there are only a few active, albeit experimental, bull kelp farms in Alaska and BC.</p>
 <p>This lack of development is partially due to the fact that bull kelp is not necessarily a commercial commodity in the same way other species of seaweed, such as sugar kelp (Sacharrina latissima) or ribbon kelp (Alaria marginata), are. Despite its challenges, bull kelp is essential for ocean health and biodiversity, so farming more of it could help with restoration efforts, as well as help fill knowledge gaps in its cultivation.</p>
 <p>Bull kelp’s suitability conditions are as follows:</p>
@@ -518,16 +518,16 @@ Figure&nbsp;1: Image Source: <a href="https://www.pangeashellfish.com/blog/the-d
 <li>sea surface temperature: 10 to 16 degrees Celsius</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use function to plot regions with highest suitability</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">west_coast_suitability_map</span>(<span class="at">species =</span> <span class="st">"Bull Kelp"</span> ,</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">min_sst =</span> <span class="dv">10</span>,</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">max_sst =</span> <span class="dv">16</span>,</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">min_depth =</span> <span class="dv">40</span>,</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">max_depth =</span> <span class="dv">17</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use function to plot regions with highest suitability</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">west_coast_suitability_map</span>(<span class="at">species =</span> <span class="st">"Bull Kelp"</span> ,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">min_sst =</span> <span class="dv">10</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">max_sst =</span> <span class="dv">16</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">min_depth =</span> <span class="dv">40</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">max_depth =</span> <span class="dv">17</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -542,10 +542,10 @@ Figure&nbsp;1: Image Source: <a href="https://www.pangeashellfish.com/blog/the-d
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
-<p><a href="https://marinespecies.wildlife.ca.gov/kelp/true/#:~:text=Bull%20kelp%20grows%20on%20similar,and%20on%20wave%2Dexposed%20reefs.">CA.gov Marine Species Portal</a></p>
-<p><a href="https://bullkelp.info/aquaculture">bullkelp.info</a></p>
-<p>Weigel, B. L., Small, S. L., Berry, H. D., &amp; Dethier, M. N. (2023). Effects of temperature and nutrients on microscopic stages of the bull kelp (Nereocystis luetkeana, Phaeophyceae). Journal of phycology, 59(5), 893–907. https://doi.org/10.1111/jpy.13366</p>
-<p>To do w internet: - fix references - try to get rid of that loading line when transforming crs - how to get rid of “figure 1” under image caption? - space after kable? - get fig-align help? - add github link - add extra resource</p>
+<p>California Department of Fish and Wildlife, Marine Species Portal. (n.d.). <em>Kelp and other marine algae — True kelp species in California</em>. Accessed November 20, 2025. https://marinespecies.wildlife.ca.gov/kelp/true/#:~:text=Bull%20kelp%20grows%20on%20similar,and%20on%20wave%2Dexposed%20reefs</p>
+<p>Subasinghe, R., Soto, D., &amp; Jia, J. (2009). <em>Global aquaculture and its role in sustainable development</em>. Reviews in aquaculture, 1(1), 2-9.</p>
+<p>The Mysterious World of Bull Kelp. (n.d.). <em>Aquaculture</em>. Accessed November 20, 2025. https://bullkelp.info/aquaculture</p>
+<p>Weigel, B. L., Small, S. L., Berry, H. D., &amp; Dethier, M. N. (2023). <em>Effects of temperature and nutrients on microscopic stages of the bull kelp (Nereocystis luetkeana, Phaeophyceae)</em>. Journal of phycology, 59(5), 893–907. https://doi.org/10.1111/jpy.13366</p>
 
 
 </section>

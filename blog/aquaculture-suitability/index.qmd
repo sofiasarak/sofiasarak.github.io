@@ -9,11 +9,11 @@ In the growing world of aquaculture, knowing where a species will thrive is vita
 
 The two main requirements that this analysis takes into consideration is depth and temperature (using sea surface temperature as a proxy), as many marine species can only thrive in certain conditions. Our area of interest is split into zones in order to rank which stretches of the coastline are best and worst suited to house certain species.
 
-This sort of analysis is significant in the face of the growing global population and climate change, which has placed a strain on agriculture worldwide. Aquaculture has been growing for years, and expanding development in a thoughtful and sustainable way could contribute to more efficient food production. EXTRA SENTENCE WITH SOURCE.
+This sort of analysis is significant in the face of the growing global population and climate change, which has placed a strain on agriculture worldwide. Aquaculture has been growing for years, and expanding development in a thoughtful and sustainable way could contribute to more efficient food production. More production increases food security, as well as contributes to economic growth within communities (Subasinghe et al. 2009).
 
 In this blog post you will find an example analysis based on oysters, as well as the creation of a function that takes temperature and depth as arguments and can locate where those conditions are true.
 
-*Complete code for this analysis can be found in the corresponding [Github repository]().* 
+*Complete code for this analysis can be found in the corresponding [Github repository](https://github.com/sofiasarak/west_coast_eez).* 
 
 ## Setup
 
@@ -92,12 +92,24 @@ We can now compare our 3 data frames to see if they all have the same CRSs, and 
 ```{r}
 #| warning: false
 #| message: false
+#| include: false
+#| results: hide
 # Project depth raster to match CRS of sst raster
 depth <- project(depth, crs(sst))
 
 # Project (using the stars package) to match the CRS of sst raster
 eez <- st_transform(eez, crs(sst))
 ```
+
+```{r}
+#| eval: false
+# Project depth raster to match CRS of sst raster
+depth <- project(depth, crs(sst))
+
+# Project (using the stars package) to match the CRS of sst raster
+eez <- st_transform(eez, crs(sst))
+```
+
 
 Find mean SST over the years 2008-2012 (as our analysis will use the average temperature across 5 years).
 
@@ -141,7 +153,7 @@ We successfully stacked our two rasters!
 
 ## Finding Areas with Suitable Growing Conditions: Oysters
 
-::: {#fig-oyster .figure fig-cap="Image Source: [Pangea Shellfish Company](https://www.pangeashellfish.com/blog/the-different-methods-of-growing-oysters)" fig-align="center"}
+::: {#fig-oyster .figure fig-align="center" fig-cap="Cages are a method used for oyster farming (Image Source: [Pangea Shellfish Company](https://www.pangeashellfish.com/blog/the-different-methods-of-growing-oysters))."  fig-number="false"}
 ![](images/oysters.jpeg)
 :::
 
@@ -234,14 +246,7 @@ suitable_per_region <- zonal(suitable_westcoast, eez_rast, fun = "sum", na.rm = 
 suitable_per_region %>% 
   knitr::kable(col.names = c("EEZ Region", "# of Suitable Cells"))
 ```
-
-
-
-
-
-
-
-
+<br>
 
 Find area of each cell in square km by extracting cell size information.
 
@@ -409,10 +414,11 @@ tm_title(paste("Suitability of West Coast EEZs for", species, "Aquaculture"),
 
 ## Running Function on New Species: Bull Kelp
 
+::: {#fig-bullkelp .figure fig-align="center" fig-cap="Bull kelp farming in Alaska (Image Source: [aquaculturenorthamerica.com](https://www.aquaculturenorthamerica.com/alaskas-vast-mariculture-potential/))."  fig-number="false"}
+![](images/bull_kelp.jpg)
+:::
 
-![](images/bull_kelp.jpg){fig-align="center" fig-cap="Image Source: [aquaculturenorthamerica.com](https://www.aquaculturenorthamerica.com/alaskas-vast-mariculture-potential/)"}
 
-Image Source: [aquaculturenorthamerica.com](https://www.aquaculturenorthamerica.com/alaskas-vast-mariculture-potential/)
 
 Bull kelp farming is a niche sector of seaweed aquaculture, especially small compared to the large seaweed operations taking place in Asia. Currently, there are only a few active, albeit experimental, bull kelp farms in Alaska and BC.
 
@@ -447,18 +453,10 @@ Despite these caveats, this sort of code is generalizable first step to a variet
 
 ## References
 
-[CA.gov Marine Species Portal](https://marinespecies.wildlife.ca.gov/kelp/true/#:~:text=Bull%20kelp%20grows%20on%20similar,and%20on%20wave%2Dexposed%20reefs.)
+California Department of Fish and Wildlife, Marine Species Portal. (n.d.). *Kelp and other marine algae — True kelp species in California*. Accessed November 20, 2025. https://marinespecies.wildlife.ca.gov/kelp/true/#:~:text=Bull%20kelp%20grows%20on%20similar,and%20on%20wave%2Dexposed%20reefs
 
-[bullkelp.info](https://bullkelp.info/aquaculture)
+Subasinghe, R., Soto, D., & Jia, J. (2009). *Global aquaculture and its role in sustainable development*. Reviews in aquaculture, 1(1), 2-9.
 
-Weigel, B. L., Small, S. L., Berry, H. D., & Dethier, M. N. (2023). Effects of temperature and nutrients on microscopic stages of the bull kelp (Nereocystis luetkeana, Phaeophyceae). Journal of phycology, 59(5), 893–907. https://doi.org/10.1111/jpy.13366
+The Mysterious World of Bull Kelp. (n.d.). *Aquaculture*. Accessed November 20, 2025. https://bullkelp.info/aquaculture
 
-
-To do w internet:
-- fix references
-- try to get rid of that loading line when transforming crs
-- how to get rid of "figure 1" under image caption?
-- space after kable?
-- get fig-align help?
-- add github link
-- add extra resource 
+Weigel, B. L., Small, S. L., Berry, H. D., & Dethier, M. N. (2023). *Effects of temperature and nutrients on microscopic stages of the bull kelp (Nereocystis luetkeana, Phaeophyceae)*. Journal of phycology, 59(5), 893–907. https://doi.org/10.1111/jpy.13366
