@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Sofia Sarak">
-<meta name="dcterms.date" content="2025-12-04">
+<meta name="dcterms.date" content="2025-12-09">
 <meta name="description" content="Using Gamma and segmented regression to find relationships and break-points.">
 
 <title>Trace-Element Accumulation in Invertebrate Tissue – Sofia Sarak</title>
@@ -212,7 +212,7 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">December 4, 2025</p>
+        <p class="date">December 9, 2025</p>
       </div>
     </div>
     
@@ -232,13 +232,14 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#data-exploration" id="toc-data-exploration" class="nav-link" data-scroll-target="#data-exploration">Data Exploration</a></li>
   </ul></li>
-  <li><a href="#why-gamma-and-segmentedbreakpoint-models" id="toc-why-gamma-and-segmentedbreakpoint-models" class="nav-link" data-scroll-target="#why-gamma-and-segmentedbreakpoint-models">Why Gamma and Segmented/Breakpoint Models?</a>
-  <ul class="collapse">
-  <li><a href="#model-1-segmented" id="toc-model-1-segmented" class="nav-link" data-scroll-target="#model-1-segmented">Model 1: Segmented</a></li>
-  <li><a href="#model-2-gamma" id="toc-model-2-gamma" class="nav-link" data-scroll-target="#model-2-gamma">Model 2: Gamma</a></li>
-  </ul></li>
+  <li><a href="#why-gamma-and-segmented-models" id="toc-why-gamma-and-segmented-models" class="nav-link" data-scroll-target="#why-gamma-and-segmented-models">Why Gamma and Segmented Models?</a></li>
   <li><a href="#statistical-model" id="toc-statistical-model" class="nav-link" data-scroll-target="#statistical-model">Statistical Model</a></li>
-  <li><a href="#hypotheses" id="toc-hypotheses" class="nav-link" data-scroll-target="#hypotheses">Hypotheses</a></li>
+  <li><a href="#hypotheses" id="toc-hypotheses" class="nav-link" data-scroll-target="#hypotheses">Hypotheses</a>
+  <ul class="collapse">
+  <li><a href="#step-1-gamma-model" id="toc-step-1-gamma-model" class="nav-link" data-scroll-target="#step-1-gamma-model">Step 1 (Gamma Model):</a></li>
+  <li><a href="#step-2-segmented-model" id="toc-step-2-segmented-model" class="nav-link" data-scroll-target="#step-2-segmented-model">Step 2 (Segmented Model):</a></li>
+  </ul></li>
+  <li><a href="#the-issue-of-collinearity" id="toc-the-issue-of-collinearity" class="nav-link" data-scroll-target="#the-issue-of-collinearity">The Issue of Collinearity?</a></li>
   <li><a href="#the-analysis" id="toc-the-analysis" class="nav-link" data-scroll-target="#the-analysis">The Analysis</a></li>
   <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">Interpretation</a></li>
   <li><a href="#other-trace-elements" id="toc-other-trace-elements" class="nav-link" data-scroll-target="#other-trace-elements">Other Trace-Elements</a>
@@ -258,7 +259,7 @@ window.Quarto = {
 
 
 
-<p>The following blog post narrates a statistical analysis performed on water-quality, bed-sediment, and invertebrate tissue trace-element concentrations for tributaries in the Clark Fork Basin, Montana. The use of the gamma and segmented statistical models aims to confirm or deny the presence of a break-point at which a potential relationship between invertebrate and water trace-element concentrations changes.</p>
+<p>The following blog post narrates a statistical analysis performed on water-quality, bed-sediment, and invertebrate tissue trace-element concentrations for tributaries in the Clark Fork Basin, Montana. The use of the Gamma and segmented statistical models aims to confirm or deny the presence of a break-point at which a potential relationship between invertebrate and water trace-element concentrations changes.</p>
 <p>Results such as these have the potential to influence policy decisions regarding water ecosystem rehabilitation, signficant after years of mining and industry pollution in the area.</p>
 <section id="clark-fork-basin-data" class="level2">
 <h2 class="anchored" data-anchor-id="clark-fork-basin-data">Clark Fork Basin Data</h2>
@@ -289,10 +290,10 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>Water, bed sediment, and invertebrate tissue were sampled in streams that contain trace elements associated with historical mining and smelting activities. Large-scale mining and smelting were prevalent in the basin for more than 100 years but are now either discontinued or reduced in scale. Current (as of 2020) land uses are primarily cattle production, logging, mining, residential development, and recreation.</p>
+<p>Water, bed sediment, and invertebrate tissue were sampled in streams that contain trace elements associated with historical mining and smelting activities. Large-scale mining and smelting were prevalent in the basin for more than 100 years but are now either discontinued or reduced in scale. In 2020, land uses were primarily cattle production, logging, mining, residential development, and recreation.</p>
 <p>Concern about the toxicity of trace elements to the aquatic ecosystem and human health has resulted in a comprehensive monitoring effort by State, Federal, Tribal, and private entities to characterize the aquatic resources in the Clark Fork Basin. This effort was designed to guide and monitor remedial activities and to evaluate the effectiveness of remediation and cleanup.</p>
-<p>Sampling methods for the three elements can be found in the <a href="https://pubs.usgs.gov/publication/ofr20221090/full">original report</a>. In this analysis, we use three elements that were tested across water, sediment, and invertebrate tissue, in an effort to explore the impact of water contamination level on the ecology and food systems of the area.</p>
-<p>Trace-element concentration in water is treated as the main predictor variable for trace-element concentration in invertebrate tissue. This relationship was determined based on past research which used element accumulation in aquatic larvae as an indicator for water quality (Haas &amp; Pánik 2025, Pastorino et al.&nbsp;2019).</p>
+<p>Water and fine-grained-bed-sediment samples were collected from the streams at multiple depths and, if possible, from both sides of the stream bed. Benthic insects at immature stages were collected with a large nylon-mesh kick net. Trace-element analysis was conducted back in the laboratory. (More details on sampling methods can be found in the <a href="https://pubs.usgs.gov/publication/ofr20221090/full">original report</a>).</p>
+<p>In this analysis, we use three elements that were tested across water, sediment, and invertebrate tissue, in an effort to explore the impact of water contamination level on the ecology and food systems of the area. Trace-element concentration in water is treated as the main predictor variable for trace-element concentration in invertebrate tissue. This relationship was determined based on past research which used element accumulation in aquatic larvae as an indicator for water quality (Haas &amp; Pánik 2025, Pastorino et al.&nbsp;2019).</p>
 <div id="fig-altadena" class="figure quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-altadena-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -303,7 +304,7 @@ Figure&nbsp;1: Directed Acyclic Graph depicting the relationship between our var
 </figcaption>
 </figure>
 </div>
-<p>Sediment concentration acts as a source of trace-element concentration, as it stores and has the potential to release it back into water over the long term (Horowitz 1991). Species may have an effect on trace-element accumulation as it can introduce differences in metabolic function, but this will not be explored in this analysis.</p>
+<p>Sediment concentration acts as a source of trace-element concentration, as sediment can store and potentially release trace-elements back into water over the long term (Horowitz 1991). Species may have an effect on trace-element accumulation as it can introduce differences in metabolic function, but this will not be explored in this analysis.</p>
 <section id="data-exploration" class="level3">
 <h3 class="anchored" data-anchor-id="data-exploration">Data Exploration</h3>
 <p>The following figures are useful to visualize the similarities and differences in distribution of trace-elements across the three sinks (water, sediment, and invertebrate tissue) tested, as well as provide a quick overview of the range that each trace-element spans.</p>
@@ -311,7 +312,7 @@ Figure&nbsp;1: Directed Acyclic Graph depicting the relationship between our var
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -321,7 +322,7 @@ Figure&nbsp;1: Directed Acyclic Graph depicting the relationship between our var
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
 </figure>
 </div>
 </div>
@@ -331,26 +332,26 @@ Figure&nbsp;1: Directed Acyclic Graph depicting the relationship between our var
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Similar to the previous figure, we can come to the conclusion that trace-elements occur at different scales. The visual positive relationship between sediment and invertegrate tissue is more obvious across trace-elements than between water and invertebrate tissue.</p>
+<p>Similar to the previous figure, we can come to the conclusion that trace-elements occur at different scales. The visual positive relationship between sediment and invertebrate tissue is more obvious across trace-elements than between water and invertebrate tissue.</p>
 </section>
 </section>
-<section id="why-gamma-and-segmentedbreakpoint-models" class="level2">
-<h2 class="anchored" data-anchor-id="why-gamma-and-segmentedbreakpoint-models">Why Gamma and Segmented/Breakpoint Models?</h2>
-<section id="model-1-segmented" class="level3">
-<h3 class="anchored" data-anchor-id="model-1-segmented">Model 1: Segmented</h3>
-<p>The <strong>segmented/break-point</strong> (or sometimes referred to as <strong>broken-line</strong>) statistical model is a regression analysis where the relationship between the response and one or more predictor variables contain a break-point at which the relationship between the response and predictor variables changes. This sort of model is common in fields such as epidemiology, occupational medicine, toxicology, and ecology, where it is of interest to assess threshold value where the effect of the covariate changes.</p>
-<p>We will will use model in our analysis to explore whether their is a threshold value(s) at which the relationship between trace-element concentration in water and trace-element accumulation in invertebrates changes.</p>
+<section id="why-gamma-and-segmented-models" class="level2">
+<h2 class="anchored" data-anchor-id="why-gamma-and-segmented-models">Why Gamma and Segmented Models?</h2>
+<section id="model-1-segmented" class="level4">
+<h4 class="anchored" data-anchor-id="model-1-segmented">Model 1: Segmented</h4>
+<p>The <strong>segmented/break-point</strong> (or sometimes referred to as <strong>broken-line</strong>) statistical model is a regression analysis where the relationship between the response and one or more predictor variables contain a break-point at which the relationship changes. This sort of model is common in fields such as epidemiology, occupational medicine, toxicology, and ecology, where it is of interest to assess threshold value where the effect of the covariate changes.</p>
+<p>We will use the model in our analysis to explore whether there is a threshold value(s) at which the relationship between trace-element concentration in water and trace-element accumulation in invertebrates changes. This is of interest to us because there are extreme values in the biota trace-element concentrations (depicted by the plots in the previous section), which the Gamma model may not be flexible enough to account for. As well, from a policy perspective, it is important to know whether there are certain thresholds to be reached in terms of rehabilitation of ecological communities.</p>
 <p>To test this analysis on simulated data, we can do so by feeding it data that has a known break-point, such as that below.</p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -367,39 +368,1009 @@ Figure&nbsp;1: Directed Acyclic Graph depicting the relationship between our var
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Does it return a break-point of 50?</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sample_model_seg_2)<span class="sc">$</span>psi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       Initial Est.       St.Err
-psi1.x      NA   50 4.045619e-15</code></pre>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="rhpxdupwim" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rhpxdupwim table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#rhpxdupwim thead, #rhpxdupwim tbody, #rhpxdupwim tfoot, #rhpxdupwim tr, #rhpxdupwim td, #rhpxdupwim th {
+  border-style: none;
+}
+
+#rhpxdupwim p {
+  margin: 0;
+  padding: 0;
+}
+
+#rhpxdupwim .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#rhpxdupwim .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#rhpxdupwim .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#rhpxdupwim .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#rhpxdupwim .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rhpxdupwim .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rhpxdupwim .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rhpxdupwim .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#rhpxdupwim .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#rhpxdupwim .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#rhpxdupwim .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#rhpxdupwim .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#rhpxdupwim .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#rhpxdupwim .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#rhpxdupwim .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#rhpxdupwim .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#rhpxdupwim .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#rhpxdupwim .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#rhpxdupwim .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rhpxdupwim .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#rhpxdupwim .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#rhpxdupwim .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#rhpxdupwim .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rhpxdupwim .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#rhpxdupwim .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#rhpxdupwim .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rhpxdupwim .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rhpxdupwim .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#rhpxdupwim .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rhpxdupwim .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#rhpxdupwim .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rhpxdupwim .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rhpxdupwim .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rhpxdupwim .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rhpxdupwim .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rhpxdupwim .gt_left {
+  text-align: left;
+}
+
+#rhpxdupwim .gt_center {
+  text-align: center;
+}
+
+#rhpxdupwim .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#rhpxdupwim .gt_font_normal {
+  font-weight: normal;
+}
+
+#rhpxdupwim .gt_font_bold {
+  font-weight: bold;
+}
+
+#rhpxdupwim .gt_font_italic {
+  font-style: italic;
+}
+
+#rhpxdupwim .gt_super {
+  font-size: 65%;
+}
+
+#rhpxdupwim .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#rhpxdupwim .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#rhpxdupwim .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#rhpxdupwim .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#rhpxdupwim .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#rhpxdupwim .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#rhpxdupwim .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#rhpxdupwim .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#rhpxdupwim div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<td colspan="4" class="gt_heading gt_title gt_font_normal gt_bottom_border">Segmented Model Summary</td>
+</tr>
+<tr class="gt_col_headings even">
+<th id="Break-point" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Break-point</th>
+<th id="Initial" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Initial</th>
+<th id="Est." class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Est.</th>
+<th id="St.-Err" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">St. Err</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Break-point">psi1.x</td>
+<td class="gt_row gt_left" headers="Initial">NA</td>
+<td class="gt_row gt_right" headers="Est.">50</td>
+<td class="gt_row gt_left" headers="St. Err">4.045619e-15</td>
+</tr>
+</tbody>
+</table>
+
+</div>
 </div>
 </div>
 <p>It does!</p>
 </section>
-<section id="model-2-gamma" class="level3">
-<h3 class="anchored" data-anchor-id="model-2-gamma">Model 2: Gamma</h3>
-<p>Y∼Gamma(μ, k),log(μ)=β0​+β1​x+β2​(x−τ)</p>
-<p>The segmented model must be applied to an already existing linear regression model, as it builds off of an already-analyzed relationship between the response and predictor variable(s) – segmented analysis simply determines where the analyzed relationship changes.</p>
-<p>Therefore, for the first step of our analysis we will use a <strong>gamma distribution</strong> statistical model. It is appropriate for data that contains continuous variables that are always positive and have skewed distributions. Our data matches this description, as trace-element concentrations are never negative (and our data contains no values of 0), and higher concentrations occur less frequently than lower ones.</p>
-<p>The gamma distribution is made up of the parameters shape and scale, which relate to the mean and variance of the data through the following formulas.</p>
-<p>To test this analysis on simulated data, we can do so by feeding it data that has a known gamma distribution, simulated using the <code>rgamma</code> function. We can then confirm that our analysis worked by returning the shape and scale of the gamma model (related to dispersion, formulas below), and seeing if they match.</p>
+<section id="model-2-gamma" class="level4">
+<h4 class="anchored" data-anchor-id="model-2-gamma">Model 2: Gamma</h4>
+<p>The segmented model must be applied to an already existing linear regression model, as it builds off of an already-analyzed relationship between the response and predictor variable(s) — segmented analysis simply determines where the analyzed relationship changes.</p>
+<p>Therefore, for the first step of our analysis we will use a <strong>Gamma regression</strong> model. It is appropriate for data containing strictly positive continuous variables with a skewed distributions. Our data matches this description, as trace-element concentrations are never negative (and our data contains no values of 0), and higher concentrations occur less frequently than lower ones.</p>
+<p>The Gamma distribution is made up of the parameters shape and scale, which relate to the mean and variance of the data through the following formulas.</p>
+<p>To test this analysis on simulated data, we can do so by feeding it data that has a known Gamma distribution, simulated using the <code>rgamma</code> function; this will be the predictor variable. To attain the response variable, we will create a y with known coefficients <span class="math inline">\(\beta_{0}\)</span> and <span class="math inline">\(\beta_{1}\)</span>. We can then confirm that our analysis worked by returning the summary of the Gamma model, and seeing if the results match our predermined relationship.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">50</span> <span class="co"># true mean</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="dv">25</span>  <span class="co"># true variance</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>simulated_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">rgamma</span>(<span class="at">n =</span> <span class="dv">100</span>, <span class="at">shape =</span> (m<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>v, <span class="at">scale =</span> v<span class="sc">/</span>m))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set Gamma parameters</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="co"># true mean</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fl">2.5</span>  <span class="co"># true variance</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Set linear model coefficients</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>B0 <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="co"># beta0</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>B1 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co"># beta1</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Produce x (gamma distribution) and y (linearly related to x)</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">rgamma</span>(<span class="at">n =</span> <span class="dv">10000</span>, <span class="at">shape =</span> (m<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>v, <span class="at">scale =</span> v<span class="sc">/</span>m)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> B0 <span class="sc">+</span> B1 <span class="sc">*</span> x</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Create data frame</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>simulated_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x, y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> <span class="dv">1</span>, </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> simulated_data,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> <span class="st">"identity"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> x, </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> simulated_data,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> <span class="st">"identity"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="xmpjkjxnfd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#xmpjkjxnfd table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#xmpjkjxnfd thead, #xmpjkjxnfd tbody, #xmpjkjxnfd tfoot, #xmpjkjxnfd tr, #xmpjkjxnfd td, #xmpjkjxnfd th {
+  border-style: none;
+}
+
+#xmpjkjxnfd p {
+  margin: 0;
+  padding: 0;
+}
+
+#xmpjkjxnfd .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#xmpjkjxnfd .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#xmpjkjxnfd .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#xmpjkjxnfd .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#xmpjkjxnfd .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#xmpjkjxnfd .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#xmpjkjxnfd .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#xmpjkjxnfd .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#xmpjkjxnfd .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#xmpjkjxnfd .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#xmpjkjxnfd .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#xmpjkjxnfd .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#xmpjkjxnfd .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#xmpjkjxnfd .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#xmpjkjxnfd .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#xmpjkjxnfd .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#xmpjkjxnfd .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#xmpjkjxnfd .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#xmpjkjxnfd .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xmpjkjxnfd .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#xmpjkjxnfd .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#xmpjkjxnfd .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#xmpjkjxnfd .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xmpjkjxnfd .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#xmpjkjxnfd .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#xmpjkjxnfd .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#xmpjkjxnfd .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xmpjkjxnfd .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#xmpjkjxnfd .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#xmpjkjxnfd .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#xmpjkjxnfd .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#xmpjkjxnfd .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#xmpjkjxnfd .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xmpjkjxnfd .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#xmpjkjxnfd .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xmpjkjxnfd .gt_left {
+  text-align: left;
+}
+
+#xmpjkjxnfd .gt_center {
+  text-align: center;
+}
+
+#xmpjkjxnfd .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#xmpjkjxnfd .gt_font_normal {
+  font-weight: normal;
+}
+
+#xmpjkjxnfd .gt_font_bold {
+  font-weight: bold;
+}
+
+#xmpjkjxnfd .gt_font_italic {
+  font-style: italic;
+}
+
+#xmpjkjxnfd .gt_super {
+  font-size: 65%;
+}
+
+#xmpjkjxnfd .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#xmpjkjxnfd .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#xmpjkjxnfd .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#xmpjkjxnfd .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#xmpjkjxnfd .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#xmpjkjxnfd .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#xmpjkjxnfd .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#xmpjkjxnfd .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#xmpjkjxnfd div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<td colspan="5" class="gt_heading gt_title gt_font_normal gt_bottom_border">Gamma Model Summary</td>
+</tr>
+<tr class="gt_col_headings even">
+<th id="Coefficients:" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Coefficients:</th>
+<th id="Estimate" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Estimate</th>
+<th id="Std.-Error" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Std. Error</th>
+<th id="t-value" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">t value</th>
+<th id="Pr(>|t|)" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Coefficients:">(Intercept)</td>
+<td class="gt_row gt_left" headers="Estimate">5.000e-01</td>
+<td class="gt_row gt_left" headers="Std. Error">1.678e-16</td>
+<td class="gt_row gt_left" headers="t value">2.980e+15</td>
+<td class="gt_row gt_left" headers="Pr(>|t|)">&lt;2e-16 ***</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Coefficients:">x</td>
+<td class="gt_row gt_left" headers="Estimate">1.000e+00</td>
+<td class="gt_row gt_left" headers="Std. Error">3.850e-17</td>
+<td class="gt_row gt_left" headers="t value">2.597e+16</td>
+<td class="gt_row gt_left" headers="Pr(>|t|)">&lt;2e-16 ***</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>As we can see in the figure above, our <code>glm(family = 'Gamma')</code> returns the expected coefficients.</p>
 </section>
 </section>
 <section id="statistical-model" class="level2">
@@ -407,14 +1378,15 @@ psi1.x      NA   50 4.045619e-15</code></pre>
 <p>Based on what we know about the Gamma and segmented models, as well as the relationship we wish explore, our model is as follows:</p>
 <p><span class="math display">\[
 \text{InvertConc} \sim \text{Gamma}(\mu, \sigma)
-\]</span> <span class="math display">\[
+\]</span></p>
+<p><span class="math display">\[
 \log(\mu)
 = \beta_{0}
 + \beta_{1}\,\text{WaterConc}
 + \beta_{2}\,\tau\text{WaterConc}\,
 + \beta_{3}\,\text{SedimentConc}
 \]</span></p>
-<p>In this case, <span class="math inline">\(\tau\)</span> represents the presence of break-point. It should also be noted that whereas a Gamma distribution uses the parameters shape and scale, a Gamma regression has the paremeters <span class="math inline">\(\mu\)</span> (mean) and <span class="math inline">\(\sigma\)</span> (variance). There relationships with shape and scale are:</p>
+<p>In this case, <span class="math inline">\(\tau\)</span> represents the presence of break-point. It should also be noted that whereas a Gamma distribution uses the parameters shape and scale, a Gamma regression has the paremeters <span class="math inline">\(\mu\)</span> (mean) and <span class="math inline">\(\sigma\)</span> (variance). Their relationships with shape and scale are:</p>
 <ul>
 <li><span class="math inline">\(\mu\)</span> = shape * scale</li>
 <li><span class="math inline">\(\sigma\)</span> = shape * (scale)²</li>
@@ -428,176 +1400,2098 @@ psi1.x      NA   50 4.045619e-15</code></pre>
 <li>Is the risk of trace-element contamination/ingestion constant across the whole range of concentrations in sediment and water?</li>
 <li>If the risk is sediment/water-concentration dependent, does a threshold value exist?</li>
 </ol>
-<p><strong>Null Hypothesis:</strong> There is no relationship between trace-element concentration in water and biota, and therefore a breakpoint doesn’t exist.</p>
-<p><strong>Alternative Hypthesis:</strong> There is a positive relationship between trace-element concentration in water and biota, and a breakpoint does exist.</p>
+<p>From this, we gather two sets of null and alternative hypotheses.</p>
+<section id="step-1-gamma-model" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-gamma-model">Step 1 (Gamma Model):</h3>
+<p><strong>Null Hypothesis:</strong> There is no relationship between trace-element concentration in water and biota.</p>
+<p><strong>Alternative Hypthesis:</strong> There is a positive relationship between trace-element concentration in water and biota.</p>
+</section>
+<section id="step-2-segmented-model" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-segmented-model">Step 2 (Segmented Model):</h3>
+<p><strong>Null Hypothesis:</strong> There is no breakpoint in the relationship between trace-element concentration in water and biota.</p>
+<p><strong>Alternative Hypthesis:</strong> There is a breakpoint in the relationship between trace-element concentration in water and biota.</p>
+</section>
+</section>
+<section id="the-issue-of-collinearity" class="level2">
+<h2 class="anchored" data-anchor-id="the-issue-of-collinearity">The Issue of Collinearity?</h2>
+<p>It is sensible to be wary of both sediment and water trace-element concentration as predictor variables in this model. Wouldn’t they be highly correlated? In fact, no.</p>
+<p>Rosso et al.&nbsp;2012 conducted a study similar to ours that explored arsenic concentrations in water, sediment, and fish species from naturally contaminated rivers. They found that there was little correlation between the concentration of arsenic in the water and the sediment. This may be due to the different storage and cycling mechanisms of the two trace-element sinks.</p>
+<p>To confirm that we do not face collinearity in our analysis, we find the R² between our water and sediment concentration variables, for all three of our trace-elements. Literature suggests that R² values of 0.8 or below typically give no reason to be concerned about collinearity. The results are summarized below.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="oxyfgdwmfb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#oxyfgdwmfb table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#oxyfgdwmfb thead, #oxyfgdwmfb tbody, #oxyfgdwmfb tfoot, #oxyfgdwmfb tr, #oxyfgdwmfb td, #oxyfgdwmfb th {
+  border-style: none;
+}
+
+#oxyfgdwmfb p {
+  margin: 0;
+  padding: 0;
+}
+
+#oxyfgdwmfb .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#oxyfgdwmfb .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#oxyfgdwmfb .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#oxyfgdwmfb .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#oxyfgdwmfb .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#oxyfgdwmfb .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#oxyfgdwmfb .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#oxyfgdwmfb .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#oxyfgdwmfb .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#oxyfgdwmfb .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#oxyfgdwmfb .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#oxyfgdwmfb .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#oxyfgdwmfb .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#oxyfgdwmfb .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#oxyfgdwmfb .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#oxyfgdwmfb .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#oxyfgdwmfb .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#oxyfgdwmfb .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#oxyfgdwmfb .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#oxyfgdwmfb .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#oxyfgdwmfb .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#oxyfgdwmfb .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#oxyfgdwmfb .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#oxyfgdwmfb .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#oxyfgdwmfb .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#oxyfgdwmfb .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#oxyfgdwmfb .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#oxyfgdwmfb .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#oxyfgdwmfb .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#oxyfgdwmfb .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#oxyfgdwmfb .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#oxyfgdwmfb .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#oxyfgdwmfb .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#oxyfgdwmfb .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#oxyfgdwmfb .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#oxyfgdwmfb .gt_left {
+  text-align: left;
+}
+
+#oxyfgdwmfb .gt_center {
+  text-align: center;
+}
+
+#oxyfgdwmfb .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#oxyfgdwmfb .gt_font_normal {
+  font-weight: normal;
+}
+
+#oxyfgdwmfb .gt_font_bold {
+  font-weight: bold;
+}
+
+#oxyfgdwmfb .gt_font_italic {
+  font-style: italic;
+}
+
+#oxyfgdwmfb .gt_super {
+  font-size: 65%;
+}
+
+#oxyfgdwmfb .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#oxyfgdwmfb .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#oxyfgdwmfb .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#oxyfgdwmfb .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#oxyfgdwmfb .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#oxyfgdwmfb .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#oxyfgdwmfb .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#oxyfgdwmfb .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#oxyfgdwmfb div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<td colspan="4" class="gt_heading gt_title gt_font_normal gt_bottom_border">Correlation Between Water and Sediment Concentrations</td>
+</tr>
+<tr class="gt_col_headings even">
+<th id="Trace-Element" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Trace-Element</th>
+<th id="Arsenic" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Arsenic</th>
+<th id="Copper" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Copper</th>
+<th id="Lead" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Lead</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Trace-Element">R²</td>
+<td class="gt_row gt_right" headers="Arsenic">0.15</td>
+<td class="gt_row gt_right" headers="Copper">0.39</td>
+<td class="gt_row gt_right" headers="Lead">0.32</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>As all of the R² values between water and sediment concentration are quite low, we can confidently proceed with our two predictor variables.</p>
 </section>
 <section id="the-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="the-analysis">The Analysis</h2>
-<p>This blog post will only feature the code for the trace-element arsenic, but the same steps can be applied to each trace-element (with the exception of values that correspond to range), and will be included in the interpretation section below.</p>
-<p>As stated above, we explore the effect of trace-element concentration in water on the corresponding concentration in biota tissue, controlling for sediment concentration.</p>
-<p><strong>Step 1:</strong> Generating models from original data.</p>
+<p>This blog post will only feature the code for the trace-element arsenic, but the same steps can be applied to each trace-element (with the exception of values that correspond to range), and will be included in the later interpretation section.</p>
+<p>We evaluate each trace-element separately (instead of using them as predictor variables in our model) because each element differs in chemical and biological properties. They interact with water, sediment, and biota differently, and the concentration of one does not affect the other in the context of our analysis. Therefore, we can model them each separately.</p>
+<p>As stated, we explore the effect of trace-element concentration in water on the corresponding concentration in biota tissue, controlling for sediment concentration.</p>
+<section id="step-1-generating-models-from-original-data." class="level4">
+<h4 class="anchored" data-anchor-id="step-1-generating-models-from-original-data.">Step 1: Generating models from original data.</h4>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run gamma model on arsenic data</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>conc_model_gamma <span class="ot">&lt;-</span> <span class="fu">glm</span>(concentration_biota <span class="sc">~</span> concentration_water <span class="sc">+</span> concentration_sediment, </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> conc_arsenic, </span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> <span class="st">"log"</span>)) <span class="co"># Log as link function to account for exponential nature of data</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Run segmented model on gamma model (note: segmented function comes from the "segmented" R package)</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>conc_model_seg <span class="ot">&lt;-</span> <span class="fu">segmented</span>(<span class="at">obj =</span> conc_model_gamma, <span class="at">seg.Z =</span> <span class="sc">~</span> concentration_water <span class="sc">+</span> concentration_sediment)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run Gamma model on arsenic data</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>conc_model_gamma <span class="ot">&lt;-</span> <span class="fu">glm</span>(concentration_biota <span class="sc">~</span> concentration_water <span class="sc">+</span> concentration_sediment, </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> conc_arsenic, </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">family =</span> <span class="fu">Gamma</span>(<span class="at">link =</span> <span class="st">"log"</span>)) <span class="co"># Log as link function to account for exponential nature of data</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Run segmented model on Gamma model (note: segmented function comes from the "segmented" R package)</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>conc_model_seg <span class="ot">&lt;-</span> <span class="fu">segmented</span>(<span class="at">obj =</span> conc_model_gamma, <span class="at">seg.Z =</span> <span class="sc">~</span> concentration_water <span class="sc">+</span> concentration_sediment)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p><strong>Step 2:</strong> Applying models to generated values.</p>
+</section>
+<section id="step-2-applying-models-to-generated-values." class="level4">
+<h4 class="anchored" data-anchor-id="step-2-applying-models-to-generated-values.">Step 2: Applying models to generated values.</h4>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create prediction grid with levels of water and sediment concentrations</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pred_grid <span class="ot">&lt;-</span> <span class="fu">expand_grid</span>(<span class="at">concentration_water =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">30</span>,</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">concentration_sediment =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">150</span>)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Applying gamma model to simulated values</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>conc_model_gamma_se <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="at">object =</span> conc_model_gamma,</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                          <span class="at">newdata =</span> pred_grid,</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                          <span class="at">type =</span> <span class="st">"link"</span>, <span class="co"># stay in link space</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                          <span class="at">se.fit =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply segmented model to simulated values</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>conc_model_seg_se<span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="at">object =</span> conc_model_seg,</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>                          <span class="at">newdata =</span> pred_grid,</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>                          <span class="at">type =</span> <span class="st">"link"</span>, <span class="co"># stay in link space</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>                          <span class="at">se.fit =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create prediction grid with levels of water and sediment concentrations</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>pred_grid <span class="ot">&lt;-</span> <span class="fu">expand_grid</span>(<span class="at">concentration_water =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">30</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">concentration_sediment =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">150</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Applying gamma model to simulated values</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>conc_model_gamma_se <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="at">object =</span> conc_model_gamma,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                          <span class="at">newdata =</span> pred_grid,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                          <span class="at">type =</span> <span class="st">"link"</span>, <span class="co"># stay in link space</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                          <span class="at">se.fit =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply segmented model to simulated values</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>conc_model_seg_se<span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="at">object =</span> conc_model_seg,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>                          <span class="at">newdata =</span> pred_grid,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                          <span class="at">type =</span> <span class="st">"link"</span>, <span class="co"># stay in link space</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>                          <span class="at">se.fit =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p><strong>Step 3:</strong> Using predicted values to plot Gamma distribution.</p>
+</section>
+<section id="step-3-using-predicted-values-to-plot-gamma-distribution." class="level4">
+<h4 class="anchored" data-anchor-id="step-3-using-predicted-values-to-plot-gamma-distribution.">Step 3: Using predicted values to plot Gamma distribution.</h4>
+<p><em>In the subsequent plots, three sediment values are plotted (50, 100, and 150). These are used as representations of the way sediment concentration affects the relationship between water and biota trace-element concentrations. It is important to note that sediment IS a continuous variable, the values extracted simply act as examples.</em></p>
+<p><em>Raw concentration data is plotted in blue.</em></p>
 <p>The following code extracts the predicted concentrations from <code>conc_model_gamma_se</code> results, as well as the 95% confidence intervals for both the predicted values and our real data.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add data columns corresponding to predicted values</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Starting in link space and then using exp() to get to response space</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>concentration_pred <span class="ot">&lt;-</span> pred_grid <span class="sc">%&gt;%</span> </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># log of predicted concentration values</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc =</span> conc_model_gamma_se<span class="sc">$</span>fit,</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 95% CI of concentration predictionvalues in link space</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc_se =</span> conc_model_gamma_se<span class="sc">$</span>se.fit,</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc_lwr =</span> <span class="fu">qnorm</span>(<span class="fl">0.025</span>, <span class="at">mean =</span> log_conc, <span class="at">sd =</span> log_conc_se),</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc_upr =</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>, <span class="at">mean =</span> log_conc, <span class="at">sd =</span> log_conc_se),</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># undo the link function -- in this case log --  using exp()</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc =</span> <span class="fu">exp</span>(log_conc),</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc_lwr =</span> <span class="fu">exp</span>(log_conc_lwr),</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc_upr =</span> <span class="fu">exp</span>(log_conc_upr))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add data columns corresponding to predicted values</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Starting in link space and then using exp() to get to response space</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>concentration_pred <span class="ot">&lt;-</span> pred_grid <span class="sc">%&gt;%</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># log of predicted concentration values</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc =</span> conc_model_gamma_se<span class="sc">$</span>fit,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 95% CI of concentration predictionvalues in link space</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc_se =</span> conc_model_gamma_se<span class="sc">$</span>se.fit,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc_lwr =</span> <span class="fu">qnorm</span>(<span class="fl">0.025</span>, <span class="at">mean =</span> log_conc, <span class="at">sd =</span> log_conc_se),</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_conc_upr =</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>, <span class="at">mean =</span> log_conc, <span class="at">sd =</span> log_conc_se),</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># undo the link function -- in this case log --  using exp()</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc =</span> <span class="fu">exp</span>(log_conc),</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc_lwr =</span> <span class="fu">exp</span>(log_conc_lwr),</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc_upr =</span> <span class="fu">exp</span>(log_conc_upr))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate shape and scale for gamma distribution ribbons in plot</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>shape <span class="ot">&lt;-</span> (concentration_pred<span class="sc">$</span>conc<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">var</span>(concentration_pred<span class="sc">$</span>conc)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>scale <span class="ot">&lt;-</span> <span class="fu">var</span>(concentration_pred<span class="sc">$</span>conc)<span class="sc">/</span>concentration_pred<span class="sc">$</span>conc</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 95% CI of actual data (using gamma distribution)</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>concentration_pred <span class="ot">&lt;-</span> concentration_pred <span class="sc">%&gt;%</span> </span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc_lwr_gamma =</span> <span class="fu">qgamma</span>(<span class="fl">0.025</span>, <span class="at">shape =</span> shape, <span class="at">scale =</span> scale),</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc_upr_gamma =</span> <span class="fu">qgamma</span>(<span class="fl">0.975</span>, <span class="at">shape =</span> shape, <span class="at">scale =</span> scale))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate shape and scale for gamma distribution ribbons in plot</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>shape <span class="ot">&lt;-</span> (concentration_pred<span class="sc">$</span>conc<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">var</span>(concentration_pred<span class="sc">$</span>conc)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>scale <span class="ot">&lt;-</span> <span class="fu">var</span>(concentration_pred<span class="sc">$</span>conc)<span class="sc">/</span>concentration_pred<span class="sc">$</span>conc</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 95% CI of actual data (using gamma distribution)</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>concentration_pred <span class="ot">&lt;-</span> concentration_pred <span class="sc">%&gt;%</span> </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc_lwr_gamma =</span> <span class="fu">qgamma</span>(<span class="fl">0.025</span>, <span class="at">shape =</span> shape, <span class="at">scale =</span> scale),</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">conc_upr_gamma =</span> <span class="fu">qgamma</span>(<span class="fl">0.975</span>, <span class="at">shape =</span> shape, <span class="at">scale =</span> scale))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>The plots below are an intermediary step before the application and plotting of the segmented model.</p>
-<p><strong>Step 4:</strong> Use predicted values to plot segmented distribution.</p>
+<p>The plots above are an intermediary step before the application and plotting of the segmented model.</p>
+</section>
+<section id="step-4-use-predicted-values-to-plot-segmented-distribution." class="level4">
+<h4 class="anchored" data-anchor-id="step-4-use-predicted-values-to-plot-segmented-distribution.">Step 4: Use predicted values to plot segmented distribution.</h4>
 <p>In a similar manner to the code above, columns are added to the prediction grid using the results of <code>conc_model_seg_se</code>. The following plot is created, with a break-point at x = 11.</p>
-<p>The segmented model is typically presented in log space, as it is the log of the response variable that appears like linear piece-wise function (ie., as a break-point).</p>
-<div class="cell">
+<p>The segmented model is typically presented in log space, as it is the log of the response variable that appears like linear piece-wise function (i.e., as a break-point).</p>
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>To better visualize the gamma relationship we are exporing, response space is plotted below (the same breakpoint is visible, but now the relationship between predictor and response is not linear, but exponential).</p>
-<div class="cell">
+<p>To better visualize the Gamma relationship we are exporing, response space is plotted below (the same break-point is visible, but now the relationship between predictor and response is not linear, but exponential).</p>
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
+</section>
 </section>
 <section id="interpretation" class="level2">
 <h2 class="anchored" data-anchor-id="interpretation">Interpretation</h2>
 <p>Visually, it appears that both a positive relationship and a break-point exist between arsenic concentration in water and biota. To confirm, we can take a look at the model summary outputs.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Return the coefficients and their statistical significance</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>conc_model_gamma<span class="sc">$</span>coefficients</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>           (Intercept)    concentration_water concentration_sediment 
-           0.892054351            0.080041313            0.007746623 </code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Return the coefficients and their statistical significance</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>conc_model_gamma<span class="sc">$</span>coefficients</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Return break-points</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>conc_model_seg<span class="sc">$</span>psi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                            Initial     Est.    St.Err
-psi1.concentration_water         NA 11.00022 0.3708171
-psi1.concentration_sediment      NA 89.39980 4.9240715</code></pre>
+<div class="cell">
+<div class="cell-output-display">
+<div id="wcuebulroa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#wcuebulroa table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#wcuebulroa thead, #wcuebulroa tbody, #wcuebulroa tfoot, #wcuebulroa tr, #wcuebulroa td, #wcuebulroa th {
+  border-style: none;
+}
+
+#wcuebulroa p {
+  margin: 0;
+  padding: 0;
+}
+
+#wcuebulroa .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#wcuebulroa .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#wcuebulroa .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#wcuebulroa .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#wcuebulroa .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#wcuebulroa .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#wcuebulroa .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#wcuebulroa .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#wcuebulroa .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#wcuebulroa .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#wcuebulroa .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#wcuebulroa .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#wcuebulroa .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#wcuebulroa .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#wcuebulroa .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#wcuebulroa .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#wcuebulroa .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#wcuebulroa .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#wcuebulroa .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wcuebulroa .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#wcuebulroa .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#wcuebulroa .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#wcuebulroa .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wcuebulroa .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#wcuebulroa .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#wcuebulroa .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#wcuebulroa .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wcuebulroa .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#wcuebulroa .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#wcuebulroa .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#wcuebulroa .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#wcuebulroa .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#wcuebulroa .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wcuebulroa .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#wcuebulroa .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wcuebulroa .gt_left {
+  text-align: left;
+}
+
+#wcuebulroa .gt_center {
+  text-align: center;
+}
+
+#wcuebulroa .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#wcuebulroa .gt_font_normal {
+  font-weight: normal;
+}
+
+#wcuebulroa .gt_font_bold {
+  font-weight: bold;
+}
+
+#wcuebulroa .gt_font_italic {
+  font-style: italic;
+}
+
+#wcuebulroa .gt_super {
+  font-size: 65%;
+}
+
+#wcuebulroa .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#wcuebulroa .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#wcuebulroa .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#wcuebulroa .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#wcuebulroa .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#wcuebulroa .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#wcuebulroa .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#wcuebulroa .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#wcuebulroa div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<td colspan="3" class="gt_heading gt_title gt_font_normal gt_bottom_border">Gamma Model Summary</td>
+</tr>
+<tr class="gt_col_headings even">
+<th id="Coefficients:" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Coefficients:</th>
+<th id="Estimate" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Estimate</th>
+<th id="Pr(>|t|)" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Coefficients:">concentration_water</td>
+<td class="gt_row gt_right" headers="Estimate">0.080041</td>
+<td class="gt_row gt_left" headers="Pr(>|t|)">&lt; 2e-16 ***</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Coefficients:">concentration_sediment</td>
+<td class="gt_row gt_right" headers="Estimate">0.007747</td>
+<td class="gt_row gt_left" headers="Pr(>|t|)">3.5e-11 ***</td>
+</tr>
+</tbody>
+</table>
+
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Return coefficients before and after breakpoints</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>conc_model_seg<span class="sc">$</span>coefficients</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                (Intercept)         concentration_water 
-                 1.21467466                 -0.02732520 
-     concentration_sediment      U1.concentration_water 
-                 0.01361267                  0.22931590 
-  U1.concentration_sediment    psi1.concentration_water 
-                -0.02302061                  0.00000000 
-psi1.concentration_sediment 
-                 0.00000000 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Return break-points</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>conc_model_seg<span class="sc">$</span>psi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="yovaxhljzv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#yovaxhljzv table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#yovaxhljzv thead, #yovaxhljzv tbody, #yovaxhljzv tfoot, #yovaxhljzv tr, #yovaxhljzv td, #yovaxhljzv th {
+  border-style: none;
+}
+
+#yovaxhljzv p {
+  margin: 0;
+  padding: 0;
+}
+
+#yovaxhljzv .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#yovaxhljzv .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#yovaxhljzv .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#yovaxhljzv .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#yovaxhljzv .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#yovaxhljzv .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#yovaxhljzv .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#yovaxhljzv .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#yovaxhljzv .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#yovaxhljzv .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#yovaxhljzv .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#yovaxhljzv .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#yovaxhljzv .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#yovaxhljzv .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#yovaxhljzv .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#yovaxhljzv .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#yovaxhljzv .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#yovaxhljzv .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#yovaxhljzv .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yovaxhljzv .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#yovaxhljzv .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#yovaxhljzv .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#yovaxhljzv .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yovaxhljzv .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#yovaxhljzv .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#yovaxhljzv .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#yovaxhljzv .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yovaxhljzv .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#yovaxhljzv .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#yovaxhljzv .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#yovaxhljzv .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#yovaxhljzv .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#yovaxhljzv .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yovaxhljzv .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#yovaxhljzv .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#yovaxhljzv .gt_left {
+  text-align: left;
+}
+
+#yovaxhljzv .gt_center {
+  text-align: center;
+}
+
+#yovaxhljzv .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#yovaxhljzv .gt_font_normal {
+  font-weight: normal;
+}
+
+#yovaxhljzv .gt_font_bold {
+  font-weight: bold;
+}
+
+#yovaxhljzv .gt_font_italic {
+  font-style: italic;
+}
+
+#yovaxhljzv .gt_super {
+  font-size: 65%;
+}
+
+#yovaxhljzv .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#yovaxhljzv .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#yovaxhljzv .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#yovaxhljzv .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#yovaxhljzv .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#yovaxhljzv .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#yovaxhljzv .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#yovaxhljzv .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#yovaxhljzv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<td colspan="4" class="gt_heading gt_title gt_font_normal gt_bottom_border">Segmented Model Summary: Break-point</td>
+</tr>
+<tr class="gt_col_headings even">
+<th id="Break-point" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Break-point</th>
+<th id="Initial" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Initial</th>
+<th id="Est." class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Est.</th>
+<th id="St.-Err" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">St. Err</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Break-point">psi1.concentration_water</td>
+<td class="gt_row gt_left" headers="Initial">NA</td>
+<td class="gt_row gt_right" headers="Est.">11.00022</td>
+<td class="gt_row gt_right" headers="St. Err">0.3708171</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Return coefficients before and after breakpoints</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>conc_model_seg<span class="sc">$</span>coefficients</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="lezobcklxh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#lezobcklxh table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#lezobcklxh thead, #lezobcklxh tbody, #lezobcklxh tfoot, #lezobcklxh tr, #lezobcklxh td, #lezobcklxh th {
+  border-style: none;
+}
+
+#lezobcklxh p {
+  margin: 0;
+  padding: 0;
+}
+
+#lezobcklxh .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#lezobcklxh .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#lezobcklxh .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#lezobcklxh .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#lezobcklxh .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#lezobcklxh .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lezobcklxh .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#lezobcklxh .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#lezobcklxh .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#lezobcklxh .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#lezobcklxh .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#lezobcklxh .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#lezobcklxh .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#lezobcklxh .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#lezobcklxh .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#lezobcklxh .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#lezobcklxh .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#lezobcklxh .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#lezobcklxh .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lezobcklxh .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#lezobcklxh .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#lezobcklxh .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#lezobcklxh .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lezobcklxh .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#lezobcklxh .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#lezobcklxh .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lezobcklxh .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lezobcklxh .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#lezobcklxh .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lezobcklxh .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#lezobcklxh .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#lezobcklxh .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#lezobcklxh .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lezobcklxh .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#lezobcklxh .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#lezobcklxh .gt_left {
+  text-align: left;
+}
+
+#lezobcklxh .gt_center {
+  text-align: center;
+}
+
+#lezobcklxh .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#lezobcklxh .gt_font_normal {
+  font-weight: normal;
+}
+
+#lezobcklxh .gt_font_bold {
+  font-weight: bold;
+}
+
+#lezobcklxh .gt_font_italic {
+  font-style: italic;
+}
+
+#lezobcklxh .gt_super {
+  font-size: 65%;
+}
+
+#lezobcklxh .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#lezobcklxh .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#lezobcklxh .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#lezobcklxh .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#lezobcklxh .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#lezobcklxh .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#lezobcklxh .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#lezobcklxh .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#lezobcklxh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<td colspan="3" class="gt_heading gt_title gt_font_normal gt_bottom_border">Segmented Model Summary: Coefficients</td>
+</tr>
+<tr class="gt_col_headings even">
+<th id="Coefficients" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Coefficients</th>
+<th id="Estimate" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Estimate</th>
+<th id="Pr(>|t|)" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Coefficients">concentration_water</td>
+<td class="gt_row gt_right" headers="Estimate">-0.027325</td>
+<td class="gt_row gt_left" headers="Pr(>|t|)">1.45e-05 ***</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Coefficients">U1.concentration_water</td>
+<td class="gt_row gt_right" headers="Estimate">0.229316</td>
+<td class="gt_row gt_left" headers="Pr(>|t|)">NA</td>
+</tr>
+</tbody>
+</table>
+
+</div>
 </div>
 </div>
 <p>These outputs correspond to the questions we asked at the beginning:</p>
-<ol type="1">
-<li>Does trace-element concentration in water increase trace-element concentration in invertebrates?</li>
-</ol>
+<p><strong>1. Does trace-element concentration in water increase trace-element concentration in invertebrates?</strong></p>
 <p>The <code>concentration_water</code> coefficient of our gamma model returns a value of 0.08, which is significant at a 99% confidence level. We can reject our null hypothesis that there is no relationship between water and invertebrate trace-element concentration.</p>
-<ol start="2" type="1">
-<li>Is the risk of trace-element contamination/ingestion constant across the whole range of concentrations in sediment and water?</li>
-<li>If the risk is sediment/water-concentration dependent, does a threshold value exist?</li>
-</ol>
+<p><strong>2. Is the risk of trace-element contamination/ingestion constant across the whole range of concentrations in sediment and water?</strong></p>
+<p><strong>3. If the risk is sediment/water-concentration dependent, does a threshold value exist?</strong></p>
 <p>Our segmented model returns a break-point of <code>concentration_water</code> = 11. Additionally, the slopes before and after the break-point (-0.03 and 0.23 respectively) are both significant at the 99% confidence level. Thus, we can reject the second part of our null hypothesis, that the relationship between trace-element water and invertebrate concentration stays consistent across all values.</p>
 </section>
 <section id="other-trace-elements" class="level2">
 <h2 class="anchored" data-anchor-id="other-trace-elements">Other Trace-Elements</h2>
-<p>Plots of the remaining trace-elements – copper and lead – are below with their corresponding break-point and gamma coefficient values.</p>
+<p>Plots of the remaining trace-elements — copper and lead — are below with their corresponding break-point and Gamma coefficient values.</p>
 <section id="copper" class="level3">
 <h3 class="anchored" data-anchor-id="copper">Copper</h3>
 <p><strong>Gamma Model</strong></p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 <p><strong>Break-point Model</strong></p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480"></p>
 </figure>
 </div>
 </div>
@@ -608,32 +3502,33 @@ psi1.concentration_sediment
 <section id="lead" class="level3">
 <h3 class="anchored" data-anchor-id="lead">Lead</h3>
 <p><strong>Gamma Model</strong></p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-44-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
 <p><strong>Break-point Model</strong></p>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-46-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>From these figures and the coefficients produced by the model, we fail to reject our null hypothesis that there is <em>no</em> relationship between lead concentration in water and invertebrate tissue. However, we can reject the null hypothesis that there is no break-point at which the relationship between the response and predictor changes, as the segmented model still identified one. Because it was based on an insignificant model, we must be cautious using these results.</p>
+<p>From these figures and the coefficients produced by the model, we fail to reject our null hypothesis that there is no relationship between lead concentration in water and invertebrate tissue. However, we can reject the null hypothesis that there is no break-point at which the relationship between the response and predictor changes, as the segmented model still identified one.</p>
+<p>Since the break-point was determined by an insignificant Gamma model, we must be cautious using these results.</p>
 </section>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>In this blog post, we walked through how to simulate data for as well as run the gamma and segmented statistical models on trace-element data from the Clark Fork Basin in Montana.</p>
-<p>In our analysis, we explored three elements – arsenic, copper, and lead – that when accumulated at high levels, have significant detrimental impact on aquatic ecosystems (especially as their concentrations increase up the food web). Our results that arsenic and copper both contain break-point values at which their accumulation in invertebrate tissue changes in rate based on their concentrations in water. In arsenic this change is a positive one, whereas in copper the relationship levels off. We found no significant relationship between lead concentration in water and invertebrate tissue.</p>
+<p>In this blog post, we walked through how to simulate data for as well as run the Gamma and segmented statistical models on trace-element data from the Clark Fork Basin in Montana.</p>
+<p>In our analysis, we explored three elements — arsenic, copper, and lead — that when accumulated at high levels, have significant detrimental impact on aquatic ecosystems (especially as their concentrations increase up the food web). Our results suggest that arsenic and copper both contain break-point values at which their accumulation in invertebrate tissue changes in rate based on their concentrations in water. In arsenic this change is a positive one, whereas in copper the relationship levels off. We found no significant relationship between lead concentration in water and invertebrate tissue.</p>
 <p>In terms of habitat remediation, recommendations based on these results could include paying particular attention to arsenic concentrations in the water.</p>
 </section>
 <section id="references" class="level2">
@@ -641,7 +3536,9 @@ psi1.concentration_sediment
 <p>Clark, G., Hornberger, M., Hepler, E., &amp; Heinert, T. (2022). Water-quality, bed-sediment, and invertebrate tissue trace-element concentrations for tributaries in the Clark Fork Basin, Montana, October 2019–September 2020 (Report 2022–1090; Open-File Report, p.&nbsp;30). USGS Publications Warehouse. https://doi.org/10.3133/ofr20221090</p>
 <p>Clark, G.D., Hornberger, M.I., Hepler, E.J., and Heinert, T.L., 2022, Water-Quality, Bed-Sediment, and Invertebrate Tissue Trace-Element Concentrations for Tributaries in the Clark Fork Basin, Montana, October 2019–September 2020: U.S. Geological Survey data release, https://doi.org/10.5066/P93BP9P8.</p>
 <p>Haas, M., Pánik, P. Long-Term and Seasonal Trends in the Mode of Accumulation of Elements in the Bodies of Aquatic Insect Larvae. Arch Environ Contam Toxicol 89, 136–153 (2025). https://doi.org/10.1007/s00244-025-01144-7</p>
+<p>Hlavac, Marek (2022). stargazer: Well-Formatted Regression and Summary Statistics Tables. R package version 5.2.3. https://CRAN.R-project.org/package=stargazer</p>
 <p>Pastorino, P., Bertoli, M., Squadrone, S., Brizio, P., Piazza, G., Oss Noser, A. G., Prearo, M., Abete, M. C., &amp; Pizzul, E. (2019). Detection of trace elements in freshwater macrobenthic invertebrates of different functional feeding guilds: A case study in Northeast Italy. Ecohydrology &amp; Hydrobiology, 19(3), 428–440. https://doi.org/10.1016/j.ecohyd.2019.04.006</p>
+<p>Rosso, J. J., Schenone, N. F., Pérez Carrera, A., &amp; Fernandez Cirelli, A. (2013). Concentration of arsenic in water, sediments and fish species from naturally contaminated rivers. Environmental geochemistry and health, 35(2), 201-214.</p>
 
 
 </section>
