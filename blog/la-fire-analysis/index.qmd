@@ -1,7 +1,7 @@
 ---
 title: "Los Angeles Fires: Vegetation Health & Socioeconomic Analysis"
 author: "Sofia Sarak"
-date: "December 11, 2025"
+date: "December 10, 2025"
 description: "Using multispectral and EJI data to explore aspects of the Eaton and Palisades fires."
 format: html
 python: /opt/anaconda3/bin/python
