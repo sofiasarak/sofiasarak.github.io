@@ -229,7 +229,7 @@ eaton_perimeter = eaton_perimeter.to_crs(eji.crs)
 
 First, we complete a spatial join of our EJI and fire perimeter data. The result is the EJI census tracts that intersect with the Palisades and Eaton fire perimeters.
 
-Spatial Join:
+**Spatial Join:**
 ```{python}
 # Inner join fire perimeter to CA census tracts
 palisades_tracts = gpd.sjoin(eji, palisades_perimeter, how = "inner", predicate = "intersects")
@@ -263,7 +263,7 @@ One option to conduct a similar spatial join (using `.sjoin()`), but instead of 
 
 In this analysis, however, we opt to use the `geopandas` `.clip()` method. 
 
-Clipping:
+**Clipping:**
 ```{python}
 # First arg: what we want to clip; Second arg: what polygon we want to clip to
 clipped_palisades = gpd.clip(eji, palisades_perimeter)
