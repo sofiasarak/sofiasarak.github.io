@@ -372,7 +372,7 @@ Based on what we know about the Gamma and segmented models, as well as the relat
 
 $$
 \text{InvertConc} \sim \text{Gamma}(\mu, \sigma)
-$$ 
+$$
 
 $$
 \log(\mu) 
@@ -440,6 +440,7 @@ r %>%
   gt::gt() %>% 
   gt::tab_header("Correlation Between Water and Sediment Concentrations")
 ```
+
 As all of the R² values between water and sediment concentration are quite low, we can confidently proceed with our two predictor variables.
 
 ## The Analysis
@@ -481,7 +482,6 @@ conc_model_seg_se<- predict(object = conc_model_seg,
                           type = "link", # stay in link space
                           se.fit = TRUE)
 ```
-
 
 #### Step 3: Using predicted values to plot Gamma distribution.
 
@@ -750,6 +750,7 @@ seg %>%
 # Return coefficients before and after breakpoints
 conc_model_seg$coefficients
 ```
+
 ```{r}
 #| echo: false
 seg <- matrix(c("Coefficients", "Estimate", "Pr(>|t|)",
@@ -766,16 +767,15 @@ seg %>%
   gt::tab_header("Segmented Model Summary: Coefficients")
 ```
 
-
 These outputs correspond to the questions we asked at the beginning:
 
-**1.  Does trace-element concentration in water increase trace-element concentration in invertebrates?**
+**1. Does trace-element concentration in water increase trace-element concentration in invertebrates?**
 
 The `concentration_water` coefficient of our gamma model returns a value of 0.08, which is significant at a 99% confidence level. We can reject our null hypothesis that there is no relationship between water and invertebrate trace-element concentration.
 
-**2.  Is the risk of trace-element contamination/ingestion constant across the whole range of concentrations in sediment and water?**
+**2. Is the risk of trace-element contamination/ingestion constant across the whole range of concentrations in sediment and water?**
 
-**3.  If the risk is sediment/water-concentration dependent, does a threshold value exist?**
+**3. If the risk is sediment/water-concentration dependent, does a threshold value exist?**
 
 Our segmented model returns a break-point of `concentration_water` = 11. Additionally, the slopes before and after the break-point (-0.03 and 0.23 respectively) are both significant at the 99% confidence level. Thus, we can reject the second part of our null hypothesis, that the relationship between trace-element water and invertebrate concentration stays consistent across all values.
 
@@ -1147,9 +1147,9 @@ ggplot(data = conc_pred_seg_filtered, aes(x = concentration_water, y = conc)) +
   guides(fill = "none") +
   theme_minimal()
 
-``` 
+```
 
-From these figures and the coefficients produced by the model, we fail to reject our null hypothesis that there is no relationship between lead concentration in water and invertebrate tissue. However, we can reject the null hypothesis that there is no break-point at which the relationship between the response and predictor changes, as the segmented model still identified one. 
+From these figures and the coefficients produced by the model, we fail to reject our null hypothesis that there is no relationship between lead concentration in water and invertebrate tissue. However, we can reject the null hypothesis that there is no break-point at which the relationship between the response and predictor changes, as the segmented model still identified one.
 
 Since the break-point was determined by an insignificant Gamma model, we must be cautious using these results.
 

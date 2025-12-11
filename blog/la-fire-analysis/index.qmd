@@ -1,7 +1,7 @@
 ---
 title: "Los Angeles Fires: Vegetation Health & Socioeconomic Analysis"
 author: "Sofia Sarak"
-date: "December 3, 2025"
+date: "December 11, 2025"
 description: "Using multispectral and EJI data to explore aspects of the Eaton and Palisades fires."
 format: html
 python: /opt/anaconda3/bin/python
@@ -14,27 +14,27 @@ categories: [Python, geospatial]
 ![](images/la_fires.png)
 :::
 
-This blog post summarizes anlyses involving the Eaton and Palisades Fires that took place in Los Angeles County during January 2025. It will speficially highlight the vegetation damage through false color imagery (part 1) and explore internet availability of census blocks affected by the fires (part 2).
+This blog post summarizes analyses involving the Eaton and Palisades Fires that took place in Los Angeles County during January 2025. It will specifically highlight the vegetation damage through false color imagery and explore internet availability of census blocks affected by the fires.
 
-*Complete code can be found in the following Github repositories:* [part 1](https://github.com/sofiasarak/eds220-hwk4) & [part 2](https://github.com/sofiasarak/eds220-sections) (see week8_la_fires notebook).
+*Complete code can be found in the corresponding [Github repository](https://github.com/sofiasarak/la-fires).*
 
 ## Overview 
 
 The Eaton and Palisades fires occurred nearly simultaneously, inflicting both ecological and infrastructural damage on Los Angeles. Together, they destroyed more than 16,000 structures and displaced thousands of households. Understanding the specifics of the impact -- such as which populations were most affected as well as the extent of vegetation damage -- is vital for recovery efforts, as well as informing future fire safety and policy.
 
-We overlay the fire perimeters onto to remote sensing and Environmental Justice Index (EJI) data to explore the patterns within in. First, by using remote sensing data and assigning infrared bands to visible colors, we are able to highlight vegetation health, burn severity, and the extent of fire scars remnant after the fire. Second, clipping EJI census block data to the fire perimeters gives us a summary of the internet availability in each area. Internet availability is an important aspect of fire safety response as communities that lack availability to natural disaster information have less time to respond.
+We overlay the fire perimeters onto to remote sensing and Environmental Justice Index (EJI) data to explore the patterns within. First, by using remote sensing data and assigning infrared bands to visible colors, we are able to highlight vegetation health, burn severity, and the extent of fire scars remnant after the fire. Second, clipping EJI census block data to the fire perimeters gives us a summary of the internet availability in each area. Internet availability is an important aspect of fire safety response as communities that lack availability to natural disaster information have less time to respond.
 
-### Analysis Highlights: 
+### Analysis Highlights 
 
 1. **Using `xarray` and NetCDF data formats.** Our primary dataset comes from the [NASA/USGS Landsat](https://landsat.gsfc.nasa.gov/) program, and must be read in using the `xarray` package.
-2. **Plotting raster data as false color.** The combination `.plot.imshow` ensures that our raster image plots, arguments like `robust` ensure accurate plotting, and selecting reflectance bands other than true color are important steps to the process.
+2. **Plotting raster data as false color.** The method combination `.plot.imshow`, the argument `robust`, and selecting reflectance bands other than true color are important steps in the process.
 3. **Clipping raster data to a polygon.** `geopandas` functionality is used to accurately clip EJI data to our area of interest.
 
-### About the data:
+### About the Data
 
 **Landsat/remote sensing**
 
-The dataset used in this analysis is a simplified collection of bands (red, green, blue, near-infrared and shortwave infrared) from the Landsat Collection 2 Level-2 atmospherically corrected surface reflectance data, collected by the Landsat 8 satellite. Landsat data is provided by a series of Earth-observing satellites jointly managed by NASA and the U.S. Geological Survey (USGS), and stores a significant amount of reflectance information about the Earth's surface.
+The dataset used in this analysis is a simplified collection of bands (red, green, blue, near-infrared and shortwave infrared) from the Landsat Collection 2 Level-2 atmospherically-corrected surface reflectance data, collected by the Landsat 8 satellite. Landsat data is provided by a series of Earth-observing satellites jointly managed by NASA and the U.S. Geological Survey (USGS), and stores a significant amount of reflectance information about the Earth's surface.
 
 The data was retrieved from the [Microsoft Planetary Computer data catalogue](https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2) catalogue and clipped to an area surrounding the fire perimeters by the [EDS220](https://meds-eds-220.github.io/MEDS-eds-220-course/) course team. 
 
@@ -44,7 +44,7 @@ Palisades and Eaton fire perimeter data were sourced from [LA County's GIS hub](
 
 **Environmental Justice Index (EJI)**
 
-EJI aims to summarize the cumulative impacts of environmental injustice by census tract in the United States. The index considers 36 different environmental, social, and health factors, with data from a variety of sources (including but not limited to the U.S. Census Bureau, the U.S. Environmental Protection Agency, U.S. Geological Survey, and OpenStreetMap). The data in this analysis was sourced from [Centers for Disease Control and Prevention and Agency for Toxic Substances Disease Registry](https://www.atsdr.cdc.gov/place-health/php/eji/eji-data-download.html).
+EJI aims to summarize the cumulative impacts of environmental injustice by census tract in the United States. The index considers 36 different environmental, social, and health variables, with data from a variety of sources (including but not limited to the U.S. Census Bureau, the U.S. Environmental Protection Agency, USGS, and OpenStreetMap). The data in this analysis was sourced from the [Centers for Disease Control and Prevention and Agency for Toxic Substances Disease Registry](https://www.atsdr.cdc.gov/place-health/php/eji/eji-data-download.html).
 
 ## Analysis
 
@@ -56,7 +56,6 @@ import os
 import geopandas as gpd
 import xarray as xr
 import matplotlib.pyplot as plt
-
 ```
 
 ### False Color Image
@@ -80,29 +79,31 @@ palisades_perimeter = gpd.read_file(fp)
 Data loaded in successfully! Now we can plot them to visualize what we are working with.
 
 ```{python}
-#| echo: false
+#| code-fold: true
 # Plot perimeter data to visualize its contents
 
 # Initialize figure with two axes (so can plot each perimeter on a separate plot)
 fig, ax = plt.subplots(nrows = 1, ncols = 2, figsize = (6,4))
 
-# Plot Eaton fire perimeter on the left //.boundary allows access to just the border of the polygon
-eaton_perimeter.boundary.plot(ax = ax[0])
+# And the Palisades fire perimeter on the left //.boundary allows access to just the border of the polygon
+palisades_perimeter.boundary.plot(ax = ax[0])
 
-# And the Palisades fire perimeter on the right
-palisades_perimeter.boundary.plot(ax = ax[1])
+# Plot Eaton fire perimeter on the right 
+eaton_perimeter.boundary.plot(ax = ax[1])
 ```
 
-Now we have a preliminary understanding of what our datasets contain: geometries of each fire perimeter.
+Now we have a preliminary understanding of what our datasets contain: complete geometries of each fire perimeter.
 
-To find the CRS of the two datasets (which will inform how we treat them with plotting other data), we can explore the following.
+To find the CRS of the two datasets (which will inform how we treat them while plotting other data), we can explore the following.
 ```{python}
-# What is the CRS?
-print(f"The CRS of the Eaton fire perimeter data is {eaton_perimeter.crs}.")
-print(f"The CRS of the Palisades fire perimeter data is {palisades_perimeter.crs}.")
+# Use an assert statement to confirm the two data sets have the same CRS
+assert eaton_perimeter.crs == palisades_perimeter.crs
+
+# Since they match, what is the CRS of both fires?
+print(f"The CRS of the fire perimeter data is {eaton_perimeter.crs}.")
 ```
 
-Great! They match, and we will keep this information in mind when we plot with our raster data.
+Great! The two CRSs match, and we will keep this information in mind when we plot with our raster data.
 
 #### Landsat (NetCDF) Data Import and Exploration
 
@@ -159,13 +160,13 @@ palisades_perimeter = palisades_perimeter.to_crs(landsat_crs)
 
 Then, we can plot them all together.
 
-**Note:** To plot a raster image, we select the bands we want to plot in RGB order from the dataset using `[[]]`. The method `.plot.imshow(robust = True)` is used to plot. 
+**Note:** 
 
-`imshow()` is useful for raster data as it tells the "image to show", and the argument `robust = True` indicates to only plot values from the 2nd to 98th percentile. This helps to avoid outliers that are results of inaccurate or incorrect data (for example: 0 or very high values that correspond to cloud cover), and can skew the appearance of the image, sometimes inhibiting it from plotting at all.
+`imshow()` is useful for raster data as it tells the "image to show", and the argument `robust = True` indicates to only plot values from the 2nd to 98th percentile. This distinction helps to avoid outliers that are results of inaccurate or incorrect data (for example: extremely low or high values that correspond to cloud cover) which can skew the appearance of the image, sometimes inhibiting it from plotting at all.
 
 
 ```{python}
-#| echo: false
+#| code-fold: true
 # Initialize figure with one axes
 fig, ax = plt.subplots(figsize = (9,5))
 
@@ -218,13 +219,49 @@ eji = gpd.read_file("data/EJI_2024_California/EJI_2024_California.gdb")
 
 #### Polygon Clipping
 
-The EJI dataset is a raster spanning all of California. To get it to only our area of interest (the fires), we can use the  `geopandas` method `.clip()`.
+The EJI dataset is a raster spanning all of California. To get it to only our area of interest (the fires), we can use the  `geopandas` methods `.sjoin()` and `.clip()`.
 
 ```{python}
 # Transform both perimeters to have CRSs matching that of the EJI data 
 palisades_perimeter = palisades_perimeter.to_crs(eji.crs)
 eaton_perimeter = eaton_perimeter.to_crs(eji.crs)
 ```
+
+First, we complete a spatial join of our EJI and fire perimeter data. The result is the EJI census tracts that intersect with the Palisades and Eaton fire perimeters.
+
+Spatial Join:
+```{python}
+# Inner join fire perimeter to CA census tracts
+palisades_tracts = gpd.sjoin(eji, palisades_perimeter, how = "inner", predicate = "intersects")
+eaton_tracts = gpd.sjoin(eji, eaton_perimeter, how = "inner", predicate = "intersects")
+```
+
+Through the order of our arguments, we told `.sjoin()` that we only want `EJI` that **intersects** with the fire perimeters. The argument "inner" specifies that we want to keep only the data that is shared between both `EJI` and the two fire perimeters.
+
+We can visualization this in the following plot:
+```{python}
+#| code-fold: true
+# Initialize plot with two axes
+ig, ax = plt.subplots(figsize=(9,5), nrows = 1, ncols = 2)
+
+# Plot census tracts that intersect with the fire perimeter
+palisades_tracts.plot(ax = ax[0])
+# Plot palisades fire perimeter on top in red
+palisades_perimeter.boundary.plot(ax = ax[0],
+                       color = "red")
+
+# Plot census tracts that intersect with fire perimeter
+eaton_tracts.plot(ax = ax[1])
+# Plot eaton fire perimeter on top in red
+eaton_perimeter.boundary.plot(ax = ax[1],
+                       color = "red")
+```
+
+We only want the data that is **fully within** the fire perimeters, so additional steps must be taken. 
+
+One option to conduct a similar spatial join (using `.sjoin()`), but instead of the `predicate = "intersects"`, specify `predicate = "within"`. This distinction tells the method to only keep data that is wholly within our perimeters, instead of just intersecting.
+
+In this analysis, however, we opt to use the `geopandas` `.clip()` method. 
 
 Clipping:
 ```{python}
@@ -236,7 +273,7 @@ clipped_eaton = gpd.clip(eji, eaton_perimeter)
 To ensure that our clipping was successful, we can plot our new clipped data with our fire perimeters.
 
 ```{python}
-#| echo: false
+#| code-fold: true
 # Initialize plot with two axes, plot eaton and palisades on each
 ig, ax = plt.subplots(figsize=(9,5), nrows = 1, ncols = 2)
 
@@ -255,17 +292,19 @@ eaton_perimeter.boundary.plot(ax = ax[1],
                        color = "red")
 ```
 
+We have successfully extracted only the EJI/census data that is contained by our two fire perimeters!
+
 #### Visualizing EJI Data
 
-We can select our variable of interest  -- internet availability -- from the EJI data. We can take then plot our clipped `eji` datasets (`clipped_eaton` and `clipped_palisades`), and specify `column = ['variable of choice']` to color each census block by socioeconomic information.
+In plotting our EJI variable of interest within our fire perimeters, we have to select our variable of interest. In our case this is internet availability. Variable names for the EJI data can be found in its metadata. 
 ```{python}
-#| echo: false
-# Create dataset just containing internet availability information
+# Specify internet availability information as variable of interest
 eji_variable = 'E_NOINT'
 ```
 
+We can take then plot our clipped `eji` datasets (`clipped_eaton` and `clipped_palisades`), and specify `column = eji_variable` to color each census block by socioeconomic information.
 ```{python}
-#| echo: false
+#| code-fold: true
 # Initilaize figure
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 5))
 
