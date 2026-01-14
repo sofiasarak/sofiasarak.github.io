@@ -21,13 +21,6 @@
     "text": "fake resource numbebr two\nresource description\n\nthis is an h1 element\n\n\nthis is an h1 element with the title class\n\n\nthis paragraph is orange\n\n\nthis text is centered\n\n\nthis text is both centered and orange\n\n\ndescribing something fun that I enjoy doing\nHere’s a full line\n\nHere’s one time line\nHere’s another line\n\n\nThis is centered"
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "Education\n\n\nUniversity of California, Santa Barbara (2026), Master of Environmental Data Science\n\nGroup Capstone Project: TBD\n\nWesleyan University (2025), Bachelor of Arts in Earth & Environmental Sciences, Economics\n\nGroup Capstone Project: “Ants, Plants, and Isotopes: Investigating the Trophic Levels of Guanica Dry Forest”\nRelevant Coursework: Soils, Sedimentology, Renewable Energy, Environmental and Resource Economics\n\nStudy Abroad\n\n\nUniversity of Otago (Fall 2024)\n\nCourses:\n\nLa Universidad del San Francisco de Quito (January 2024)\n\nCourse:\n\nResearch and Professional Experience"
-  },
-  {
     "objectID": "blog/aquaculture-suitability/index.html",
     "href": "blog/aquaculture-suitability/index.html",
     "title": "Where Can I Farm this Marine Species?",
@@ -102,7 +95,7 @@
     "href": "index.html",
     "title": "Sofia Sarak",
     "section": "",
-    "text": "Hello, I do environmental data science!\n\n\nThis website is currently under partial construction (data analysis projects coming soon!).\nFor now, please feel free to browse through my Github and LinkedIn for more on what I do."
+    "text": "Welcome!\n\nMy name is Sofia, and I am an early-career data scientist currently completing a Master of Environmental Data Science at the Bren School of Environmental Science & Management at UCSB (whew, that was a mouthful). I am still finding my niche, but I am currently enjoying learning data visualization methods, geospatial analysis, and environmental policy evaluation.\n\nAbout Me\n\nI grew up in southern Connecticut, and ended up at Wesleyan University for my undergraduate education. I double-majored in Earth & Environmnetal Sciences and Economics, and am continuously surprised at how interconnected the fields are.\nSome of my projects included exploring evolutionary divergence of fish species, trophic levels of ants in Puerto Rico, and testing for bacteria concentrations at a water quality monitoring organization.\nIn my free time, I enjoy hiking, swimming, reading, and doing little crafts like crocheting and sewing. I’m also a big fan of the Great British Baking Show and Bad Bunny. Current personal projects include practicing my Spanish (I traveled to Argentina this winter and was able to get around!) and potentially running another half marathon soon."
   },
   {
     "objectID": "blog/stats-proj/index.html",
