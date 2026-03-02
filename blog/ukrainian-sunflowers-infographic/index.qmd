@@ -1,0 +1,16 @@
+---
+title: "Sunflowers of Ukraine: A Cultural and Economic Symbol"
+author: "Sofia Sarak"
+date: "March 2, 2026"
+description: "Creating an infographic to convey the prevalance of the sunflower industry in Ukraine, highlighting the crop as a cultural symbol as well as an integral part of the European economy."
+categories: [R, data viz]
+format: html
+---
+
+## Sunflowers: A Symbol of Peace, Resilience, and Hope
+
+When considering what themes to center my infographic on, I knew I wanted to produce something both impactful and personal. My family is Ukrainian -- my father was born and raised in Drohobych, a city slightly south of Lviv, and my maternal grandfather grew up in the Zaporoizhia Oblast (oblasts are the administrative divisions in Ukraine, parallel to states in the U.S.), which is in the southeast of the country. I am first-generation American, but I spent my childhood attending Ukrainian school every Saturday (where we learned the language, culture, and history), and attending folk dance lessons as well as performing at local festivals. 
+
+Ukrainian tradition is an integral part of my family life; reading the news on the Russo-Ukrainian War, as well as hearing about its impacts on my own relatives, has not been easy. We often hear death tolls in headlines, and I knew that I didn't want my infographic to flatten the war's impact to single numbers. Russia isn't just threatening populations, but the land, history, and traditions of an entire people. I decided that I wanted my infographic to celebrate an integral part of the Ukrainian existence: it's national flower, the sunflower.
+
+As much as I hope that this work is informative, I also want it to serve as a reminder of Ukraine's significance as a nation and a culture. In light of the four-year anniversary of the War in Ukraine (February 24, 2026), it is important to not forget the destruction and murder that is still ongoing, no matter how removed we are from it. 
