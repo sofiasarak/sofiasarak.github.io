@@ -1,0 +1,33 @@
+{
+  "chart": {
+    "citation": "Food and Agriculture Organization of the United Nations (2025)",
+    "originalChartUrl": "https://ourworldindata.org/explorers/global-food?Food=Sunflower+oil&Metric=Production&Per+capita=false&Unit=Kilocalories+per+day&country=OWID_WRL~USA~CHN~IND~BRA~GBR",
+    "selection": [
+      "World",
+      "United States",
+      "China",
+      "India",
+      "Brazil",
+      "United Kingdom"
+    ]
+  },
+  "columns": {
+    "Sunflower oil | 00000268 || Production | 005510 || tonnes": {
+      "titleShort": "Production of sunflower oil",
+      "titleLong": "Production of sunflower oil - UN FAO",
+      "shortUnit": "t",
+      "unit": "tonnes",
+      "timespan": "1961-2022",
+      "type": "Numeric",
+      "owidVariableId": 1019201,
+      "shortName": "sunflower_oil__00000268__production__005510__tonnes",
+      "lastUpdated": "2025-03-17",
+      "nextUpdate": "2026-03-17",
+      "citationShort": "Food and Agriculture Organization of the United Nations (2025) – with major processing by Our World in Data",
+      "citationLong": "Food and Agriculture Organization of the United Nations (2025) – with major processing by Our World in Data. “Production of sunflower oil – UN FAO” [dataset]. Food and Agriculture Organization of the United Nations, “Production: Crops and livestock products” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/1019201.metadata.json"
+    }
+  },
+  "dateDownloaded": "2026-02-03",
+  "activeFilters": {}
+}
