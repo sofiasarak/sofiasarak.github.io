@@ -4,12 +4,28 @@ author: "Sofia Sarak"
 date: "March 2, 2026"
 description: "Creating an infographic to convey the prevalance of the sunflower industry in Ukraine, highlighting the crop as a cultural symbol as well as an integral part of the European economy."
 categories: [R, data viz]
-format: html
+format: 
+  html:
+    css: styles.scss
 ---
 
 ## Sunflowers as a Symbol of Peace, Resilience, and Hope
 
 When considering what themes to center my infographic on, I knew I wanted to produce something both impactful and personal. My family is Ukrainian -- my father was born and raised in Drohobych, a city slightly south of Lviv, and my maternal grandfather grew up in the Zaporoizhia Oblast (oblasts are the administrative divisions in Ukraine, parallel to states in the U.S.), which is in the southeast of the country. I am first-generation American, but I spent my childhood attending Ukrainian school every Saturday (where we learned the language, culture, and history), and attending folk dance lessons as well as performing at local festivals.
+
+```{r}
+#| echo: false
+#| message: false
+#| out.width: "50%"
+#| fig-cap: " A picture of me at about 5 years old performing in a show put on by my Ukrainian school (I'm right in the middle!)."
+#| layout-ncol: 1
+#| fig-alt: "Pictures of me at about 5 and 16 years of age, wearing embroidered shirts that are part of Ukrainian traditional wear."
+library(here)
+
+knitr::include_graphics(c(here("blog","ukrainian-sunflowers-infographic","images","uki_school.png")))
+
+```
+
 
 Ukrainian tradition is an integral part of my family life; reading the news on the Russo-Ukrainian War, as well as hearing about its impacts on my own relatives, has not been easy. We often hear death tolls in headlines, and I knew that I didn't want my infographic to flatten the war's impact to single numbers. Russia isn't just threatening populations, but the land, history, and traditions of an entire people. I decided that I wanted my infographic to celebrate an integral part of the Ukrainian existence: it's national flower, the sunflower.
 
@@ -131,7 +147,7 @@ To make it more impactful, I hand-drew sunflowers and overlayed them on the bars
 
 ### Production Relative to Europe
 
-Sunflowers are not only important to Ukraine, but the country's production is also significant in the context of the entire continent. I used agricultural information from [Our World in Data]() to compare production numbers over time. I made two area plots: one for sunflower seeds and the other for sunflower oil. I used yellow to highlight Ukraine and blue for the other European countries, to both fit in with the theme but also replicate the Ukrainian flag.
+Sunflowers are not only important to Ukraine, but the country's production is also significant in the context of the entire continent. I used agricultural information from [Our World in Data](https://ourworldindata.org/search?q=sunflower) to compare production numbers over time. I made two area plots: one for sunflower seeds and the other for sunflower oil. I used yellow to highlight Ukraine and blue for the other European countries, to both fit in with the theme but also replicate the Ukrainian flag.
 
 ```{r}
 #| echo: false
@@ -279,12 +295,11 @@ sunflower_oil %>%
 showtext_auto(enable = FALSE)
 ```
 
-
 In terms of a legend, I opted to only label Ukraine and Russia, as those are the two more eye-catching parts of the plot. The comparison between them and also the rest of the countries in Europe is all I need to deliver my message: Ukraine's sunflower production is impactful.
 
 ### Sunflower Oil as an Export in Ukraine
 
-Having both explored the pattern of production as well as it relative to the Europe, I felt it was important to also highlight the portion of Ukraine's own economy that depends on sunflowers. Extracting 2021 data from the [European Parliament's briefing on Ukrainian agriculture](%22https://www.europarl.europa.eu/RegData/etudes/BRIE/2024/760432/EPRS_BRI(2024)760432_EN.pdf#:~:text=By%20volume%20and%20value%2C%20Ukraine's%20main%20export,and%20barley%20(5.8%20million%20tonnes%2C%20US$1.3%20billion).%22), I created a waffle chart as a way to visualize the proportions between different agricultural exports (which the report classifies as Ukraine's "main exports".
+Having both explored the pattern of production as well as it relative to the Europe, I felt it was important to also highlight the portion of Ukraine's own economy that depends on sunflowers. Extracting 2021 data from the [European Parliament's briefing on Ukrainian agriculture](https://www.europarl.europa.eu/RegData/etudes/BRIE/2024/760432/EPRS_BRI\(2024\)760432_EN.pdf#), I created a waffle chart as a way to visualize the proportions between different agricultural exports (which the report classifies as Ukraine's "main exports".
 
 In Affinity, I ended up labeling each segment with a bracket instead of using the {ggplot2} legend function, for better readability. Additionally, this is the one part of my plot where colorblindness may have an affect on interpretability, so this labeling method makes it more accessible.
 
@@ -477,7 +492,7 @@ Though it was not initially my intention, my inforgraphic's flow relies heavily 
 
 ### Color Palette and Typeface
 
-When initially envisioning this infographic, I knew I wanted it to be full of blues and yellows, in-line with colors of the Ukrainian flag. Since sunflowers themselves are yellow, it made sense to make most of the actual plots yellow (especially the two choropleth maps), which led to pick blue for the background.
+When initially envisioning this infographic, I knew I wanted it to be full of blues and yellows, in line with colors of the Ukrainian flag. Since sunflowers themselves are yellow, it made sense to make most of the actual plots yellow (especially the two choropleth maps), which led to pick blue for the background.
 
 In terms of typeface, I used Averia Serif Libre for the titles and headings, Roboto for body text, and Geist Mono for plot details like axis labels. I ended on this selection of typefaces because they felt both academic but not too serious, which coincides with the purpose of my infographic: to educate on as well as celebrate sunflowers in Ukraine.
 
@@ -485,10 +500,9 @@ In terms of typeface, I used Averia Serif Libre for the titles and headings, Rob
 
 My infographic color palette is almost entirely colorblind-friendly. The only exception is the waffle chart, with its greens and browns, but because I labelled each section direction, that will hopefully assist with readability.
 
-
 ## Complete Code
 
-Open up this code chunk to see the code used to create each element of the final inforgraphic!
+Open up this code chunk to see the code used to create each element of the final infographic!
 
 ```{r}
 #| code-fold: true
@@ -1045,4 +1059,3 @@ ggplot(data = sunflower_region) +
 
 showtext_auto(enable = FALSE)
 ```
-
