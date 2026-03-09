@@ -1,12 +1,10 @@
 ---
 title: "Sunflowers of Ukraine: A Cultural and Economic Symbol"
 author: "Sofia Sarak"
-date: "March 2, 2026"
+date: "March 8, 2026"
 description: "Creating an infographic to convey the prevalance of the sunflower industry in Ukraine, highlighting the crop as a cultural symbol as well as an integral part of the European economy."
 categories: [R, data viz]
-format: 
-  html:
-    css: styles.scss
+format: html
 ---
 
 ## Sunflowers as a Symbol of Peace, Resilience, and Hope
