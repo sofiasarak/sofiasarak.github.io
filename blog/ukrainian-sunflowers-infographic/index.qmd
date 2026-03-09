@@ -184,6 +184,58 @@ options(scipen = 999)
 
 showtext_auto(enable = TRUE)
 
+sunflower_seeds %>% 
+  
+   # create column with production tonnes scaled to be in millions
+  mutate(sunflower_seed_prod_mil_tonnes = sunflower_seeds_production_tonnes/1000000) %>% 
+
+    filter(year > 1992) %>% 
+  ggplot(aes(x = year, y = sunflower_seed_prod_mil_tonnes, group = entity, 
+             fill = as.factor(is_ua))) +
+  geom_area(color = alpha(uki_blue, alpha = 0.5), linewidth = 0.5) +
+  labs(x = " ",
+       # title = "Sunflower Oil",
+       y = "Tonnes Produced (in millions)",
+       # subtitle = "<b><span style='color:#FFF6B1;'>Production in Ukraine</span></b> has surged since 1995, with output being comparable<br>only to Russia's.",
+       caption = "Data Source: Our World in Data") +
+  theme_minimal(base_size = 17) +
+  scale_fill_manual(values = c(light_blue, lighter_yellow)) +
+  scale_y_continuous(position = "right", expand = c(0,0)) +
+  annotate("text", x = 2018, y = 6, label = "Ukraine", size = 6, color = light_yellow, 
+           family = "geist_mono") +
+  annotate("text", x = 2020, y = 25, label = "Russia", size = 5.5, color = uki_blue,
+           family = "geist_mono") +
+  annotate("text", x = 1999, y = 30, label = "Sunflower Seeds", size = 8, family = "libre") +
+  theme(plot.background = element_rect(fill = "#B1D7FF"),
+    panel.grid = element_blank(),
+        legend.position = "none",
+        plot.title = element_text(family = "libre",
+                                  size = rel(0.99),
+                                  margin = margin(b = 7)),
+        plot.subtitle = ggtext::element_markdown(family = "roboto", size = rel(0.70)),
+        axis.text.y.right = element_text(family = "geist_mono", size = rel(0.85), margin = margin(l = -15)),
+        axis.text.x = element_text(family = "geist_mono", size = rel(0.85)),
+        plot.caption = element_text(family = "roboto",
+                                    margin = margin(t = 5),
+                                    size = rel(0.45)),
+        plot.caption.position = "plot",
+        axis.title.y.right = element_text(family = "roboto", size = rel(0.60), margin = margin(l = 15))) +
+        # panel.grid.minor.y = element_line(color = alpha("gray50", 0.5))) +
+   scale_x_continuous(breaks = c(1995, 2000, 2005, 2010, 2015, 2020))
+
+showtext_auto(enable = FALSE)
+```
+
+```{r}
+#| echo: false
+#| fig-align: "center"
+#| fig-asp: 0.6
+#| fig-alt: "Area chart showing sunflower oil production in tonnes from 1992 to 2022, with Ukraine contributing about the third of production in Europe by 2022."
+# avoid exponential notation in y-axis
+options(scipen = 999)
+
+showtext_auto(enable = TRUE)
+
 sunflower_oil %>% 
   
   # create column with production tonnes scaled to be in millions
@@ -227,57 +279,6 @@ sunflower_oil %>%
 showtext_auto(enable = FALSE)
 ```
 
-```{r}
-#| echo: false
-#| fig-align: "center"
-#| fig-asp: 0.6
-#| fig-alt: "Area chart showing sunflower oil production in tonnes from 1992 to 2022, with Ukraine contributing about the third of production in Europe by 2022."
-# avoid exponential notation in y-axis
-options(scipen = 999)
-
-showtext_auto(enable = TRUE)
-
-sunflower_seeds %>% 
-  
-   # create column with production tonnes scaled to be in millions
-  mutate(sunflower_seed_prod_mil_tonnes = sunflower_seeds_production_tonnes/1000000) %>% 
-
-    filter(year > 1992) %>% 
-  ggplot(aes(x = year, y = sunflower_seed_prod_mil_tonnes, group = entity, 
-             fill = as.factor(is_ua))) +
-  geom_area(color = alpha(uki_blue, alpha = 0.5), linewidth = 0.5) +
-  labs(x = " ",
-       # title = "Sunflower Oil",
-       y = "Tonnes Produced (in millions)",
-       # subtitle = "<b><span style='color:#FFF6B1;'>Production in Ukraine</span></b> has surged since 1995, with output being comparable<br>only to Russia's.",
-       caption = "Data Source: Our World in Data") +
-  theme_minimal(base_size = 17) +
-  scale_fill_manual(values = c(light_blue, lighter_yellow)) +
-  scale_y_continuous(position = "right", expand = c(0,0)) +
-  annotate("text", x = 2018, y = 6, label = "Ukraine", size = 6, color = light_yellow, 
-           family = "geist_mono") +
-  annotate("text", x = 2020, y = 25, label = "Russia", size = 5.5, color = uki_blue,
-           family = "geist_mono") +
-  annotate("text", x = 1999, y = 30, label = "Sunflower Seeds", size = 8, family = "libre") +
-  theme(plot.background = element_rect(fill = "#B1D7FF"),
-    panel.grid = element_blank(),
-        legend.position = "none",
-        plot.title = element_text(family = "libre",
-                                  size = rel(0.99),
-                                  margin = margin(b = 7)),
-        plot.subtitle = ggtext::element_markdown(family = "roboto", size = rel(0.70)),
-        axis.text.y.right = element_text(family = "geist_mono", size = rel(0.85), margin = margin(l = -15)),
-        axis.text.x = element_text(family = "geist_mono", size = rel(0.85)),
-        plot.caption = element_text(family = "roboto",
-                                    margin = margin(t = 5),
-                                    size = rel(0.45)),
-        plot.caption.position = "plot",
-        axis.title.y.right = element_text(family = "roboto", size = rel(0.60), margin = margin(l = 15))) +
-        # panel.grid.minor.y = element_line(color = alpha("gray50", 0.5))) +
-   scale_x_continuous(breaks = c(1995, 2000, 2005, 2010, 2015, 2020))
-
-showtext_auto(enable = FALSE)
-```
 
 In terms of a legend, I opted to only label Ukraine and Russia, as those are the two more eye-catching parts of the plot. The comparison between them and also the rest of the countries in Europe is all I need to deliver my message: Ukraine's sunflower production is impactful.
 
@@ -540,6 +541,7 @@ sunflower_prod <- tribble(
 
  #............................Bar Plot............................
 
+# This line of code -- used in every subsequent plot -- enables imported fonts
 showtext_auto(enable = TRUE)
 
 # Manipulate data
@@ -595,6 +597,8 @@ ggplot(aes(x = year, y = prod_millions)) +
                                     size = rel(0.45)),
         plot.caption.position = "plot")
 
+
+# This line of code -- used in every subsequent plot -- disables imported fonts
 showtext_auto(enable = FALSE)
 
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -624,7 +628,13 @@ sunflower_oil <- read_csv(here("blog", "ukrainian-sunflowers-infographic", "data
   # Add a column to denote when the observation is for Ukraine
   mutate(is_ua = case_when(
     entity == "Ukraine" ~ 1,
-    TRUE ~ 0))
+    TRUE ~ 0)) %>% 
+  
+  # Create column with production tonnes scaled to be in millions
+  mutate(sunflower_oil_prod_mil_tonnes = sunflower_oil_production_tonnes/1000000) %>% 
+  
+  # Keep data only from 1992 (that is when data from Ukraine begind)
+  filter(year > 1992) 
 
 # Read in sunflower seed data
 sunflower_seeds <- read_csv(here("blog", "ukrainian-sunflowers-infographic","data", "sunflower-seed-production.csv")) %>% 
@@ -636,24 +646,93 @@ sunflower_seeds <- read_csv(here("blog", "ukrainian-sunflowers-infographic","dat
   # Add a column to denote when the observation is for Ukraine
   mutate(is_ua = case_when(
     entity == "Ukraine" ~ 1,
-    TRUE ~ 0))
+    TRUE ~ 0)) %>% 
+  
+  # Create column with production tonnes scaled to be in millions
+  mutate(sunflower_seed_prod_mil_tonnes = sunflower_seeds_production_tonnes/1000000) %>% 
+
+  # Filter for years where there is data for Ukraine
+    filter(year > 1992)
 
 
  #..................Area Chart: Sunflower Seeds...................
+
+
+sunflower_seeds %>% 
+  
+# Initialize plot
+  ggplot(aes(x = year, y = sunflower_seed_prod_mil_tonnes, group = entity, 
+             
+             # Fill by whether country is Ukraine or not
+             fill = as.factor(is_ua))) +
+  
+  geom_area(color = alpha(uki_blue, alpha = 0.5), linewidth = 0.5) +
+  
+  # Add plot text
+  labs(x = " ",
+       # title = "Sunflower Oil",
+       y = "Tonnes Produced (in millions)",
+       # subtitle = "<b><span style='color:#FFF6B1;'>Production in Ukraine</span></b> has surged since 1995, with output being comparable<br>only to Russia's.",
+       caption = "Data Source: Our World in Data") +
+  
+  # Set minimal theme and base size
+  theme_minimal(base_size = 17) +
+  
+   # Add specific colors: yellow for when the country is Ukraine, blue for all others
+  scale_fill_manual(values = c(light_blue, lighter_yellow)) +
+  
+  # Place y-axis on right side, and remove space between axis and text
+  scale_y_continuous(position = "right", expand = c(0,0)) +
+  
+   # Add area labels for Ukraine and russia
+  annotate("text", x = 2018, y = 6, 
+           label = "Ukraine", 
+           size = 6, color = light_yellow, 
+           family = "geist_mono") +
+  annotate("text", x = 2020, y = 25, 
+           label = "Russia", 
+           size = 5.5, color = uki_blue,
+           family = "geist_mono") +
+  
+  # Add plot title as annotation
+  annotate("text", x = 1999, y = 30, label = "Sunflower Seeds", size = 8, family = "libre") +
+  
+  # Set theme specifications
+  theme(
+    # Blue background
+    plot.background = element_rect(fill = "#B1D7FF"),
+    panel.grid = element_blank(),
+    
+    # Remove legend
+        legend.position = "none",
+    
+    # Add text specifications, including font, size, and margin sizes
+        plot.title = element_text(family = "libre",
+                                  size = rel(0.99),
+                                  margin = margin(b = 7)),
+        plot.subtitle = ggtext::element_markdown(family = "roboto", size = rel(0.70)),
+        axis.text.y.right = element_text(family = "geist_mono", size = rel(0.85), margin = margin(l = -15)),
+        axis.text.x = element_text(family = "geist_mono", size = rel(0.85)),
+        plot.caption = element_text(family = "roboto",
+                                    margin = margin(t = 5),
+                                    size = rel(0.45)),
+        plot.caption.position = "plot",
+        
+    # Use specific argument for y-axis labels on the RIGHT 
+    axis.title.y.right = element_text(family = "roboto", size = rel(0.60), margin = margin(l = 15))) +
+        # panel.grid.minor.y = element_line(color = alpha("gray50", 0.5))) +
+   
+   # Set x-axis incremenents to be every 5 years
+  scale_x_continuous(breaks = c(1995, 2000, 2005, 2010, 2015, 2020))
+
+showtext_auto(enable = FALSE)
 
  #....................Area Chart: Sunflower Oil...................
 
 
 showtext_auto(enable = TRUE)
 
-# Manipulate data
 sunflower_oil %>% 
-  
-  # Create column with production tonnes scaled to be in millions
-  mutate(sunflower_oil_prod_mil_tonnes = sunflower_oil_production_tonnes/1000000) %>% 
-  
-  # Keep data only from 1992 (that is when data from Ukraine begind)
-  filter(year > 1992) %>% 
   
 # Initialize plot
 
@@ -718,7 +797,7 @@ sunflower_oil %>%
         plot.caption = element_text(family = "roboto",
                                     margin = margin(t = 5),
                                     size = rel(0.45)),
-        plot.caption.position = "plot"))
+        plot.caption.position = "plot") +
        
   # Set x-axis incremenents to be every 5 years
    scale_x_continuous(breaks = c(1995, 2000, 2005, 2010, 2015, 2020))
@@ -865,7 +944,7 @@ ggplot(data = sunflower_region) +
                                position = "bottom",
                                barwidth = 9)) +
   
-  # Add minimal theme and base size
+  # Add void theme (useful for sf objects) and base size
    theme_void(base_size = 17) +
 
   # Set continuous scale, with high values being darker
@@ -899,6 +978,7 @@ ggplot(data = sunflower_region) +
         plot.caption.position = "plot") 
   
   # Add no data legend, if not adding annotation using Affinity
+
   #annotate("rect", xmin = 38.5, xmax = 39.5, ymin = 45.6, ymax = 45.9, fill = #846E54") +
   #annotate("text", x = 38.5, y = 45.3, label = "No Data", hjust = 0, size = 3.1, family = "geist_mono")
 
@@ -906,5 +986,63 @@ ggplot(data = sunflower_region) +
 showtext_auto(enable = FALSE)
 
    #....................Choropleth: Size of Farms...................
+
+
+showtext_auto(enable = TRUE)
+
+# Initialize plot
+ggplot(data = sunflower_region) +
+  
+  geom_sf(aes(fill = Size), color = "white") +
+  
+  # Add plot text
+  labs(title = "Size of sunflower farms in hectares",
+       # subtitle = "Sunflower farms tend to cover more area in southeast Ukraine,\npossibly due to warmer climate.",
+       fill = " ",
+       caption = "Data Source: OneSoil.ai") +
+  
+  # Legend specifications -- horizontal and on the bottom of the plot
+  guides(fill = guide_colorbar(direction = "horizontal",
+                               title.position = "top",
+                               barheight = 0.75,
+                               position = "bottom",
+                               barwidth = 9)) +
+  
+  # Add void theme and set base size
+   theme_void(base_size = 17) +
+  
+   # Set continuous scale, with high values being darker
+  scale_fill_continuous(high = "#E7B030", low = platinum, 
+                        
+                        # Set color oblasts with no available data
+                        na.value = alpha("#846E54", 0.25),
+                        
+                        # Set label scale
+                        labels = scales::label_number(scale = 1e-5, suffix = " ")) +
+  
+  theme(
+    # Blue background and margins
+    plot.background = element_rect(fill = "#B1D7FF"),
+        plot.margin = margin(t = 1, r = 1, b = 1, l = 1, unit = "cm"),
+    
+    # Text specifications, including fonts, size, and margins
+        plot.title = element_text(family = "libre",
+                                  size = rel(0.99),
+                                  margin = margin(b = 7, t= 7)),
+        plot.subtitle = element_text(family = "roboto", size = rel(0.70),
+                                     margin = margin(b = 5)),
+        legend.text = element_text(family = "geist_mono",
+                                   size = rel(0.55)),
+        plot.caption = element_text(family = "roboto",
+                                    margin = margin(t = 20),
+                                    size = rel(0.45)),
+        plot.caption.position = "plot") 
+  
+  # Add no data legend, if not adding annotation using Affinity
+
+  #annotate("rect", xmin = 38.5, xmax = 39.5, ymin = 45.6, ymax = 45.9, fill = "#cbe1f5") +
+  #annotate("text", x = 38.5, y = 45.3, label = "No Data", hjust = 0, size = 3.1, family = "geist_mono")
+
+showtext_auto(enable = FALSE)
 ```
 
