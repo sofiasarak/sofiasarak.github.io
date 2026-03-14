@@ -9,7 +9,9 @@ format: html
 
 ## Sunflowers as a Symbol of Peace, Resilience, and Hope
 
-When considering what themes to center my infographic on, I knew I wanted to produce something both impactful and personal. My family is Ukrainian -- my father was born and raised in Drohobych, a city slightly south of Lviv, and my maternal grandfather grew up in the Zaporoizhia Oblast (oblasts are the administrative divisions in Ukraine, parallel to states in the U.S.), which is in the southeast of the country. I am first-generation American, but I spent my childhood attending Ukrainian school every Saturday (where we learned the language, culture, and history), and attending folk dance lessons as well as performing at local festivals.
+When considering what themes to center my infographic on, I knew I wanted to produce something both impactful and personal. My family is Ukrainian -- my father was born and raised in Drohobych, a city slightly south of Lviv, and my maternal grandfather grew up in the Zaporoizhia Oblast (oblasts are the administrative divisions in Ukraine, parallel to states in the U.S.), which is in the southeast of the country. 
+
+I am first-generation American, but I spent my childhood attending Ukrainian school every Saturday (where we learned the language, culture, and history), and attending folk dance lessons as well as performing at local festivals.
 
 ```{r}
 #| echo: false
@@ -302,75 +304,20 @@ Having both explored the pattern of production as well as it relative to the Eur
 In Affinity, I ended up labeling each segment with a bracket instead of using the {ggplot2} legend function, for better readability. Additionally, this is the one part of my plot where colorblindness may have an affect on interpretability, so this labeling method makes it more accessible.
 
 ```{r}
+#| eval: true
 #| echo: false
 #| fig-align: "center"
-#| fig-asp: 1
-#| fig-width: 4
-#| fig-alt: "Area chart showing sunflower oil production in tonnes from 1992 to 2022, with Ukraine contributing about the third of production in Europe by 2022."
-#| 
-## Ukraine's agriculture data, 2021
-uki_agri_2021 <- tribble(
-  ~export, ~tonnes, ~value,
-  "Sunflower Oil", 5000000, 6400000000,
-  "Maize", 23000000, 5900000000,
-  "Wheat", 19000000, 5100000000,
-  "Rapeseed", 2700000, 1700000000,
-  "Barley", 5800000, 1300000000
-)
+#| out-width: "40%"
+#| fig-alt: "Waffle chart showing that about a third of Ukrain'e export value is made up by sunflower oil, and an additional 29% by maize."
 
-# adjust data
-uki_agri_2021 <- uki_agri_2021 %>% 
-  mutate(value_billions = value/100000000,
-         tonnes_millions = tonnes/1000000,
-          fraction = value_billions/(sum(value_billions))) %>% 
-  mutate(n_squares = round(fraction * 100),
-       remainder = (fraction * 100) - floor(fraction * 100)) %>%
-arrange(desc(remainder)) %>%
-mutate(n_squares = floor(fraction * 100) + 
-         if_else(row_number() <= 100 - sum(floor(fraction * 100)), 1L, 0L)) %>% 
-  mutate(export = factor(export, levels = c("Sunflower Oil", "Maize", "Wheat", "Rapeseed", "Barley"))) %>% 
-  
-  # forces the order!
-  arrange(export)
+knitr::include_graphics("images/waffle_plot.png")
 
-# create color scheme
-exports <- c("Sunflower Oil" = alpha(light_yellow, 1),
-             "Maize" = alpha(dark_yellow,1),
-             "Wheat" = alpha("#846E54",1),
-             "Rapeseed" = alpha("#442824", 1),
-             "Barley" = alpha("#007756", 1))
-
-showtext_auto(enable = TRUE)
-
-# uki agri exports in value of US dollars
-ggplot(uki_agri_2021, aes(fill = reorder(export, -value_billions), values = n_squares)) + 
-  waffle::geom_waffle(n_rows = 10, radius = unit(0.5, "npc"), size = 0,
-                      flip = TRUE, make_proportional = FALSE) +
-  labs(fill = " ",
-       title = "Ukraine's Top Export Products",
-       #subtitle = "Sunflower oil was the highest-valued export at $6.4 billion.",
-       caption = "Data Source: European Parliamentary Data Service") +
-  coord_equal() +
-  theme_void(base_size = 17) +
-  theme(plot.background = element_rect(fill = "#B1D7FF"),
-        plot.title = element_text(family = "libre",
-                                  size = rel(0.99),
-                                  margin = margin(t = 8)),
-        plot.subtitle = element_text(family = "roboto", size = rel(0.70),
-                                     margin = margin(t = 4)),
-        legend.text = element_text(family = "geist_mono",
-                                   size = rel(0.4)),
-        plot.caption = element_text(family = "roboto",
-                                    margin = margin(t = 2, b = 5),
-                                    size = rel(0.45)),
-        plot.caption.position = "plot",
-        legend.position = "none",
-        legend.key.size = unit(0.3, "cm")) +
-  scale_discrete_manual(values = exports, aesthetics = "fill") 
-
-
-showtext_auto(enable = FALSE)
+# hello! you found my source code! 
+# are you wondering why this plot is embedded as an image, while the others run as code?
+# the answer is that, for a reason I cannot figure out, the subsequent plots would output with white borders on either side -- I didn't like the look of them, and I could not get rid of them!
+# so image it is :) see the complete code chunk at the end of the blog post for complete plot code!
 ```
+
 
 ### Sunflower Fields Across the Country
 
@@ -380,109 +327,22 @@ Ideally, I would have preferred to use data from [Qadar et al. (2024)](https://w
 
 ```{r}
 #| echo: false
-#| fig-align: "center"
-#| fig-asp: 0.7
+#| fig-show: hold
+#| layout-ncol: 2
 #| warning: false
 #| message: false
 #|fig-alt: "Map of Ukraine with oblasts colored by the number of sunflower farms. There tend to be more sunflower farms in southeast Ukraine, possibly due to warmer climate."
 
-# Load data and join attributes to geometries
+knitr::include_graphics(c("images/map_number.png", "images/map_size.png")) 
 
-# Ukraine geometry
-oblasts <- read_sf(here("blog", "ukrainian-sunflowers-infographic", "data","UA_FULL_Ukraine.geojson"))
-# Atttributes
-by_region <- read_csv(here("blog","ukrainian-sunflowers-infographic", "data","by_region.csv")) %>% 
-  mutate("name:en" = Region)
-
-# Join on oblast name
-sunflower_region <- left_join(oblasts, by_region, by = "name:en")
-
-showtext_auto(enable = TRUE)
-
-sunflower_region <- sunflower_region %>% 
-  mutate(number_k = Number/10)
-
-ggplot(data = sunflower_region) +
-  geom_sf(aes(fill = Number), color = "white") +
-  labs(title = "Number of sunflower farms",
-       #subtitle = "There tend to be more sunflower farms in southeast Ukraine,\npossibly due to warmer climate.",
-       fill = " ",
-       caption = "Data Source: OneSoil.ai") +
-  guides(fill = guide_colorbar(direction = "horizontal",
-                               title.position = "top",
-                               barheight = 0.75,
-                               position = "bottom",
-                               barwidth = 9)) +
-   theme_void(base_size = 17) +
-  # theme(legend.position = "bottom") +
-  scale_fill_continuous(high = "#E7B030", low = platinum, na.value = alpha("#846E54", 0.25),
-                        labels = scales::label_number(scale = 1e-2, suffix = "k")) +
-  theme(plot.background = element_rect(fill = "#B1D7FF"),
-        plot.margin = margin(t = 1, r = 1, b = 1, l = 1, unit = "cm"),
-        plot.title = element_text(family = "libre",
-                                  size = rel(0.99),
-                                  margin = margin(b = 7, t = 7)),
-        plot.subtitle = element_text(family = "roboto", size = rel(0.70),
-                                     margin = margin(b = 5)),
-        legend.text = element_text(family = "geist_mono",
-                                   size = rel(0.55)),
-        plot.caption = element_text(family = "roboto",
-                                    margin = margin(t = 20),
-                                    size = rel(0.45)),
-        plot.caption.position = "plot") 
-  
-  # add no data legend
-  #annotate("rect", xmin = 38.5, xmax = 39.5, ymin = 45.6, ymax = 45.9, fill = "#cbe1f5") +
-  #annotate("text", x = 38.5, y = 45.3, label = "No Data", hjust = 0, size = 3.1, family = "geist_mono")
-
-
-showtext_auto(enable = FALSE)
+# hello! you found my source code! 
+# are you wondering why this plot is embedded as an image, while the others run as code?
+# the answer is that, for a reason I cannot figure out, the subsequent plots would output with white borders on either side -- I didn't like the look of them, and I could not get rid of them!
+# so image it is :) see the complete code chunk at the end of the blog post for complete plot code!
 ```
 
-```{r}
-#| echo: false
-#| fig-align: "center"
-#| fig-asp: 0.7
-#|fig-alt: "Map of Ukraine with oblasts colored by sunflower farm area. There tends to be more area allocated to sunflower production in southeast Ukraine, possibly due to warmer climate."
 
-showtext_auto(enable = TRUE)
-
-ggplot(data = sunflower_region) +
-  geom_sf(aes(fill = Size), color = "white") +
-  labs(title = "Size of sunflower farms in hectares",
-       # subtitle = "Sunflower farms tend to cover more area in southeast Ukraine,\npossibly due to warmer climate.",
-       fill = " ",
-       caption = "Data Source: OneSoil.ai") +
-  guides(fill = guide_colorbar(direction = "horizontal",
-                               title.position = "top",
-                               barheight = 0.75,
-                               position = "bottom",
-                               barwidth = 9)) +
-   theme_void(base_size = 17) +
-  scale_fill_continuous(high = "#E7B030", low = platinum, na.value = alpha("#846E54", 0.25),
-                        labels = scales::label_number(scale = 1e-5, suffix = " ")) +
-  theme(plot.background = element_rect(fill = "#B1D7FF"),
-        plot.margin = margin(t = 1, r = 1, b = 1, l = 1, unit = "cm"),
-        plot.title = element_text(family = "libre",
-                                  size = rel(0.99),
-                                  margin = margin(b = 7, t= 7)),
-        plot.subtitle = element_text(family = "roboto", size = rel(0.70),
-                                     margin = margin(b = 5)),
-        legend.text = element_text(family = "geist_mono",
-                                   size = rel(0.55)),
-        plot.caption = element_text(family = "roboto",
-                                    margin = margin(t = 20),
-                                    size = rel(0.45)),
-        plot.caption.position = "plot") 
-  
-  # add no data legend
-  #annotate("rect", xmin = 38.5, xmax = 39.5, ymin = 45.6, ymax = 45.9, fill = "#cbe1f5") +
-  #annotate("text", x = 38.5, y = 45.3, label = "No Data", hjust = 0, size = 3.1, family = "geist_mono")
-
-showtext_auto(enable = FALSE)
-```
-
-For the units, I chose to make adjustments in Affinity as opposed to including them in the original legend. If I were to keep this figure on its own, I would most likley revert the colorbar back to vertical and have it be on the right side of the map, and incldue units there.
+For the units, I chose to make adjustments in Affinity as opposed to including them in the original legend. If I were to keep this figure on its own, I would most likley revert the colorbar back to vertical and have it be on the right side of the map, and include units there.
 
 ## Putting it Together
 

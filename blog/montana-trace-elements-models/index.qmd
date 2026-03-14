@@ -150,6 +150,7 @@ conc_lead <- conc %>%
 
 ```{r}
 #| echo: false
+#| message: false
 #| warning: false
 #| fig-align: "center"
 water_plot <- ggplot(data = conc, aes(x = constituent, y = concentration_water)) +

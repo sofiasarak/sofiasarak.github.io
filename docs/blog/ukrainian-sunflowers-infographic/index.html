@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-f88286f0cd90ede3ab3f73dc2c13f047.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-433949bcaaf1c4c83122bd91f43aa8bb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -222,7 +222,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="sunflowers-as-a-symbol-of-peace-resilience-and-hope" class="level2">
 <h2 class="anchored" data-anchor-id="sunflowers-as-a-symbol-of-peace-resilience-and-hope">Sunflowers as a Symbol of Peace, Resilience, and Hope</h2>
-<p>When considering what themes to center my infographic on, I knew I wanted to produce something both impactful and personal. My family is Ukrainian – my father was born and raised in Drohobych, a city slightly south of Lviv, and my maternal grandfather grew up in the Zaporoizhia Oblast (oblasts are the administrative divisions in Ukraine, parallel to states in the U.S.), which is in the southeast of the country. I am first-generation American, but I spent my childhood attending Ukrainian school every Saturday (where we learned the language, culture, and history), and attending folk dance lessons as well as performing at local festivals.</p>
+<p>When considering what themes to center my infographic on, I knew I wanted to produce something both impactful and personal. My family is Ukrainian – my father was born and raised in Drohobych, a city slightly south of Lviv, and my maternal grandfather grew up in the Zaporoizhia Oblast (oblasts are the administrative divisions in Ukraine, parallel to states in the U.S.), which is in the southeast of the country.</p>
+<p>I am first-generation American, but I spent my childhood attending Ukrainian school every Saturday (where we learned the language, culture, and history), and attending folk dance lessons as well as performing at local festivals.</p>
 <div class="cell quarto-layout-panel" data-layout-ncol="1">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: flex-start;">
@@ -307,7 +308,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Area chart showing sunflower oil production in tonnes from 1992 to 2022, with Ukraine contributing about the third of production in Europe by 2022." width="384"></p>
+<p><img src="images/waffle_plot.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:40.0%" alt="Waffle chart showing that about a third of Ukrain'e export value is made up by sunflower oil, and an additional 29% by maize."></p>
 </figure>
 </div>
 </div>
@@ -317,25 +318,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="sunflower-fields-across-the-country">Sunflower Fields Across the Country</h3>
 <p>I wanted to tie sunflowers back to the Ukrainian landscape. Using predicted data from <a href="https://map.onesoil.ai/2020/UKR#4.24/47.26/34.38">OneSoil.ai</a>, I was able to attain oblast-level information on the size and number of sunflower fields. I plotted this spatially, using a basemap from this <a href="https://github.com/EugeneBorshch/ukraine_geojson">GitHub repository</a> and joining by oblast name. The choropleth maps revealed that sunflowers are mostly grown in the southeast of the country.</p>
 <p>Ideally, I would have preferred to use data from <a href="https://www.sciencedirect.com/science/article/pii/S2666017224000233?">Qadar et al.&nbsp;(2024)</a>, which has more granular and perhaps more accurate data, but it was not publicly accesible.</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
-</figure>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="images/map_number.png" class="img-fluid" width="409"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="images/map_size.png" class="img-fluid" width="409"></p>
 </div>
 </div>
 </div>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>For the units, I chose to make adjustments in Affinity as opposed to including them in the original legend. If I were to keep this figure on its own, I would most likley revert the colorbar back to vertical and have it be on the right side of the map, and incldue units there.</p>
+<p>For the units, I chose to make adjustments in Affinity as opposed to including them in the original legend. If I were to keep this figure on its own, I would most likley revert the colorbar back to vertical and have it be on the right side of the map, and include units there.</p>
 </section>
 </section>
 <section id="putting-it-together" class="level2">
