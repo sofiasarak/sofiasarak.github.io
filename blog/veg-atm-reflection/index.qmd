@@ -1,0 +1,24 @@
+---
+title: "A Break from Data Science"
+subtitle: "Using my graduate program to take a class in the UCCSB geography department"
+format: html
+draft: true
+---
+
+I love to learn! And since this is the last time I will be in school for a bit (most likely), I want to take advantage of it as much as I can.
+
+My graduate program has pretty much non-negotiable graduation requirements that are identical for everyone -- our schedules were pre-determined before we even started. Since it's a rather small program with no additional specializations, we all take the same things. This quarter, this meant taking:
+- Environmental Modeling
+- Data Visualization and Communications
+- Evaluating Environmental Policy
+- and the capstone class, which gave us time and structure to work through our projects
+
+This past quarter (Winter 2026), I added another class to my course schedule. It was a graduate-level course in the Geography department taught by Professor Joe McFadden, called " ". I was so excited! Although I have been loving learning all things data science, I have missed the environmental world as well (I have very fond memories of all the fun field trips we took during my undergraduate degree).
+
+GEOG843 promised weekly discussions about vegetation and atmospheric science literature. As it turns out, we read mostly textbook chapters and review papers. I got to take a break from writing code and instead pivoted back to the close reading I often had to do as an undergraduate.
+
+Other than the readings, we were each expected to contribute to two review sheets throughout the quarter -- a two-sided document that summarized the chapter we read, and provided some questions for discussion. Below are the two that I worked on!
+
+All in all, I really enjoyed the class. It was fun not only to step out of the world of R and Python for a bit, but also from the bubble that is the MEDS program. With only ~30 students that take *all of our classes together*, it's easy to only interact with one another.
+
+Speaking of which, one of my favorite parts of this course was actually meeting people outside of my department. Yes, our discussions centered on the readings, 
