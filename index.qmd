@@ -1,9 +1,9 @@
 ---
 title: "Sofia Sarak"
-image: images/sarak_headshot.jpg
+image: images/channel_headshot.jpg
 about:
   template: trestles
-  image-shape: rounded
+  image-shape: round
   #image-width: 
   links:
     - text: LinkedIn
@@ -19,14 +19,26 @@ about:
       href: mailto:sarak@ucsb.edu
 ---
 
-<h1>Welcome!</h1>
+<h1>Welcome! I'm Sofia. </h1>
 
-My name is Sofia, and I am an early-career data scientist currently completing a Master of Environmental Data Science at the Bren School of Environmental Science & Management at UCSB (whew, that was a mouthful). I am still finding my niche, but I am currently enjoying learning data visualization methods, geospatial analysis, and environmental policy evaluation.
+I am an early-career data scientist currently completing a Master of Environmental Data Science at the Bren School of Environmental Science & Management at UCSB (whew, that was a mouthful). I am still finding my niche, but I am currently enjoying learning data visualization methods, geospatial analysis, and environmental policy evaluation.
 
-<h3>About Me</h3>
+::: panel-tabset
+### Education
 
-I grew up in southern Connecticut, and ended up at Wesleyan University for my undergraduate education. I double-majored in Earth & Environmnetal Sciences and Economics, and am continuously surprised at how interconnected the two fields are. 
+**Master of Environmental Data Science** (Expected June 2026) <br>Bren School of Environmental Science & Management @ University of California, Santa Barbara (UCSB)
 
-Some of my past projects include exploring evolutionary divergence of fish species, trophic levels of ants in Puerto Rico, and testing for bacteria concentrations at a water quality monitoring organization.
+**Bachelor of Arts in Earth & Environmental Sciences, Economics** (May 2025) <br> Wesleyan University @ Middletown, CT
 
-In my free time, I enjoy hiking, swimming, reading, and doing little crafts like crocheting and sewing. I'm also a big fan of the Great British Baking Show and Bad Bunny. Current personal projects include practicing my Spanish (I traveled to Argentina this winter and was able to get around!) and potentially running another half marathon soon.
+### Experience
+
+*To be updated*
+
+### Fun Facts!
+
+1. I'm first-generation American, which has showed me the importance of language for communication and connection. **I grew up speaking Russian and Ukrainian at home**, and am very determined to not lose the Spanish I learned in high school and college.
+
+2. **I love to read!** Some recent favorites include [Educated](https://www.goodreads.com/book/show/35133922-educated) by Tara Westover and [Happy City](https://www.goodreads.com/book/show/13330588-happy-city?from_search=true&from_srp=true&qid=K5OBEgo4XG&rank=1) by Charles Montgomery.
+
+3. When I'm not coding, practicing my Spanish, or reading, I'm probably doing some sort of physical activity. Like many environmental scientists **I enjoy hiking, but I'm also a big fan of weightlifting and swimming laps at the pool**.
+:::

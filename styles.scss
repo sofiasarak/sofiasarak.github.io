@@ -14,19 +14,24 @@ $cream: #fff9e8ff;
 $lightyellow2: #fcf7d2;
 $lightyellow: #fff2c0ff;
 $darkgreen: #396845ff;
+$lightblue: #BFDDEC;
+$lighterblue: #d0e9f5;
+$darkblue: #182A68;
+$red: #83111F;
 
+$primary: $darkgreen;
 
 // define quarto variables
-$body-bg: $lightyellow2;
-$navbar-bg: $darkgreen;
+$body-bg: $lighterblue;
+$navbar-bg: $darkblue;
 $navbar-fg: $cream;
 $navbar-hl: $lightyellow;
 $link-color: $lightgreen;
-$body-color: $mediumgreen;
+$body-color: $darkblue;
 //$btn-primary-color: $lightyellow;
-//$btn-primary-bg: $lightyellow;
-//$btn-primary-border-color: $lightyellow;
-//$btn-primary-color: $darkgreen;
+$btn-primary-bg: $darkgreen;
+$btn-primary-border-color: $darkgreen;
+$btn-primary-color: $darkgreen;
 
 // L body text
 .body-text-l {
@@ -37,14 +42,70 @@ $body-color: $mediumgreen;
 
 /*-- scss:rules --*/
 
+.navbar-brand img {
+  max-height: 80px;  // adjust as needed
+}
+
+.about-contents {
+  border-left: 1px solid $darkgreen;
+}
+
+#quarto-content.trestles-content {
+  border-left-color: $darkgreen;
+}
+
+.trestles-left {
+  border-right: 1px solid $darkgreen !important;
+}
+
+.trestles-left {
+  background-color: $lighterblue;
+}
+
+// the one that works!
+.about-contents {
+  border-left: 1px solid $darkgreen !important;
+}
+
+// Quarto sidebar border
+.sidebar {
+  border-color: $darkgreen;
+}
+
+// Column rule if using CSS columns
+.column-rule {
+  border-left-color: $darkgreen;
+}
+
+
+.panel-tabset .tab-content {
+  border-color: $darkgreen;
+}
+
+.panel-tabset .nav-tabs {
+  border-bottom-color: $darkgreen;
+}
+
+//.panel-tabset .nav-link {
+//  border-color: $darkgreen;
+//}
+
+.panel-tabset .nav-link.active {
+  border-color: $darkgreen;
+}
+
+.panel-tabset .nav-link {
+  color: $darkgreen;
+}
+
 h3, h4, h5, h6 {
   font-family: $bricolage;
-  color:$darkgreen;
+  color:$red;
 }
 
 h1, h2 {
   font-family: $bricolage;
-  color:$darkgreen;
+  color:$red;
 }
 
 h1, h2 {
@@ -53,7 +114,7 @@ h1, h2 {
 }
 
 .title{
-  color: $darkgreen;
+  color: $red;
 }
 
 .center-text {
