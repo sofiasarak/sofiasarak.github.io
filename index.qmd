@@ -21,24 +21,34 @@ about:
 
 <h1>Welcome! I'm Sofia. </h1>
 
-I am an early-career data scientist currently completing a Master of Environmental Data Science at the Bren School of Environmental Science & Management at UCSB (whew, that was a mouthful). I am still finding my niche, but I am currently enjoying learning data visualization methods, geospatial analysis, and environmental policy evaluation.
+I am an early-career data scientist currently completing a Master of Environmental Data Science at the Bren School of Environmental Science & Management at UCSB (whew, that was a mouthful!). I am still finding my niche, but I am currently enjoying learning data visualization methods, geospatial analysis, and environmental policy evaluation.
 
 ::: panel-tabset
 ### Education
 
 **Master of Environmental Data Science** (Expected June 2026) <br>Bren School of Environmental Science & Management @ University of California, Santa Barbara (UCSB)
 
-**Bachelor of Arts in Earth & Environmental Sciences, Economics** (May 2025) <br> Wesleyan University @ Middletown, CT
+**Bachelor of Arts in Earth & Environmental Sciences, Economics** (2025) <br> Wesleyan University @ Middletown, CT
 
 ### Experience
 
-*To be updated*
+**Master's Capstone Project** (2026 - Present) <br> Title: *Power lines and people -- Mapping how distribution grid constraints shape resilient and equitable energy transition* <br> Bren School of Environmental Science & Management
+
+**Career Development Student Assistant** (2025 - Present) <br> Bren School of Environmental Science & Management
+
+**Lab Intern** (2023 - 2025) <br> College of the Environment, Wesleyan University
+
+**Course Assistant** (2023 - 2024) <br> Economics Department, Wesleyan University
+
+**Field and Lab Intern** (2023) <br> Harbor Watch at Earthplace (Westport, CT)
+
+For more information about these roles, [check out my resume](docs/SofiaSarak_Resume.pdf){target="_blank"}!
 
 ### Fun Facts!
 
-1. I'm first-generation American, which has showed me the importance of language for communication and connection. **I grew up speaking Russian and Ukrainian at home**, and am very determined to not lose the Spanish I learned in high school and college.
+{{< fa earth-europe title="descriptive text for accessibility" >}}  I'm first-generation American, which has shown me the importance of language for communication and connection. **I grew up speaking Russian and Ukrainian at home**, and am very determined to not lose the Spanish I learned in high school and college.
 
-2. **I love to read!** Some recent favorites include [Educated](https://www.goodreads.com/book/show/35133922-educated) by Tara Westover and [Happy City](https://www.goodreads.com/book/show/13330588-happy-city?from_search=true&from_srp=true&qid=K5OBEgo4XG&rank=1) by Charles Montgomery.
+{{< fa book-bookmark title="descriptive text for accessibility" >}}  **I love to read!** Some recent favorites include [Educated](https://www.goodreads.com/book/show/35133922-educated) by Tara Westover and [Happy City](https://www.goodreads.com/book/show/13330588-happy-city?from_search=true&from_srp=true&qid=K5OBEgo4XG&rank=1) by Charles Montgomery.
 
-3. When I'm not coding, practicing my Spanish, or reading, I'm probably doing some sort of physical activity. Like many environmental scientists **I enjoy hiking, but I'm also a big fan of weightlifting and swimming laps at the pool**.
+{{< fa person-swimming title="descriptive text for accessibility" >}}  When I'm not coding, practicing my Spanish, or reading, I'm probably doing some sort of physical activity. Like many environmental scientists, **I enjoy hiking, but I'm also a big fan of weightlifting and swimming laps at the pool**.
 :::

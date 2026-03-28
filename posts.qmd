@@ -1,5 +1,6 @@
 ---
 title: "Blog"
+subtitle: "A collection of coursework deliverables as well as some projects and personal reflections."
 listing: 
   contents: blog
   type: grid
