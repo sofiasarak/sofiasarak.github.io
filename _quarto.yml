@@ -30,6 +30,7 @@ format:
     toc: true
     page-layout: full # makes it so the text uses the whole screen
     mainfont: Manrope
+    lightbox: true
 
 
 
