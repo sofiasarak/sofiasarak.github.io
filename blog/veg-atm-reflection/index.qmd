@@ -1,6 +1,8 @@
 ---
 title: "A Break from Data Science"
-subtitle: "A reflection on a winter quarter course in the goeography department"
+author: "Sofia Sarak"
+date: "March 31, 2026"
+description: "A reflection on a winter quarter course in the goeography department"
 image: "images/veg-atm.jpg"
 image-alt: "Alt text for the thumbnail image"
 format: html
@@ -9,7 +11,7 @@ draft: false
 
 I love to learn! And since this is the last time I will be in school for a bit (most likely), I want to take advantage of it as much as I can.
 
-My graduate program has very specific graduation requirements that are identical for everyone -- our schedules were pre-determined before we even started. Since it's a rather small program with no additional specializations, we all take the same things. This quarter, this meant taking courses in:
+My graduate program has very specific graduation requirements that are identical for everyone -- our schedules were pre-determined before we even started. Since it's a rather small program with no additional specializations, we all take the same things. In the winter, this meant taking courses in:
 
 -   environmental modeling,
 
@@ -19,7 +21,7 @@ My graduate program has very specific graduation requirements that are identical
 
 -   and the capstone class, which gave us time and structure to work through our projects.
 
-Although we can't deduct or replace any of the classes on the schedule, we can add as many we would like. This past quarter (Winter 2026), I took advantage of this: I enrolled in a graduate-level course in the Geography department taught by [Professor Joe McFadden](https://www.geog.ucsb.edu/people/faculty/joe-mcfadden), called Vegetation-Atmosphere Interactions.
+Although we can't deduct or replace any of the classes on the schedule, we can add as many we would like. This past quarter (Winter 2026), I took advantage of this: I enrolled in a graduate-level course in the Geography department taught by [Professor Joe McFadden](https://www.geog.ucsb.edu/people/faculty/joe-mcfadden), called Vegetation-Atmosphere Interactions (GEOG243).
 
 I was so excited! Although I have been loving learning all things data science, I have also missed the environmental world. I have very fond memories of all the fun field trips I got to take during my undergraduate studies, and how exciting it is to understand the underlying processes of the natural world. Why a rock over here looks different than the one half a mile away, how we can determine a dinosaur's speed based on in footprints, and why coniferous forests often lack undergrowth.
 
