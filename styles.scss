@@ -16,6 +16,7 @@ $lightyellow: #fff2c0ff;
 $darkgreen: #396845ff;
 $lightblue: #BFDDEC;
 $lighterblue: #d0e9f5;
+$lightererblue: #d7ebf5;
 $darkblue: #182A68;
 $red: #83111F;
 
@@ -26,12 +27,16 @@ $body-bg: $lighterblue;
 $navbar-bg: $darkblue;
 $navbar-fg: $cream;
 $navbar-hl: $lightyellow;
-$link-color: $lightgreen;
+$link-color: $darkgreen;
 $body-color: $darkblue;
+$code-block-bg: $lightererblue;
+$code-color: $darkgreen;
 //$btn-primary-color: $lightyellow;
 $btn-primary-bg: $darkgreen;
 $btn-primary-border-color: $darkgreen;
 $btn-primary-color: $darkgreen;
+$code-block-border-left: $darkgreen;
+$code-block-border-left-style: double;
 
 // L body text
 .body-text-l {
