@@ -1,0 +1,749 @@
+---
+title: "EDS Job Market Report: Winter Quarter"
+subtitle: "Data collected between October 2025 and March 2026"
+author: "Sofia Sarak"
+date: April 11, 2026
+format: html
+editor: visual
+draft: true
+---
+
+The following report contains statistics and visualizations summarizing the job openings being posted to online services such as [Indeed](https://www.indeed.com/jobs?q=environmental+data+science&l=&from=searchOnHP&vjk=b9ae5b9d8d4a16b4), [Conservation Job Board](https://www.conservationjobboard.com/), [CalCareers](https://calcareers.ca.gov/CalHRPublic/Search/JobSearchResults.aspx#kw=environmental%20data), and others. Keywords such "environmental data science", "environmental analyst", and "climate analyst" (just to name a few, though a wide range were used) were searched for, and roles pertaining to environmental data analysis, planning, or communication were pulled and re-posted on the [BrenConnect website](https://brenconnect.bren.ucsb.edu/s/group/0F9Kg0000004CHNKA2/meds-2026-jobinternship-opportunities). These posts are what make up the data used in the following report, and examples of positions are included throughout.
+
+This report summarizes combined data collected between October 2025 and March 2026, and offers a brief comparison between the fall (October through early January) and winter (January through March) quarters. **In total, there are 234 job listings summarized in this report, with 104 pertaining to the fall and the other 130 to the winter.**
+
+### MEDS 2026 Cohort
+
+The Master of Environmental Data Science (MEDS) program at the Bren School teaches data techniques such as statistical modeling, machine learning, and data visualization. Core skills include R, Python, SQL and version control in GitHub, and therefore students typically aim for jobs that utilize these programming languages and practices. Students are also interested in positions that involve GIS/geospatial methods.
+
+Although most, if not all, positions that exemplified the skills taught in the MEDS program were posted, the job search was somewhat customized to the preferences of the current cohort. This was likely most influential when considering the location of the position, as the current class is particularly interested in California, the West Coast of the United States, Texas, and large cities such as New York City and Washington, D.C, with some international interest as well. Some students are also partial to remote positions.
+
+These factors guide the job openings posted on BrenConnect, and therefore the results presented in this report.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+# Load necessary packages
+library(tidyverse)
+library(here)
+library(janitor)
+library(ggplot2)
+library(patchwork)
+library(maps)
+library(geomtextpath)
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+# Load fall quarter data
+fall <- read_csv(here("blog", "career-dev-report", "data/fall_posts.csv")) %>% 
+  clean_names() %>%
+  
+  # Denote that these data come from the fall quarter
+  mutate(season = "fall")
+
+
+# Load winter quarter data
+winter <- read_csv(here("blog", "career-dev-report", "data/winter_posts.csv")) %>% 
+  clean_names() %>%
+  
+  # Fix data types
+  mutate(yearly_salary_min = as.numeric(yearly_salary_min),
+         yearly_salary_max = as.numeric(yearly_salary_max)) %>% 
+  
+  # Denote that these data come from the winter quarter
+   mutate(season = "winter",
+          
+          # Fix observations to match standards
+          sector = case_when(
+            sector == "International Organization" ~ "Federal Government",
+            TRUE ~ sector))
+
+# Join into one
+all <- bind_rows(fall, winter)
+
+# Clean joined data frame
+
+all_clean <- all %>% 
+  
+  # Apply geographic groupings for summaries and viz
+  mutate(region = case_when(
+    city == "Washington, DC" ~ "Washington,D.C.",
+    
+    state == "AB" ~ NA,
+    
+    state == "AK" ~ "Alaska",
+    
+    state == "HI" ~ "Hawaii",
+    
+    state %in% c("Multiple", "TX/NM") ~ NA,
+    
+    # West Coast
+    state %in% c("CA", "OR", "WA") ~ "West Coast",
+    
+    # Southwest
+    state %in% c("AZ", "NM", "TX", "NV") ~ "Southwest",
+    
+    # Rocky Mountains
+    state %in% c("CO", "UT", "WY", "MT", "ID") ~ "Rocky Mountains",
+    
+    # Great Plains
+    state %in% c("ND", "SD", "NE", "KS", "OK", "IA", "MO") ~ "Great Plains",
+    
+    # Great Lakes
+    state %in% c("MN", "WI", "MI", "IL", "IN", "OH") ~ "Great Lake",
+    
+    # Mideast
+    state %in% c("NY", "NJ", "PA", "DE", "MD", "DC") ~ "Mideast",
+    
+    # New England
+    state %in% c("ME", "NH", "VT", "MA", "RI", "CT") ~ "New England",
+    
+    # Southeast
+    state %in% c("VA", "WV", "KY", "TN", "NC", "SC", "GA",
+                 "FL", "AL", "MS", "AR", "LA") ~ "Southeast",
+    
+    # Default (keeps state abbreviation if unmatched)
+    TRUE ~ state
+  )) %>% 
+  
+  # Fix some position types
+  mutate(position_type = str_replace(position_type, "reseacher", "researcher"),
+         position_type = str_replace(position_type, "specialist", "data specialist"),
+         position_type = str_replace(position_type, "data data specialist", "data specialist"),
+         position_type = str_replace(position_type, "machine learning data specialist", "machine learning specialist"))
+
+specialist <- fall$position_type[str_detect(unique(fall$position_type), "specialist")]
+```
+
+```{r}
+#| echo: false
+#| message: false
+# Create theme for all visualizations
+report_theme <- function(){
+  theme_classic() +
+  theme(axis.title.y = element_blank(),
+         panel.background = element_rect(fill = "#d7ebf5"),
+        plot.background = element_rect(fill = "#d7ebf5"))}
+
+bren_blue <- "#003660"
+bren_green <- "#78a441"
+ivory <- "#F5F9E9"
+```
+
+# Complete Data
+
+## Sector
+
+The Career Development Team classifies alumni employment into seven categories. Following this system, we find that the majority of position listing were in **consulting** (27% of all posts). The other sectors break down as:
+
+-   Corporate: 21%
+-   Non-Profit/NGO: 15%
+-   State Government: 12%
+-   Local Government: 12%
+-   Research/Education: 11%
+-   Federal Government: 2%
+
+```{r}
+#| echo: false
+#| fig-align: "center"
+all_clean %>% 
+  group_by(sector) %>% 
+  summarize(count = n()) %>% 
+ggplot(aes(x = reorder(sector, count), y = count)) +
+  geom_col(color = bren_blue, fill = alpha(bren_blue, 0.7)) + # position = "dodge"
+  geom_text(aes(label = count), hjust = 1.5,
+            color = ivory) +
+  labs(y = " ") +
+  coord_flip() +
+  report_theme() +
+  #scale_x_discrete(position = "top") +
+  #scale_y_reverse() +
+  theme(
+   axis.line.x = element_blank(),
+   axis.text.x = element_blank(),
+   axis.ticks.x = element_blank()
+  )
+```
+
+::: {.callout-note collapse="true" icon="false"}
+## Position in Consulting: Remote Sensing Scientist \@ Land IQ
+
+**Location:** Sacramento, CA
+
+**Description:** Land IQ is a multidisciplinary environmental consulting firm with services in agriculture, nutrients and salinity, and remote sensing, among others. They are hiring a remote sensing scientist to work on their growing geospatial team in a range of agronomic, environmental, and other land-based science disciplines. They are looking for applicants who have strong analytical, remote sensing and GIS skills and an exceptionally strong understanding of machine learning algorithms.
+
+**Desired Qualifications:**
+
+-   Education: MS Remote Sensing/Geography/Data Science field
+
+-   Experience: 0-5 years of experience in at least one of the following areas:
+
+    -   Remote sensing-based land cover mapping over agricultural areas and crop classification;
+
+    -   Image based time series analysis and crop phenology modeling;
+
+    -   Remote sensing of crop evapotranspiration; and/or
+
+    -   Image based crop yield modeling.
+
+-   Required Technical Capabilities:
+
+    -   Proficient at remote sensing modeling (e.g., data cleaning, feature selection, analysis, designing, building, and model assessment).
+
+    -   Familiar with deep learning platforms (e.g., Keras, Tensorflow) and related classification and segmentation algorithms.
+
+    -   Strong programming skills with Python.
+
+    -   Experienced in Python packages like NumPy, SciPy, Geopandas, Matplotlib, Scikit-Learn, Keras
+
+**Details:** Full-time; \$80K - \$115K salary, depending on experience
+
+**Date Posted (to BrenConnect):** November 4, 2025
+:::
+
+## Environmental Field
+
+Along with variety in sectors, roles reflected a wide range of environmental niches. The top three pertained to geospatial work (15% of all positions), water/coastal resources (14%), and sustainability (14%). It should be noted that most consulting positions, unless a specific environment was listed, were categorized under resource management.
+
+```{r}
+#| echo: false
+#| fig-align: "center"
+
+all_clean %>% 
+  
+   mutate(environmental_field = case_when(
+    is.na(environmental_field) ~ "other data analysis",
+    TRUE ~ environmental_field)) %>% 
+  
+  group_by(environmental_field) %>% 
+  summarize(count = n()) %>% 
+  
+ggplot(aes(x = count, y = reorder(environmental_field, count))) + 
+  geom_bar(stat = "identity",
+           color = bren_blue,
+           fill = alpha(bren_blue, 0.7)) +
+  geom_text(aes(label = count), hjust = 1.5,
+            color = ivory) +
+  labs(x = " ") +
+  report_theme() +
+   theme(
+   axis.line.x = element_blank(),
+   axis.text.x = element_blank(),
+   axis.ticks.x = element_blank(),
+   panel.background = element_rect(fill = "#d7ebf5"),
+   plot.background = element_rect(fill = "#d7ebf5")
+  )
+```
+
+## Location
+
+As mentioned, the preference of MEDS 2026 cohort had a big influence on which positions were reposted to BrenConnect, and therefore exist in this dataset. Primarily, there is a very large bias for roles located in California.
+
+```{r}
+#| echo: false
+#| fig-align: "center"
+
+# bar graph
+
+stats_region <- all_clean %>%  
+  filter(region == "West Coast") %>% 
+  group_by(state) %>% 
+  summarize(count = n())
+
+location_bar <- all_clean %>% 
+filter(!is.na(region)) %>% 
+group_by(region) %>% 
+  summarize(count = n()) %>% 
+ggplot(aes(x = count, y = reorder(region, -count))) + 
+  geom_bar(stat = "identity",
+           color = bren_blue,
+           fill = alpha(bren_blue, 0.8)) + 
+  geom_text(aes(label = count, hjust = ifelse(count > 4, 1.5, -1),
+            color = ifelse(count > 4, ivory, "black"))) +
+  
+   scale_color_identity(guide = "none") +
+  
+  labs(title = " ",
+  x =  " ") +
+  report_theme() +
+  theme(
+   axis.line.x = element_blank(),
+   axis.text.x = element_blank(),
+   axis.ticks.x = element_blank()
+  )
+
+location_bar
+```
+
+```{r}
+#| echo: false
+#| fig-align: "center"
+# map of United States
+
+state_counts <- all_clean %>%
+  filter(!is.na(state)) %>%
+  count(state)
+
+# load in lat and long of US states from map library
+us_map <- map_data("state")
+
+# add a column that matches state abbreviation to its name
+state_counts <- state_counts %>%
+  mutate(
+    region = tolower(state.name[match(state, state.abb)])
+  )
+
+# join and plot
+location_map <- us_map %>%
+  left_join(state_counts, by = "region") %>%
+  ggplot(aes(long, lat, group = group, fill = n)) +
+  geom_polygon(color = "white", linewidth = 0.2) +
+  coord_fixed(1.3) +
+  scale_fill_gradient(
+    low = alpha(bren_blue, 0.2),
+    high = bren_blue,
+    na.value = "grey90"
+  ) +
+  labs(fill = " ",
+       title = " ") +
+  theme_void() +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    axis.ticks = element_blank(),
+     plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), "cm"),
+    panel.background = element_rect(fill = "#d7ebf5"),
+   plot.background = element_rect(fill = "#d7ebf5")
+  )
+
+location_map
+```
+
+```{r}
+#| echo: false
+# international?
+international <- sum(all_clean$country != "USA")
+
+countries <- unique(all_clean$country)
+```
+
+There were a total of 11 international positions posted, in India, Sweden, Canada, Singapore, the Netherlands, Australia, Austria, and the UK. There was also one role in Puerto Rico.
+
+## Position Details
+
+```{r}
+#| echo: false
+#| output: false
+
+# I chose not to include this summary in the report because I do not think the distinction between position titles such as "data analyst" and "data specialist" are distinct enough
+
+ all_clean %>% 
+   drop_na(position_type) %>% 
+  group_by(position_type) %>% 
+  summarize(count = n()) %>% 
+ggplot(aes(x = count, y = reorder(position_type, -count))) + 
+  geom_bar(stat = "identity",
+           color = bren_blue,
+           fill = alpha(bren_blue, 0.8)) +
+  geom_text(aes(label = count), hjust = 1.5,
+            color = ivory) +
+  labs(title = "Position Title",
+       x = "Number of Positions") +
+  theme_classic() +
+  theme(axis.title.y = element_blank(),
+        plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), "cm")) 
+```
+
+Overall, the majority of jobs were permanent, full-time, and on-site positions. Jobs were classified as "limited term" if they listed specific durations, such as "one-year placement".
+
+```{r}
+#| echo: false 
+#| fig-align: "center"
+commitment <- all_clean %>% 
+  group_by(term) %>% 
+  summarize(count = n()) %>% 
+  filter(term != "part-time") %>% 
+ggplot(aes(x = reorder(term, -count), y = count)) + 
+  geom_bar(stat = "identity",
+           color = bren_blue,
+           fill = alpha(bren_blue, 0.7)) +
+  geom_text(aes(label = count), vjust = 1.5,
+            color = ivory) +
+  labs(title = "Commitment Length",
+       y = "Number of Positions") +
+  theme_classic() +
+  scale_x_discrete(labels = c("Permanent", "Limited Term")) +
+  theme(axis.title.x = element_blank()) +
+  ylim(0, 200) +
+   theme(
+   axis.line.y = element_blank(),
+   axis.text.y = element_blank(),
+   axis.ticks.y = element_blank(),
+   panel.background = element_rect(fill = "#d7ebf5"),
+   plot.background = element_rect(fill = "#d7ebf5")
+  )
+
+
+type <- all_clean %>% 
+  mutate(job_type = case_when(
+    job_type == "short-term project" ~ "internship",
+    TRUE ~ job_type)) %>% 
+  group_by(job_type) %>% 
+  summarize(n = n()) %>% 
+ggplot(aes(x = reorder(job_type, -n), y = n)) + 
+  geom_bar(stat = "identity",
+           color = bren_blue,
+           fill = alpha(bren_blue, 0.7)) +
+  geom_text(aes(label = n, vjust = ifelse(n > 184, 1.5, -1),
+            color = ifelse(n > 184, ivory, "black"))) +
+  scale_color_identity(guide = "none") +
+  labs(title = "Position Type",
+       y = "Number of Positions") +
+  theme_classic() +
+  scale_x_discrete(labels = c("Full-time", "Internship", "Fellowship", "Part-time")) +
+  theme(axis.title.x = element_blank()) +
+  ylim(0, 200) +
+   theme(
+   axis.line.y = element_blank(),
+   axis.text.y = element_blank(),
+   axis.ticks.y = element_blank(),
+   panel.background = element_rect(fill = "#d7ebf5"),
+   plot.background = element_rect(fill = "#d7ebf5"))
+
+
+# * note that short term project was lumped into internship!
+
+modality <- all_clean %>% 
+  group_by(modality) %>% 
+  summarize(n = n()) %>% 
+ggplot(aes(x = reorder(modality, -n), y = n)) + 
+  geom_bar(stat = "identity",
+           color = bren_blue,
+           fill = alpha(bren_blue, 0.7)) +
+  geom_text(aes(label = n, vjust = ifelse(n > 60, 1.5, -1),
+            color = ifelse(n > 60, ivory, "black"))) +
+  
+  # tells ggplot to use the color strings literally and supresses legend
+  scale_color_identity(guide = "none") +
+  
+  labs(title = "Modality", y = "Number of Positions") +
+  theme_classic() +
+   scale_x_discrete(labels = c("On-site", "Hybrid", "Remote", "Remote Option", "Hybrid Option")) +
+  theme(axis.title.x = element_blank()) +
+  ylim(0, 150) +
+   theme(
+   axis.line.y = element_blank(),
+   axis.text.y = element_blank(),
+   axis.ticks.y = element_blank(),
+   panel.background = element_rect(fill = "#d7ebf5"),
+   plot.background = element_rect(fill = "#d7ebf5")
+  )
+
+
+commitment / type / modality +
+  plot_layout(axes = "collect") +
+  theme(plot.margin = margin(0,0,0,0))
+```
+
+::: {.callout-note collapse="true" icon="false"}
+## Position with Remote Option: Forest Carbon Analyst \@ Green Diamond
+
+**Location:** Can be based in any state where Green Diamond operates; work may be performed remotely or from one of Green Diamond's offices. Preference will be given to candidates in the Seattle, WA area.
+
+**Description:** Green Diamond is one of the five largest timberland owner-operators in the U.S., managing land in nine states throughout the western and southern U.S. with a commitment to sustainable forest management. They are hiring a forest carbon analyst to support the company’s forest carbon program. Position responsibilities include maintaining a calendarized workflow of project activities, assisting with the design and implementation of forest carbon inventories (including data collection, growth and yield analyses, and calculation of forest carbon metrics), and support development of analytical and spatial tools to improve project efficiency and accuracy.
+
+**Desired Qualifications:** “You’re curious, analytical, and inspired by the role forests play in tackling climate change. Whether you already have a few years of forest carbon experience or come from a strong quantitative forestry background, you love solving complex problems and learning new systems. You thrive on collaboration and are excited to make a measurable impact by supporting high-quality forest carbon projects.”
+
+**Details:** Full-time; \$79K – \$119K salary
+
+**Date Posted (to BrenConnect):** November 10, 2025
+:::
+
+::: {.callout-note collapse="true" icon="false"}
+## Limited Term Position: Natural Resources Planning Intern \@ San Francisco Public Utilities Commission
+
+**Location:** San Francisco, CA (hybrid)
+
+**Description:** The San Francisco Public Utilities Commission is responsible for the management of over 61,000 acres of local watershed lands; the Natural Resources and Lands Management Division provides direction for watershed protection, planning, research, operations, and training. Within this division, the Planning and Compliance Section is currently seeking a natural resources planning intern to support the development of a Habitat Conservation Plan and other resource management plans. The position will involve aspects of natural resource planning; environmental compliance; habitat assessment, monitoring, and restoration; and geospatial data collection, management, and analysis.
+
+**Desired Qualifications:**
+
+-   Enrollment or graduation from (within 6 months) a biology or environmental management related field at an accredited university or community college.
+
+-   3-4 years education or experience in disciplines including but not limited to environmental planning, geography, environmental science, and/or natural resources.
+
+-   Knowledge of resource management, watershed management, or conservation planning.
+
+-   Proficiency using GIS for data collection and management as well as environmental analysis.
+
+-   Experience with database management, Microsoft Office platform, and technical writing.
+
+**Details:** Part-time (20 hours/week); \$36.65 - \$41.24 hourly pay; 12-month duration, with opportunity for extension
+
+**Date Posted (to BrenConnect):** January 3, 2026
+:::
+
+The median compensation of all salaried positions (meaning, excluding part-time work and internships) is **80,000 US dollars**. The breakdown by sector can be seen below.
+
+```{r}
+#| echo: false
+#| warning: false
+#| fig-align: "center"
+all_clean %>% 
+  mutate(median_salary = (yearly_salary_min + yearly_salary_max)/2) %>% 
+  filter(median_salary != 0,
+         job_type != "part-time",
+         job_type != "internship") %>% 
+  
+  ggplot(aes(y = median_salary, x = reorder(sector, median_salary))) + 
+  geom_boxplot(color = bren_green,
+           fill = alpha(bren_green, 0.7)) +
+  labs(y = "Annual Compensation (US Dollars)",
+       x = " ") +
+  theme_minimal() +
+  theme(
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank(),
+        axis.title.y = element_text(margin = margin(r = 8)),
+        panel.background = element_rect(fill = "#d7ebf5"),
+   plot.background = element_rect(fill = "#d7ebf5")) +
+  
+  # styling labels for spacing
+  
+  scale_x_discrete(labels = c("Non-profit/\nNGO", "Research/\nEducation", 
+                              "State\nGovernment", "Consulting", "Federal\nGovernment",
+                              "Local\nGovernment", "Corporate")) +
+  scale_y_continuous(labels = scales::label_number(scale = 1e-3, suffix = "k"))
+
+```
+
+The corporate sector has the highest outliers in the dataset, with salaries ranging all the way up to \$225,000. The non-profit/NGO sector offers the smallest compensation.
+
+It should be mentioned that not all positions in the dataset are salaried position: if they contained hourly or monthly compensation information, annual compensation was approximated (assuming a 37.5-hour work week). Part-time and internship positions are excluded from these figures.
+
+## Skills and Qualifications
+
+GIS, R, and Python are the primary data analysis skills that employers are looking for. Many positions also specify MS Office tools such as Power BI and Excel.
+
+```{r}
+#| echo: false
+#| fig-align: "center"
+# Create columns that contain TRUE/FALSE values for hard skills mentioned
+all_clean <- all_clean %>% 
+  mutate(R_req = stringr::str_detect(all_clean$hard_skills, "R"), 
+         Python_req = stringr::str_detect(all_clean$hard_skills, "Python"),
+         GIS_req = stringr::str_detect(all_clean$hard_skills, "GIS"),
+         Excel_req = stringr::str_detect(all_clean$hard_skills, "Excel"),
+         SQL_req = stringr::str_detect(all_clean$hard_skills, "SQL"),
+         Power_req = stringr::str_detect(all_clean$hard_skills, "Power BI"))
+
+# Create data frame with the number of positions that mentioned each skill
+skills <- c("R", "Python", "GIS", "Excel", "SQL", "Power BI")
+skills_sum <- c(sum(all_clean$R_req, na.rm = TRUE), 
+                sum(all_clean$Python_req, na.rm = TRUE), 
+                sum(all_clean$GIS_req, na.rm = TRUE), 
+                sum(all_clean$Excel_req, na.rm = TRUE), 
+                sum(all_clean$SQL_req, na.rm = TRUE), 
+                sum(all_clean$Power_req, na.rm = TRUE))
+
+skills_count <- data.frame(skills, skills_sum)
+
+# Plot data frame
+ggplot(skills_count, aes(x = reorder(skills, skills_sum), y = skills_sum)) +
+  geom_col(color = bren_blue,
+           fill = alpha(bren_blue, 0.8)) +
+  geom_text(aes(label = skills_sum), hjust = 1.5,
+            color = ivory) +
+  coord_flip() +
+  labs(y = " ", 
+       x = " ") +
+  theme_classic() +
+  theme(
+   axis.line.x = element_blank(),
+   axis.text.x = element_blank(),
+   axis.ticks.x = element_blank(),
+   panel.background = element_rect(fill = "#d7ebf5"),
+   plot.background = element_rect(fill = "#d7ebf5")
+  )
+```
+
+It was common for positions to not list a specific coding language, but instead use terms such as "data analysis" or "spatial analysis" to convey their qualifications.
+
+::: {.callout-note collapse="true" icon="false"}
+## GIS and R Desired: Project Management and GIS Specialist \@ The Great Basin Institute
+
+**Location:** South Lake Tahoe, CA (hybrid)
+
+**Description:** The Great Basin Institute is an interdisciplinary field studies organization that promotes environmental research, education, and service throughout the western United States. Their Research Associate Program, in cooperation with California Tahoe Conservancy, is hiring a project management and GIS specialist to provide project management, GIS, and data management services for the Tahoe-Central Sierra Initiative. Job responsibilities will revolve around bulk data entry and management, specifically involving ESRI GIS and spatial data.
+
+**Desired Qualifications:**
+
+-   Bachelor’s degree in a related field with coursework and/or experience that demonstrate understanding of the principles of natural resources management, forestry, and geographic information systems (GIS).
+-   Strong proficiency with GIS software- particularly the ESRI suite, including ArcGIS Pro and ArcMap, with demonstrated experience using tools and workflows to develop high-quality maps, manage and analyze geospatial datasets, and organize complex spatial layers.
+-   Experience with managing large datasets of tabular and spatial data.
+-   Working knowledge of Python and R and committed to continued skill growth in data analysis and scripting.
+
+**Details:** Full-time; \$31.00 - \$35.50 hourly pay; two-year term, with possible extension
+
+**Date Posted (to BrenConnect):** December 6, 2025
+:::
+
+## Comparison
+
+There were some fluctuations in the proportion of job listings that represent each sector, between fall and winter. For example, the percent of corporate listings jumped from 8% in the fall to 15% in the winter. Other trends include an increase in roles at Non-Profits and NGOs, a decrease in the Research/Education sector, and the appearance of Federal Government positions in the winter.
+
+```{r}
+#| echo: false
+#| message: false
+#| fig-align: "center"
+all_clean %>% 
+  group_by(season, sector) %>% 
+  summarize(count = n(),
+            percent = count/nrow(all_clean)) %>% 
+ggplot(aes(x = reorder(sector, percent), y = percent, 
+           fill = season, 
+           color = season)) + 
+  geom_col(position = "dodge") +
+  geom_text(aes(label = paste0(round(percent * 100), "%"), 
+            vjust = ifelse(season == "fall", 1.5, -0.8)),
+            hjust = 1.5,
+            color = ivory) +
+
+  scale_fill_manual(values = c(alpha(bren_blue, 0.8), alpha(bren_green, 0.8))) +
+  scale_color_manual(values = c(bren_blue, bren_green), guide = "none") +
+  labs(y = " ") +
+  report_theme() +
+  coord_flip() +
+   theme(
+   axis.line.x = element_blank(),
+   axis.text.x = element_blank(),
+   axis.ticks.x = element_blank()
+  )
+```
+
+In terms of position type, the number of open internships and fellowships increased in the winter. This may be because hiring employers anticipate an influx of interns in the summer and therefore start their hiring process in the winter. The dispersion across different environmental fields stayed relatively the same between the two seasons.
+
+## Conclusion
+
+234 environmental data science positions were retrieved from online job boards between October 28, 2025 through March 27, 2026. They covered roles in all sectors and a wide range of environmental focuses, and varied in salary, modality, commitment length, and position type. The most popular data analysis qualifications were proficiency in GIS and R.
+
+```{r}
+#| echo: false 
+#| message: false
+#| output: false
+commitment <- all_clean %>% 
+  group_by(season, term) %>% 
+  summarize(count = n()) %>% 
+  filter(term != "part-time") %>% 
+ggplot(aes(x = reorder(term, -count), y = count)) + 
+  geom_bar(stat = "identity",
+           aes(fill = season, 
+           color = season),
+           position = "dodge") +
+  geom_text(aes(label = count,
+                hjust = ifelse(season == "fall", 3.9, -3)),
+            vjust = -.7) +
+  labs(title = "Commitment Length",
+       y = " ") +
+  theme_classic() +
+  scale_x_discrete(labels = c("Permanent", "Limited Term")) +
+  theme(axis.title.x = element_blank()) +
+  ylim(0, 200) +
+  scale_fill_manual(values = c(alpha(bren_blue, 0.8), alpha(bren_green, 0.8))) +
+  scale_color_manual(values = c(bren_blue, bren_green), guide = "none") +
+   theme(
+   axis.line.y = element_blank(),
+   axis.text.y = element_blank(),
+   axis.ticks.y = element_blank(),
+   
+  )
+
+type <- all_clean %>% 
+  mutate(job_type = case_when(
+    job_type == "short-term project" ~ "internship",
+    TRUE ~ job_type)) %>% 
+  group_by(season, job_type) %>% 
+  summarize(n = n()) %>% 
+ggplot(aes(x = reorder(job_type, -n), y = n)) + 
+  geom_bar(stat = "identity",
+            aes(fill = season, 
+           color = season),
+           position = "dodge") +
+  geom_text(aes(label = n,
+                hjust = ifelse(season == "fall", 2.1, -1.1)),
+            vjust = -.7) +
+  scale_color_identity(guide = "none") +
+  labs(title = "Position Type",
+       y = " ") +
+  theme_classic() +
+  scale_x_discrete(labels = c("Full-time", "Internship", "Fellowship", "Part-time")) +
+  theme(axis.title.x = element_blank()) +
+  ylim(0, 200) +
+  scale_fill_manual(values = c(alpha(bren_blue, 0.8), alpha(bren_green, 0.8))) +
+  scale_color_manual(values = c(bren_blue, bren_green), guide = "none") +
+   theme(
+   axis.line.y = element_blank(),
+   axis.text.y = element_blank(),
+   axis.ticks.y = element_blank()
+  )
+
+# * note that short term project was lumped into internship!
+
+modality <- all_clean %>% 
+  group_by(season, modality) %>% 
+  summarize(n = n()) %>% 
+ggplot(aes(x = reorder(modality, -n), y = n)) + 
+  geom_bar(stat = "identity",
+            aes(fill = season, 
+           color = season),
+           position = "dodge") +
+  geom_text(aes(label = n,
+                hjust = ifelse(season == "fall", 1.9, -1)),
+            vjust = -.7) +
+
+  labs(title = "Modality", y = " ") +
+  theme_classic() +
+   scale_x_discrete(labels = c("On-site", "Hybrid", "Remote", "Remote Option", "Hybrid Option")) +
+  theme(axis.title.x = element_blank()) +
+  ylim(0, 150) +
+  scale_fill_manual(values = c(alpha(bren_blue, 0.8), alpha(bren_green, 0.8))) +
+  scale_color_manual(values = c(bren_blue, bren_green), guide = "none") +
+   theme(
+   axis.line.y = element_blank(),
+   axis.text.y = element_blank(),
+   axis.ticks.y = element_blank()
+  )
+
+commitment / type / modality +
+  plot_layout(axes = "collect", guides = "collect")
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| output: false
+all_clean %>% 
+  
+   mutate(environmental_field = case_when(
+    is.na(environmental_field) ~ "other data analysis",
+    TRUE ~ environmental_field)) %>% 
+  
+  group_by(season, environmental_field) %>% 
+  summarize(count = n()) %>% 
+  
+ggplot(aes(x = count, y = reorder(environmental_field, count))) + 
+  geom_bar(stat = "identity",
+           aes(fill = season, 
+           color = season),
+           position = "dodge") +
+  #geom_text(aes(label = count, color = season), hjust = -.5) +
+  labs(x = "Number of Positions") +
+  report_theme() +
+   scale_fill_manual(values = c(alpha(bren_blue, 0.8), alpha(bren_green, 0.8))) +
+  scale_color_manual(values = c(bren_blue, bren_green), guide = "none") 
+```
