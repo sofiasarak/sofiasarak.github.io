@@ -1,6 +1,6 @@
 ---
-title: "EDS Job Market Report: Winter Quarter"
-subtitle: "Data collected between October 2025 and March 2026"
+title: "Exploring Communication Methods: EDS Job Market Report"
+subtitle: "Data collected for my Career Development SA Position"
 author: "Sofia Sarak"
 date: April 11, 2026
 format: html
@@ -8,6 +8,361 @@ editor: visual
 draft: true
 draft-mode: linked
 ---
+
+# Introduction
+
+Alongside being a full-time Master's student, I also work part-time as the Student Assistant for the [Bren School's Career Development Team](https://bren.ucsb.edu/career-services). In this role, I primarily search for open environmental data science (EDS) positions to repost on the Bren School's networking platform (kind of like an internal LinkedIn). I find it interesting to see what kind of positions my degree prepares me for, it helps me in my own job search, too. I also find it incredibly rewarding to help out my classmates (hopefully making their job search easier) and work with my supervisor, Miya.
+
+In addition to the job posts, I collect data on the roles I find. I compile and analyze all of my observations in a quarterly report. I completed one for the fall, and am now on the winter rendition. In this blog post, I include two formats of my EDS job market review: an infographic and a written summary. I was inspired to make the infographic after taking Data Communication & Visualization in the winter quarter and having to [make my own](https://sofiasarak.github.io/blog/ukrainian-sunflowers-infographic/) for the final project. I compiled information in a written summary because it is a more useful format for the career and curriculum teams at Bren.
+
+Both forms of the report are included in this blog post -- I will let them speak for themselves, rather than being redundant in the intro. Each section also features my own personal reflection on the output and my process, which was not included in the final product I handed over to the supervisor. Enjoy!
+
+# Infographic 
+
+<br>
+
+```{r}
+#| eval: true
+#| echo: false
+#| fig-align: "center"
+#| out-width: "80%"
+#| fig-alt: "An infographic highlighting trends in the environmental data science job market from October 2025 through March 2026."
+knitr::include_graphics("images/infographic.png")
+```
+
+## Reflection
+
+I'm really proud of how this infographic came out. I used Affinity to compile the plots (which I made in R) and add descriptive text. Some changes I made to the plots themselves include adjusting the size of the text labels in the "Environmental Field" bubble chart and "Hard Skill Specifications" tree map, as well as re-positioning bar chart labels so they sit either above or within the bar itself. (Spoiler alert: I figure out how to do this completely in R later on!).
+
+I particularly happy with how the bubble chart and treemap came out, since this was my first time attempting those visualizations forms. I also like my color palette: the blue and green I matched to that of the [Bren logo](https://bren.ucsb.edu/about/origins-bren-logo), but I thought that the lavender was a nice accent color.
+
+Something I would have continued working on if I had had the time was the salary box plot: I wanted to think more critically about whether or not I should include the outliers, since they do go quite far off the chart (specifically in the top right corner). I also wonder if the map of the United States is the most effective way of conveying geographic distribution information, since that data is so skewed towards California and New York. Finally, some of the spacing between text and plots could use some honing.
+
+## Complete Code
+
+Open up this code chunk to see the code used to create each element of the infographic!
+
+```{r}
+#| code-fold: true
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: true
+
+# Data processing is not included in this code chunk (instead, check out my GitHub!).
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                    Setup                                 ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+# Load necessary packages
+library(tidyverse)
+library(here)
+library(janitor)
+library(ggplot2)
+library(patchwork)
+library(maps)
+library(geomtextpath)
+library(showtext)
+
+# for bubble chart
+library(packcircles)
+library(ggforce)
+library(treemap)
+
+# save theme colors
+bren_blue <- "#003660"
+bren_green <- "#78a441"
+apricot <- "#F5CDA7"
+tangerine <- "#FAA381"
+lavender <- "#8E9AAF"
+sky_blue <- "#76BED0"
+ivory <- "#F5F9E9"
+
+# font
+font_add_google(name = "IBM Plex Sans", family = "plex")
+
+# Create theme for all visualizations
+report_theme <- theme_classic() +
+  theme(axis.title.y = element_blank())
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                                                            --
+##----------------------------- SECTOR BAR CHART--------------------------------
+##                                                                            --
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+showtext_auto(enable = TRUE)
+
+all_posts %>% 
+  group_by(sector) %>% 
+  summarize(count = n()) %>% 
+ggplot(aes(x = reorder(sector, count), y = count)) +
+  geom_col(color = bren_blue, fill = alpha(bren_blue, 0.8)) + # position = "dodge"
+  geom_text(aes(label = count), hjust = -1,
+            color = ivory) +
+  labs(y = " ") +
+  coord_flip() +
+  report_theme +
+  scale_x_discrete(position = "top") +
+  scale_y_reverse() +
+  theme(
+   axis.text = element_text(family = "plex"),
+   axis.line.x = element_blank(),
+   axis.text.x = element_blank(),
+   axis.ticks.x = element_blank()
+  )
+
+
+showtext_auto(enable = FALSE)
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                                                            --
+##--------------------- ENVIRONMENTAL FIELD BUBBLE CHART------------------------
+##                                                                            --
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Data prep
+all_bubble <- all_posts %>% 
+  count(environmental_field, sort = TRUE) %>% 
+  head(9) %>%
+  
+  # Capitalize environmental fields
+  mutate(environmental_field_cap = case_when(
+    environmental_field == "geospatial" ~ "Geospatial Analysis",
+    environmental_field == "sustainability" ~ "Sustainability",
+    environmental_field == "water/coastal" ~ "Water/Coastal",
+    environmental_field == "energy and infrastructure" ~ "Energy & Infrastructure",
+    environmental_field == "resource management" ~ "Resource Management",
+    environmental_field == "climate" ~ "Climate",
+    environmental_field == "conservation" ~ "Conservation",
+    environmental_field == "policy" ~ "Policy",
+    environmental_field == "agriculture" ~ "Agriculture",
+    #environmental_field == "communication" ~ "Communication",
+    TRUE ~ environmental_field
+  )) %>% 
+  
+  mutate(circleProgressiveLayout(n, sizetype = "area"),
+         label = paste0(environmental_field_cap))
+
+# Build plot
+showtext_auto(enable = TRUE)
+
+ggplot(all_bubble, aes(x0 = x, y0 = y)) +
+  geom_circle(aes(r = radius), fill = alpha(bren_green, 0.8), color = bren_green) +
+  geom_text(aes(x = x, y = y, label = paste0(label, "\n", n)),
+            color = ivory, family = "plex") +
+  theme_void()
+
+showtext_auto(enable = FALSE)
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                                                            --
+##----------------------------- SKILLS TREE MAP---------------------------------
+##                                                                            --
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Data prep
+skills_count <- data.frame(skills, skills_sum) %>% 
+  mutate(percent = round(skills_sum/nrow(all_posts) * 100),
+         label = paste0(skills, "\n", percent, "%"))
+
+skills_count %>% 
+  treemap(
+    index = "label",
+    vSize = "skills_sum",
+    type = "index"
+  )
+
+# Build plot
+library(treemapify)
+
+showtext_auto(enable = TRUE)
+
+# Build treemap with custom labels
+ggplot(skills_count, aes(area = skills_sum, label = label)) +
+                         #fill = skills)) + # Combine labels in aes
+  geom_treemap(alpha = 0.8, color = ivory, fill = bren_blue) +
+  geom_treemap_text(
+    place = "centre", # Position
+    size = 12,        # Font size
+    color = ivory,  # Font color
+    family = "plex",  # Font family
+    grow = TRUE,
+    reflow = TRUE
+  ) +
+  scale_fill_manual(values = skills_pal) +
+  theme(legend.position = "none") # Remove legend 
+
+showtext_auto(enable = FALSE)
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                                                            --
+##----------------------- POSITION DETAILS BAR CHARTS---------------------------
+##                                                                            --
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+showtext_auto(enable = TRUE)
+
+commitment <- all_posts %>% 
+  group_by(term) %>% 
+  summarize(count = n()) %>% 
+  filter(term != "part-time") %>% 
+ggplot(aes(x = reorder(term, -count), y = count)) + 
+  geom_bar(stat = "identity",
+           color = bren_blue,
+           fill = alpha(bren_blue, 0.8)) +
+  geom_text(aes(label = count), vjust = 1.5,
+            color = ivory) +
+  labs(title = "Commitment Length",
+       y = "Number of Positions") +
+  theme_classic() +
+  scale_x_discrete(labels = c("Permanent", "Limited Term")) +
+  theme(axis.title.x = element_blank(),
+        text = element_text(family = "plex")) +
+  ylim(0, 200)
+
+type <- all_posts %>% 
+  mutate(job_type = case_when(
+    job_type == "short-term project" ~ "internship",
+    TRUE ~ job_type)) %>% 
+  group_by(job_type) %>% 
+  summarize(count = n()) %>% 
+ggplot(aes(x = reorder(job_type, -count), y = count)) + 
+  geom_bar(stat = "identity",
+           color = bren_blue,
+           fill = alpha(bren_blue, 0.8)) +
+  geom_text(aes(label = count), vjust = 1.5,
+            color = ivory) +
+  labs(title = "Position Type",
+       y = "Number of Positions") +
+  theme_classic() +
+  scale_x_discrete(labels = c("Full-time", "Internship", "Fellowship", "Part-time")) +
+  theme(axis.title.x = element_blank(),
+        text = element_text(family = "plex")) +
+  ylim(0, 200)
+
+# * note that short term project was lumped into internship!
+
+modality <- all_posts %>% 
+  group_by(modality) %>% 
+  summarize(count = n()) %>% 
+ggplot(aes(x = reorder(modality, -count), y = count)) + 
+  geom_bar(stat = "identity",
+           color = bren_blue,
+           fill = alpha(bren_blue, 0.8)) +
+  geom_text(aes(label = count), vjust = 1.5,
+            color = ivory) +
+  labs(title = "Modality", y = "Number of Positions") +
+  theme_classic() +
+   scale_x_discrete(labels = c("On-site", "Hybrid", "Remote", "Remote Option", "Hybrid Option")) +
+  theme(axis.title.x = element_blank(),
+        text = element_text(family = "plex")) +
+  ylim(0, 150)
+
+commitment / type / modality +
+  plot_layout(axes = "collect")
+
+showtext_auto(enable = FALSE)
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                                                            --
+##----------------------------- SALARY BOX PLOTS--------------------------------
+##                                                                            --
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+showtext_auto(enable = TRUE)
+all_posts <- all_posts %>% 
+  mutate(median_salary = (yearly_salary_min + yearly_salary_max)/2) %>% 
+  filter(median_salary != 0,
+         job_type != "part-time",
+         job_type != "internship") %>% 
+  
+  ggplot(aes(y = median_salary, x = reorder(sector, median_salary))) + 
+  geom_boxplot(color = bren_green,
+           fill = alpha(bren_green, 0.5)) +
+  labs(y = "Annual Compensation (US Dollars)",
+       x = " ") +
+  theme_minimal() +
+  theme(text = element_text(family = "plex"),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank(),
+        axis.title.y = element_text(margin = margin(r = 8))) +
+  
+  # styling labels for spacing
+  
+  scale_x_discrete(labels = c("Non-profit/\nNGO", "Research/\nEducation", 
+                              "State\nGovernment", "Consulting", "Federal\nGovernment",
+                              "Local\nGovernment", "Corporate")) +
+  scale_y_continuous(labels = scales::label_number(scale = 1e-3, suffix = "k"))
+  
+ # geom_labelvline(xintercept = median_salary, 
+                 # color = bren_green, label = "Median Salary: $74850",
+                  #size = 3) 
+
+showtext_auto(enable = FALSE)
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                                                            --
+##------------------------------- LOCATION MAP----------------------------------
+##                                                                            --
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# map of United States
+
+state_counts <- all_posts %>%
+  filter(!is.na(state)) %>%
+  count(state) %>% 
+  
+  # replace NA values with 0
+  mutate(count = replace_na(n, 0)) %>% 
+  
+  # bin state counts
+  mutate(count_bin = cut(n,
+                         breaks = c(-1, 0, 5, 10, 20, 80, 100),
+                         labels = c("0", "Below 5", "6-10", "10-20", "20-80", "Over 80"),
+                         include.lowest = TRUE))
+
+# load in lat and long of US states from map library
+us_map <- map_data("state")
+
+# add a column that matches state abbreviation to its name
+state_counts <- state_counts %>%
+  mutate(
+    region = tolower(state.name[match(state, state.abb)])
+  )
+
+showtext_auto(enable = TRUE)
+
+# join and plot
+us_map %>%
+  left_join(state_counts, by = "region") %>%
+  ggplot(aes(long, lat, group = group, fill = count_bin)) +
+  geom_polygon(color = "gray90", linewidth = 0.2) +
+  
+  #geom_text(aes(x = x, y = y, label =n),
+            #color = bren_blue, family = "plex") +
+
+  coord_fixed(1.3) +
+  scale_fill_manual(
+  values = c("#F0F4EB", "#C6D4B2", "#9DB979", "#78A441"),
+  na.value = "grey99"
+) +
+ labs(fill = " ") +
+  theme_void() +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    axis.ticks = element_blank(),
+     plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), "cm")
+  )
+
+showtext_auto(enable = FALSE)
+```
+
+
+# Written Report
 
 The following report contains statistics and visualizations summarizing the job openings being posted to online services such as [Indeed](https://www.indeed.com/jobs?q=environmental+data+science&l=&from=searchOnHP&vjk=b9ae5b9d8d4a16b4), [Conservation Job Board](https://www.conservationjobboard.com/), [CalCareers](https://calcareers.ca.gov/CalHRPublic/Search/JobSearchResults.aspx#kw=environmental%20data), and others. Keywords such "environmental data science", "environmental analyst", and "climate analyst" (just to name a few, though a wide range were used) were searched for, and roles pertaining to environmental data analysis, planning, or communication were pulled and re-posted on the [BrenConnect website](https://brenconnect.bren.ucsb.edu/s/group/0F9Kg0000004CHNKA2/meds-2026-jobinternship-opportunities). These posts are what make up the data used in the following report, and examples of positions are included throughout.
 
@@ -136,9 +491,9 @@ bren_green <- "#78a441"
 ivory <- "#F5F9E9"
 ```
 
-# Complete Data
+## Environmental Data Science Job Market, October through March
 
-## Sector
+### Sector
 
 The Career Development Team classifies alumni employment into seven categories. Following this system, we find that the majority of position listing were in **consulting** (27% of all posts). The other sectors break down as:
 
@@ -207,7 +562,7 @@ ggplot(aes(x = reorder(sector, count), y = count)) +
 **Date Posted (to BrenConnect):** November 4, 2025
 :::
 
-## Environmental Field
+### Environmental Field
 
 Along with variety in sectors, roles reflected a wide range of environmental niches. The top three pertained to geospatial work (15% of all positions), water/coastal resources (14%), and sustainability (14%). It should be noted that most consulting positions, unless a specific environment was listed, were categorized under resource management.
 
@@ -241,7 +596,7 @@ ggplot(aes(x = count, y = reorder(environmental_field, count))) +
   )
 ```
 
-## Location
+### Location
 
 As mentioned, the preference of MEDS 2026 cohort had a big influence on which positions were reposted to BrenConnect, and therefore exist in this dataset. Primarily, there is a very large bias for roles located in California.
 
@@ -335,7 +690,7 @@ countries <- unique(all_clean$country)
 
 There were a total of 11 international positions posted, in India, Sweden, Canada, Singapore, the Netherlands, Australia, Austria, and the UK. There was also one role in Puerto Rico.
 
-## Position Details
+### Position Details
 
 ```{r}
 #| echo: false
@@ -527,7 +882,7 @@ The corporate sector has the highest outliers in the dataset, with salaries rang
 
 It should be mentioned that not all positions in the dataset are salaried position: if they contained hourly or monthly compensation information, annual compensation was approximated (assuming a 37.5-hour work week). Part-time and internship positions are excluded from these figures.
 
-## Skills and Qualifications
+### Skills and Qualifications
 
 GIS, R, and Python are the primary data analysis skills that employers are looking for. Many positions also specify MS Office tools such as Power BI and Excel.
 
@@ -594,7 +949,7 @@ It was common for positions to not list a specific coding language, but instead 
 **Date Posted (to BrenConnect):** December 6, 2025
 :::
 
-## Comparison
+## Comparing the Fall Job Market to Winter's
 
 There were some fluctuations in the proportion of job listings that represent each sector, between fall and winter. For example, the percent of corporate listings jumped from 8% in the fall to 15% in the winter. Other trends include an increase in roles at Non-Profits and NGOs, a decrease in the Research/Education sector, and the appearance of Federal Government positions in the winter.
 
@@ -632,6 +987,12 @@ In terms of position type, the number of open internships and fellowships increa
 ## Conclusion
 
 234 environmental data science positions were retrieved from online job boards between October 28, 2025 through March 27, 2026. They covered roles in all sectors and a wide range of environmental focuses, and varied in salary, modality, commitment length, and position type. The most popular data analysis qualifications were proficiency in GIS and R.
+
+## Reflection
+
+## Complete Code
+
+Open up this code chunk to see the code used to create each element of the written report!
 
 ```{r}
 #| echo: false 
