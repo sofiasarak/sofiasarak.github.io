@@ -3,7 +3,7 @@ title: "Exploring Communication Methods: EDS Job Market Report"
 description: "Data collected for my Career Development SA Position"
 image: "images/blog_cover.png"
 author: "Sofia Sarak"
-date: April 11, 2026
+date: May 1, 2026
 format: html
 editor: visual
 draft: true
