@@ -6,8 +6,7 @@ author: "Sofia Sarak"
 date: May 1, 2026
 format: html
 editor: visual
-draft: true
-draft-mode: linked
+draft: false
 custom-callout:
   green:
     color: "#78a441"
