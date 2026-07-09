@@ -21,18 +21,24 @@ about:
 
 <h1>Welcome! I'm Sofia. </h1>
 
-I am an early-career data scientist currently completing a Master of Environmental Data Science at the Bren School of Environmental Science & Management at UCSB (whew, that was a mouthful!). I am still finding my niche, but I am currently enjoying learning data visualization methods, geospatial analysis, and environmental policy evaluation.
+I am an early-career environmental data scientist passionate about data communication, visualization, and statistical analysis. I recently completed a Master of Environmental Data Science at the Bren School of Environmental Science & Management (UCSB), and am currently searching for roles in NYC! Click around my wesbite to learn more about me and all of my fun little projects :)
 
 ::: panel-tabset
 ### Education
 
-**Master of Environmental Data Science** (Expected June 2026) <br>Bren School of Environmental Science & Management @ University of California, Santa Barbara (UCSB)
+**Master of Environmental Data Science** (June 2026) <br>Bren School of Environmental Science & Management @ University of California, Santa Barbara (UCSB)
 
 **Bachelor of Arts in Earth & Environmental Sciences, Economics** (2025) <br> Wesleyan University @ Middletown, CT
 
-### Experience
+### Projects
 
-**Master's Capstone Project** (2026 - Present) <br> Title: *Power lines and people -- Mapping how distribution grid constraints shape resilient and equitable energy transition* <br> Bren School of Environmental Science & Management
+**Water Quality Data Interactive Viewer** (July 2026 - Present) <br> Westport Conservation Department (Westport, CT)
+
+**Power lines and people -- Mapping how distribution grid constraints shape resilient and equitable energy transition** (Completed June 2026) <br> *Master's Capstone Project* <br> Bren School of Environmental Science & Management
+
+**Ants, Plants, and Isotopes: Investigating the Trophic Levels of the Guánica Dry Forest** (Completed March 2025) <br> *Earth & Environmental Sciences Senior Capstone Project*  <br> Wesleyan University 
+
+### Experience
 
 **Career Development Student Assistant** (2025 - Present) <br> Bren School of Environmental Science & Management
 

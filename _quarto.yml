@@ -15,6 +15,8 @@ website:
       #- about.qmd
       - posts.qmd
       #- href: resources.qmd
+      - href: Sarak_Resume.pdf
+        text: Resume
       - icon: github
         href: https://github.com/sofiasarak
       #   text: Resources # makes it "Resources" in taskbar even if page title is different 
