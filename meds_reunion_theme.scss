@@ -1,0 +1,53 @@
+/*-- scss:defaults --*/
+
+// import google fonts
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:ital,wght@0,100..900;1,100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=VT323&display=swap');
+
+// fonts
+$nunito: "Nunito", sans-serif;
+$pixel: "VT323", monospace;
+$mono: "Geist Mono", monospace;
+
+$font-family-body: 'Nunito';
+
+// colors
+$brenblue: #003660;
+
+/*-- scss:rules --*/
+//create ombre background
+body {
+  background: linear-gradient(to bottom, #9EE7E9, #50B9E6);
+  background-attachment: fixed;
+  min-height: 100vh;
+  font-family: $mono;
+  color: $brenblue;
+  font-size: 20px;
+}
+
+// center text variable
+.center-text {
+  text-align: center;
+}
+
+// a larger font size than default
+.large-text {
+  font-size: 30px;
+}
+
+// define body and heading text
+h3, h4, h5, h6 {
+  font-family: $nunito;
+  color:$brenblue;
+}
+
+h1, h2 {
+  font-family: $pixel;
+  color:$brenblue;
+}
+
+// remove line under header 2
+h2, .h2 {
+  border-bottom: none !important;
+}

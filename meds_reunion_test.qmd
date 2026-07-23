@@ -1,28 +1,77 @@
 ---
-title: "meds_reuinion_test"
-format: html
-draft: true
+title: " "
+format:
+  html:
+    theme: meds_reunion_theme.scss
+    toc: false
 ---
+
+```{r}
+#| eval: true
+#| echo: false
+#| fig-align: "center"
+#| out-width: "80%"
+#| fig-alt: "An infographic highlighting trends in the environmental data science job market from October 2025 through March 2026."
+knitr::include_graphics("images/meds_reunion.png")
+```
+
+::: {.center-text}
+The MEDS team invites you to a reunion for the classes of 2022 through 2026 -- that's 5 years of MEDS! Join us at the Bren School for a chance to network, reconnect with old classmates, and reminisce about your grad school days. 
+:::
+
+
+# Itinerary
+
+:::: {layout-ncol=2}
+
+
+::: {#first-column}
+
+
+**1-2pm:** Check-in *location*
+
+short description
+
+<br>
+
+**2-5pm:** Panels *location*
+
+short description
+
+<br>
+
+**5-7pm:** Reception *location*
+
+short description
+:::
+::: {#second-column}
+add all 5 class eyar photos here!
+:::
+
+::::
+
+
+# Have you RSVPed?
+
+RSVP on the Partiful to let others know you're going and get access to the photo album!
 
 <div id="guest-buttons"></div>
 
-<script>
-fetch('guests.csv')
-  .then(res => res.text())
-  .then(text => {
-    const rows = text.trim().split('\n').slice(1);
-    const container = document.getElementById('guest-buttons');
-    rows.forEach(row => {
-      const [name, url] = row.split(',');
-      if (!name) return; // skip only if no name
-      const btn = document.createElement('a');
-      btn.href = url ? url.trim() : '#';
-      btn.textContent = name.trim();
-      if (url) btn.target = '_blank';
-      btn.style.cssText = 'display:inline-block;margin:4px;padding:8px 12px;background:#0077b5;color:white;border-radius:4px;text-decoration:none;';
-      container.appendChild(btn);
-    });
-  });
-</script>
-
-hello
+<!-- <script> -->
+<!-- fetch('guests.csv') -->
+<!--   .then(res => res.text()) -->
+<!--   .then(text => { -->
+<!--     const rows = text.trim().split('\n').slice(1); -->
+<!--     const container = document.getElementById('guest-buttons'); -->
+<!--     rows.forEach(row => { -->
+<!--       const [name, url] = row.split(','); -->
+<!--       if (!name) return; // skip only if no name -->
+<!--       const btn = document.createElement('a'); -->
+<!--       btn.href = url ? url.trim() : '#'; -->
+<!--       btn.textContent = name.trim(); -->
+<!--       if (url) btn.target = '_blank'; -->
+<!--       btn.style.cssText = 'display:inline-block;margin:4px;padding:8px 12px;background:#0077b5;color:white;border-radius:4px;text-decoration:none;'; -->
+<!--       container.appendChild(btn); -->
+<!--     }); -->
+<!--   }); -->
+<!-- </script> -->
