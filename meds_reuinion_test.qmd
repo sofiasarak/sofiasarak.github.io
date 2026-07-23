@@ -3,6 +3,8 @@ title: "meds_reuinion_test"
 format: html
 ---
 
+<div id="guest-buttons"></div>
+
 <script>
 fetch('guests.csv')
   .then(res => res.text())
