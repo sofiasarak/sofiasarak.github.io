@@ -18,7 +18,7 @@ $brenblue: #003660;
 /*-- scss:rules --*/
 //create ombre background
 body {
-  background: linear-gradient(to bottom, #9EE7E9, #50B9E6);
+  background: linear-gradient(to bottom, #C9F2F3, #50B9E6);
   background-attachment: fixed;
   min-height: 100vh;
   font-family: $mono;
@@ -50,4 +50,34 @@ h1, h2 {
 // remove line under header 2
 h2, .h2 {
   border-bottom: none !important;
+}
+
+// set table background to a light blue
+.table {
+  --bs-table-border-color: white !important;
+  background-color: transparent !important;
+  border-top-color: white !important;
+  border-right-color: #003660 !important;
+  border-left-color: #003660 !important;
+  border-bottom-color: #003660 !important;
+}
+
+
+table {
+  --bs-table-border-color: white !important;
+    background: transparent !important;
+    background-image: initial;
+    background-position-x: initial;
+    background-position-y: initial;
+    background-size: initial;
+    background-repeat: initial;
+    background-attachment: initial;
+    background-origin: initial;
+    background-clip: initial;
+    background-color: transparent !important;
+    border-bottom: #003660 !important;
+    border-top-color: white !important;
+    border-right-color: #003660 !important;
+    border-left-color: #003660 !important;
+    border-bottom-color: #003660 !important;
 }
