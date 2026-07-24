@@ -12,11 +12,11 @@ format:
 #| fig-align: "center"
 #| out-width: "80%"
 #| fig-alt: "An infographic highlighting trends in the environmental data science job market from October 2025 through March 2026."
-knitr::include_graphics("images/meds_reunion.png")
+knitr::include_graphics("images/reunion/meds_reunion.png")
 ```
 
 ::: {.center-text}
-The MEDS team invites you to a reunion for the classes of 2022 through 2026 -- that's 5 years of MEDS! Join us at the Bren School for a chance to network, reconnect with old classmates, and reminisce about your grad school days. 
+The Bren School invites you to a reunion for the classes of 2022 through 2026 -- that's 5 years of MEDS! Join us on campus for a chance to network, reconnect with old classmates, and reminisce about your grad school days. 
 :::
 
 
@@ -28,24 +28,97 @@ The MEDS team invites you to a reunion for the classes of 2022 through 2026 -- t
 ::: {#first-column}
 
 
-**1-2pm:** Check-in *location*
+**1-2pm:** Check-in 
+
+*location*
 
 short description
 
 <br>
 
-**2-5pm:** Panels *location*
+**2-3pm:** Panel 1 
+
+*location*
 
 short description
 
 <br>
 
-**5-7pm:** Reception *location*
+**3-4pm:** Panel 2 
+
+*location*
+
+short description
+
+<br>
+
+**5-6pm:** Panel 3 
+
+*location*
+
+short description
+
+<br>
+
+**6-7pm:** Panel 4 
+
+*location*
+
+short description
+
+<br>
+
+**5-7pm:** Reception 
+
+*location*
 
 short description
 :::
 ::: {#second-column}
-add all 5 class eyar photos here!
+```{r}
+#| eval: true
+#| echo: false
+#| fig-align: "center"
+#| out-width: "80%"
+#| fig-alt: "An infographic highlighting trends in the environmental data science job market from October 2025 through March 2026."
+knitr::include_graphics("images/reunion/MEDS2022.jpg")
+```
+
+```{r}
+#| eval: true
+#| echo: false
+#| fig-align: "center"
+#| out-width: "80%"
+#| fig-alt: "An infographic highlighting trends in the environmental data science job market from October 2025 through March 2026."
+knitr::include_graphics("images/reunion/MEDS2023.jpg")
+```
+
+```{r}
+#| eval: true
+#| echo: false
+#| fig-align: "center"
+#| out-width: "80%"
+#| fig-alt: "An infographic highlighting trends in the environmental data science job market from October 2025 through March 2026."
+knitr::include_graphics("images/reunion/MEDS2024.jpg")
+```
+
+```{r}
+#| eval: true
+#| echo: false
+#| fig-align: "center"
+#| out-width: "80%"
+#| fig-alt: "An infographic highlighting trends in the environmental data science job market from October 2025 through March 2026."
+knitr::include_graphics("images/reunion/MEDS2025.jpg")
+```
+
+```{r}
+#| eval: true
+#| echo: false
+#| fig-align: "center"
+#| out-width: "80%"
+#| fig-alt: "An infographic highlighting trends in the environmental data science job market from October 2025 through March 2026."
+knitr::include_graphics("images/reunion/MEDS2026.jpg")
+```
 :::
 
 ::::
@@ -53,7 +126,17 @@ add all 5 class eyar photos here!
 
 # Have you RSVPed?
 
-RSVP on the Partiful to let others know you're going and get access to the photo album!
+See who else is attending and get access to the photo album!
+
+::: {.center-text}
+[✰ Partiful ✰](https://partiful.com/e/3KTaoL1smKLlM3wmwcHB){.btn style="background-color: #79A540; color: white; font-size: 32px; padding: 20px 40px; font-family: VT323, monospace;"}
+:::
+
+```{r}
+#| echo: false
+# border: 2px solid #003660; (to change border color of button)
+```
+
 
 <div id="guest-buttons"></div>
 
