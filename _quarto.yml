@@ -12,10 +12,10 @@ website:
     left:
       - href: index.qmd
         text: Home
-      #- about.qmd
+      - about.qmd
       - posts.qmd
       #- href: resources.qmd
-      - href: Sarak_Resume.pdf
+      - href: docs/Sarak_Resume.pdf
         text: Resume
       - icon: github
         href: https://github.com/sofiasarak
