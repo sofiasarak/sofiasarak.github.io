@@ -24,7 +24,7 @@ about:
 I'm an early-career environmental data scientist passionate about data communication, visualization, and statistical analysis. I recently completed a Master of Environmental Data Science at the Bren School of Environmental Science & Management, and am currently searching for roles in NYC! 
 <br>
 
-Click around my wesbite to learn more about me and all of my fun little projects :)
+Click around my website to learn more about me and all of my fun little projects :)
 
 ::: panel-tabset
 ### Education

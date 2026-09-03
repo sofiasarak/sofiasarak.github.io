@@ -8,6 +8,7 @@
 $bricolage: "Bricolage Grotesque", sans-serif;
 $sourcecode: "Source Code Pro", monospace;
 $geist: "Geist Mono", monospace;
+$manrope: "Manrope", sans-serif;
 
 // colors
 $darkyellow: #fcc765;
@@ -49,7 +50,7 @@ $bs-body-font-family: $sourcecode;
 /*-- scss:rules --*/
 
 body {
-  font-family: $geist;
+  font-family: $manrope;
 }
 
 // L body text
@@ -116,12 +117,12 @@ body {
 }
 
 h3, h4, h5, h6 {
-  font-family: $bricolage;
+  font-family: $geist;
   color:$red;
 }
 
 h1, h2 {
-  font-family: $bricolage;
+  font-family: $geist;
   color:$red;
 }
 

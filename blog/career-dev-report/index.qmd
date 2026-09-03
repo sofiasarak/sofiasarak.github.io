@@ -1,7 +1,7 @@
 ---
 title: "Exploring Communication Methods: EDS Job Market Report"
 description: "Data collected for my role as the Career Development Student Assistant."
-image: "images/blog_cover.jpg"
+image: "images/blog_cover.png"
 author: "Sofia Sarak"
 date: May 1, 2026
 format: html

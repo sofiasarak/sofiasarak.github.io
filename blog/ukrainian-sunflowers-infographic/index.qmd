@@ -1,7 +1,7 @@
 ---
 title: "Sunflowers of Ukraine: A Cultural and Economic Symbol"
 author: "Sofia Sarak"
-image: "images/blog_cover.jpg"
+image: "images/blog_cover.png"
 date: "March 8, 2026"
 description: "Creating an infographic to convey the prevalance of the sunflower industry in Ukraine."
 categories: [R, data viz]

@@ -16,7 +16,7 @@ website:
       - href: posts.qmd
         text: Posts
       #- href: resources.qmd
-      - href: docs/Sarak_Resume.pdf
+      - href: Sarak_Resume.pdf
         text: Resume
       - icon: github
         href: https://github.com/sofiasarak
