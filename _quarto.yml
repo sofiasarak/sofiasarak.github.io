@@ -9,11 +9,12 @@ website:
     logo: images/website_logo_transparent.png
     # logo-alt: "description of my logo"
     title: false #; use if logo and name is repetitive
-    left:
+    right:
       - href: index.qmd
         text: Home
       - about.qmd
-      - posts.qmd
+      - href: posts.qmd
+        text: Posts
       #- href: resources.qmd
       - href: docs/Sarak_Resume.pdf
         text: Resume

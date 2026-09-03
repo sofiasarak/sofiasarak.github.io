@@ -1,7 +1,7 @@
 ---
 title: "Exploring Communication Methods: EDS Job Market Report"
-description: "Data collected for my Career Development SA Position"
-image: "images/blog_cover.png"
+description: "Data collected for my role as the Career Development Student Assistant."
+image: "images/blog_cover.jpg"
 author: "Sofia Sarak"
 date: May 1, 2026
 format: html
@@ -16,10 +16,9 @@ filters:
 
 # Introduction
 
-Alongside being a full-time Master's student, I work part-time as the Student Assistant for the [Bren School's Career Development Team](https://bren.ucsb.edu/career-services). I primarily search for open environmental data science positions, which I repost to the Bren School's networking platform -- kind of like an internal LinkedIn. 
+Alongside being a full-time Master's student, I work part-time as the Student Assistant for the [Bren School's Career Development Team](https://bren.ucsb.edu/career-services). I primarily search for open environmental data science positions, which I repost to the Bren School's networking platform -- kind of like an internal LinkedIn.
 
-It has been really fun to see what sorts of roles are out there, and has even helped me in my own job search, too.
-I also find it incredibly rewarding to help out my classmates (hopefully making their job searches easier) and work with my supervisor, Miya. In addition to crafting job posts, I collect data on the roles I find, creating an environmental data science job dataset that's ready for analysis. 
+It has been really fun to see what sorts of roles are out there, and has even helped me in my own job search, too. I also find it incredibly rewarding to help out my classmates (hopefully making their job searches easier) and work with my supervisor, Miya. In addition to crafting job posts, I collect data on the roles I find, creating an environmental data science job dataset that's ready for analysis.
 
 I use this dataset to compile an environmental data science (EDS) job market report every quarter. I completed one for the fall, and am now on the winter rendition. In this blog post, I include two formats of my EDS job market review: an infographic and a written summary. I was inspired to make the infographic after taking a data visualization course in the winter quarter and having to [make my own](https://sofiasarak.github.io/blog/ukrainian-sunflowers-infographic/) for the final project. The written summary, on the other hand, is a more useful format for the career and curriculum teams at Bren.
 
@@ -27,7 +26,7 @@ Both forms of the report are included in this blog post -- I will let them speak
 
 P.S. I included code for all of the plots within this blog, but for **complete** code (data wrangling, as well), check out the [GitHub repository](https://github.com/sofiasarak/career-dev)!
 
-# Infographic 
+# Infographic
 
 <br>
 
@@ -46,7 +45,7 @@ I'm really proud of how this infographic came out. I used Affinity to compile th
 
 I am particularly happy with how the bubble chart and treemap came out, since this was my first time attempting those visualizations forms. I also like my color palette: the blue and green I matched to that of the [Bren logo](https://bren.ucsb.edu/about/origins-bren-logo), but I thought that the lavender was a nice accent color.
 
-Something I would have continued working on if (I had had the time) was the salary box plot: I wanted to think more critically about whether or not I should include the outliers, since they do go quite far off the chart (specifically in the top right corner). I also wonder if the map of the United States is the most effective way of conveying geographic distribution information, since that data is so skewed towards California and New York. 
+Something I would have continued working on if (I had had the time) was the salary box plot: I wanted to think more critically about whether or not I should include the outliers, since they do go quite far off the chart (specifically in the top right corner). I also wonder if the map of the United States is the most effective way of conveying geographic distribution information, since that data is so skewed towards California and New York.
 
 ## Complete Code
 
@@ -371,7 +370,6 @@ us_map %>%
 showtext_auto(enable = FALSE)
 ```
 
-
 # Written Report
 
 The following report contains statistics and visualizations summarizing the job openings being posted to online services such as [Indeed](https://www.indeed.com/jobs?q=environmental+data+science&l=&from=searchOnHP&vjk=b9ae5b9d8d4a16b4), [Conservation Job Board](https://www.conservationjobboard.com/), [CalCareers](https://calcareers.ca.gov/CalHRPublic/Search/JobSearchResults.aspx#kw=environmental%20data), and others. Keywords such "environmental data science", "environmental analyst", and "climate analyst" (just to name a few, though a wide range were used) were searched for, and roles pertaining to environmental data analysis, planning, or communication were pulled and re-posted on the [BrenConnect website](https://brenconnect.bren.ucsb.edu/s/group/0F9Kg0000004CHNKA2/meds-2026-jobinternship-opportunities).
@@ -674,8 +672,6 @@ There were some fluctuations in the proportion of job listings that represent ea
 
 knitr::include_graphics("images/season_bar.png")
 ```
-
-
 
 ::: {.green collapse="true" icon="false"}
 ## Federal Government Position: Wildland Fire Weather Research Fellow \@ USDA Forest Service
@@ -1049,4 +1045,4 @@ ggplot(aes(x = reorder(sector, percent), y = percent,
   )
 ```
 
-*The cover image for this blog post was created using Affinity, with images sourced from this [NCEAS article](https://www.nceas.ucsb.edu/news/meds-program-maiden-voyage) (background image -- the first MEDS cohort!) and the [Bren Wikipedia page](https://en.wikipedia.org/wiki/UC_Santa_Barbara_Bren_School_of_Environmental_Science_and_Management) for the logo.*
+*The cover image for this blog post was taken in Barcelona, Spain on a recent trip.*

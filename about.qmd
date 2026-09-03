@@ -47,8 +47,11 @@ format:
 
 I can't actually pinpoint the moment that drove me to care for the health of the environment and communities. Often environmental scientists have tales of childhoods spent outside — and although I did spend a lot of time outside — my desire to study and work in the environmental field didn’t come around until college. 
 
+<br>
 
 I started at Wesleyan University with a dream to be a journalist (after a childhood of English being my best subject), but that idea was squashed when I realized that I did not care for my introductory government class. In my attempt to explore all potential paths (bless Wesleyan’s open curriculum), I took a class on renewable energy, and that’s what ended up sticking. 
+
+<br>
 
 In undergrad I took courses in soils, geobiology, sedimentology, planetary evolution, studied abroad on the Galápagos Islands and in New Zealand, and did a capstone project on ant species in Puerto Rico (see the photo gallery below!). Truly the most enriching parts of my education were all of the afternoons I spent in the field, learning how the world works. 
 
@@ -62,6 +65,8 @@ In undergrad I took courses in soils, geobiology, sedimentology, planetary evolu
 #| fig-alt: "Me as a kid in Riga!"
 knitr::include_graphics("images/about/meoutsideasakid.png")
 ```
+<p style="color: #396845ff; font-size: 12px;">Me (rocking a pretty awesome tracksuit) outside in Riga, Latvia. </p>
+
 :::
 
 ::::
@@ -78,13 +83,14 @@ knitr::include_graphics("images/about/meoutsideasakid.png")
 #| fig-alt: "One of my MEDS capstone team members - also named Sofia - and I on a cohort hike on the Channel Islands!"
 knitr::include_graphics("images/about/sofiasci.png")
 ```
-
+<p style="color: #396845ff; font-size: 12px;">Me and one of my MEDS capstone team members - also named Sofia - on a cohort hike on the Channel Islands!</p>
 
 :::
 ::: {#second-column}
 
 At the same time, I was also completing an economics major — learning about statistical methods and the science of choice. It felt pragmatic, another way of making sense of the world. The major was also my first introduction to coding, as I got to learn Stata, a statistical software which, in the economics field, is used as often as R. 
 
+<br>
 
 After finishing my Bachelor’s degree, I — perhaps in an attempt to delay the job search — shipped out to California to pursue a Master of Environmental Data Science at UCSB. I hoped this intersection of environment and economics is where I could belong. Turns out, I love it! Though I still cherish getting my hands dirty and my feet wet, the satisfaction of your code finally running properly after hours of tinkering is hard to beat.
 

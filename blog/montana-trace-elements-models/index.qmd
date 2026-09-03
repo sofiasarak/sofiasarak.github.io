@@ -5,6 +5,7 @@ date: "December 9, 2025"
 description: "Using Gamma and segmented regression to find relationships and break-points."
 format: html
 categories: [R, statistics]
+draft: true
 ---
 
 The following blog post narrates a statistical analysis performed on water-quality, bed-sediment, and invertebrate tissue trace-element concentrations for tributaries in the Clark Fork Basin, Montana. The use of the Gamma and segmented statistical models aims to confirm or deny the presence of a break-point at which a potential relationship between invertebrate and water trace-element concentrations changes.

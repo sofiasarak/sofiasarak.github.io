@@ -1,5 +1,5 @@
 ---
-title: "A Break from Data Science"
+title: "Vegetation-Atmosphere Interactions"
 author: "Sofia Sarak"
 date: "March 31, 2026"
 description: "A reflection on a winter quarter course in the geography department."

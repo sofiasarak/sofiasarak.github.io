@@ -2,9 +2,12 @@
 
 // import google fonts
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Manrope:wght@200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:ital,wght@0,100..900;1,100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
 
 // fonts
 $bricolage: "Bricolage Grotesque", sans-serif;
+$sourcecode: "Source Code Pro", monospace;
+$geist: "Geist Mono", monospace;
 
 // colors
 $darkyellow: #fcc765;
@@ -19,11 +22,12 @@ $lighterblue: #d0e9f5;
 $lightererblue: #d7ebf5;
 $darkblue: #182A68;
 $red: #83111F;
+$white: #FFFFFF;
 
 $primary: $darkgreen;
 
 // define quarto variables
-$body-bg: $lighterblue;
+$body-bg: $white;
 $navbar-bg: $darkblue;
 $navbar-fg: $cream;
 $navbar-hl: $lightyellow;
@@ -37,6 +41,16 @@ $btn-primary-border-color: $darkgreen;
 $btn-primary-color: $darkgreen;
 $code-block-border-left: $darkgreen;
 $code-block-border-left-style: double;
+$main-font: "Source Code Pro", monospace;
+$font-family-sans-serif: $sourcecode; 
+$font-family-monospace: $sourcecode;
+$bs-body-font-family: $sourcecode;
+
+/*-- scss:rules --*/
+
+body {
+  font-family: $geist;
+}
 
 // L body text
 .body-text-l {
@@ -44,8 +58,6 @@ $code-block-border-left-style: double;
 	line-height: 1.9em !important;
 	margin-bottom: 1em !important;
 }
-
-/*-- scss:rules --*/
 
 .navbar-brand img {
   max-height: 80px;  // adjust as needed
