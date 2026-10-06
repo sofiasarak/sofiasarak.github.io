@@ -1,0 +1,35 @@
+---
+title: "teaching-myself-tableau"
+format: html
+draft: true
+---
+
+I left the Master of Environmental Data Science program at UCSB - having graduated in June 2026 - which technical experience in R, Python, SQL, and some ArcGIS (among many other other soft skills, like project and communication management). As I navigate the (currently quite brutal) EDS job market in NYC, I want to make sure that 1) my ability to play with data doesn't get too rusty, and 2) I continue developing abilities that are transferable across industries.
+
+Whereas the MEDS program focused heavily on reproducible workflows, recent informational interviews have suggested that being able to implement other data visualization platforms into my workflows. Some notable contenders include Power BI and Tableau, the latter of which is described as "a cloud-based, visual analytics platform". In this blog post, I will be walking through a recent project I built, leveraging [NYC Open Data](https://www.nyc.gov/opendata) to explore plant cover across the city.
+
+## Setup to follow along
+
+1. Download Tableau! I opted for the free version of [Tableau Desktop](https://www.tableau.com/products/desktop-free/download).
+
+2. Download [Tree Census 2015 data](https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/uvpi-gqnh/explore) as well as [NYC community districts geometries](https://data.cityofnewyork.us/City-Government/Community-Districts/5crt-au7u/about_data).
+
+## Step 1: Open data sources in Tableau and make first connection
+
+Navigating a point-and-click interface after a year full of command-line data analysis is definitely a transition, but I was able to open and connect the two data sources (trees and districts) via a "relationship" by dragging the two files into the "connection space" and selecting `CB New` and `Boro Cd` as the connecting variable (which corresponds to the community district IDs).
+
+Before doing so, I had to change the data type of `CB New` in the tree dataset from numeric to string.
+
+After the end of this step, my screen looks like this:
+
+[insert screenshot 1]
+
+## Step 2: Filter out dead trees 
+
+By clicking **Add** in the top right corner, I navigate to the `Condition` variable in the trees dataset and select "Good", "Fair" and "Excellent". This should keep all of the trees that are, well, in good condition, and avoid counting trees that do not provide adequate shade and greenery.
+
+## Step 3: Calculate the number of trees per square mile
+
+This gave me experience in *creating* columns using Tableau as well as provides a variable for analysis!
+
+I called my variable `trees_per_sq_mi` after selecting **Analysis** (in the top bar) **> Create Calculated Field**.
