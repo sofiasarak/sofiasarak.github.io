@@ -8,28 +8,90 @@ I left the Master of Environmental Data Science program at UCSB - having graduat
 
 Whereas the MEDS program focused heavily on reproducible workflows, recent informational interviews have suggested that being able to implement other data visualization platforms into my workflows. Some notable contenders include Power BI and Tableau, the latter of which is described as "a cloud-based, visual analytics platform". In this blog post, I will be walking through a recent project I built, leveraging [NYC Open Data](https://www.nyc.gov/opendata) to explore plant cover across the city.
 
-## Setup to follow along
+### Setup
 
 1. Download Tableau! I opted for the free version of [Tableau Desktop](https://www.tableau.com/products/desktop-free/download).
 
-2. Download [Tree Census 2015 data](https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/uvpi-gqnh/explore) as well as [NYC community districts geometries](https://data.cityofnewyork.us/City-Government/Community-Districts/5crt-au7u/about_data).
+2. Download the following datasets:
+- [Tree Census 2015 data](https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/uvpi-gqnh/explore) 
+- [NYC community districts geometries](https://data.cityofnewyork.us/City-Government/Community-Districts/5crt-au7u/about_data).
+-[NYC Heat Vulnerability Index Rankings](https://data.cityofnewyork.us/Health/Heat-Vulnerability-Index-Rankings/4mhf-duep/about_data)
+- [NYC Zip Code Tabulation Areas](https://data.cityofnewyork.us/City-Government/ZIP-Code-Tabulation-Areas/35j5-n34v/about_data) (as a .geojson file)
 
-## Step 1: Open data sources in Tableau and make first connection
+## Choropleth map: Trees per square mile in each community district
 
-Navigating a point-and-click interface after a year full of command-line data analysis is definitely a transition, but I was able to open and connect the two data sources (trees and districts) via a "relationship" by dragging the two files into the "connection space" and selecting `CB New` and `Boro Cd` as the connecting variable (which corresponds to the community district IDs).
+### Step 1: Open data sources in Tableau and make first connection
 
-Before doing so, I had to change the data type of `CB New` in the tree dataset from numeric to string.
+Navigating a point-and-click interface after a year full of command-line data analysis is definitely a transition, but I was able to open and connect the Tree Census and Community Districts data sources via a "relationship" by dragging the two files into the "connection space" and selecting `Community Board` and `Boro Cd` as the connecting variable (which corresponds to the community district IDs).
 
-After the end of this step, my screen looks like this:
+Before doing so, I had to change the data type of `Community Board` in the tree dataset from numeric to string.
 
-[insert screenshot 1]
+**Tip:** Viewing data is easiest in the "Sheet 1" tab, whereas building the relationship and applying the subsequent filter (next step) was more intuitive for me in the "Data Source" tab. These tabs are in the bottom left corner of my screen.
 
-## Step 2: Filter out dead trees 
+### Step 2: Filter out dead trees 
 
-By clicking **Add** in the top right corner, I navigate to the `Condition` variable in the trees dataset and select "Good", "Fair" and "Excellent". This should keep all of the trees that are, well, in good condition, and avoid counting trees that do not provide adequate shade and greenery.
+By clicking **Add** in the top right corner ("Data Source" tab), I navigate to the `Status` variable in the trees dataset and select "Alive". This should keep all of the trees that are in good condition, and avoid counting trees that do not provide adequate shade and greenery.
 
-## Step 3: Calculate the number of trees per square mile
+My dataset and screen now looks like this:
+
+[Insert screenshot 1]
+
+### Step 3: Calculate the number of trees per square mile
 
 This gave me experience in *creating* columns using Tableau as well as provides a variable for analysis!
 
-I called my variable `trees_per_sq_mi` after selecting **Analysis** (in the top bar) **> Create Calculated Field**.
+After selecting **Analysis** (in the top bar) **> Create Calculated Field**, I title my variable `trees_per_sq_mi` and define it as follows:
+
+`COUNTD([Tree Id]) / (SUM([Shape Area]) / 27878400)`
+
+This is done because `Shape Area` is in square feet; 27,878,400 sq ft = 1 sq mi. If this results in an error, changing `Shape Area` to a numeric variable from a string variable may be necessary.
+
+**Sanity check:** Drag `Boro Cd` into "Rows" and `trees_per_sq_mi` into "Text". This should result in 59 rows (visible on the bottom left of the screen), no nulls, and values in the low thousands. The sum of `trees_per_sq_mi` is 156,134.
+
+### Step 4: Build choropleth map
+
+*Make sure to remove all other variable from the sheet before starting!*
+
+**a.** Double click `Geometry` variable in the leftmost pane - this should populate Sheet 1 with a NYC community district map.
+
+**b.** Drag `trees_per_sq_mile` onto "Color" - nothing really changed for me.
+
+**c.** Drag `Boro Cd` onto "Detail". This should shade the different district geometries by number of trees per square mile. This works because the "Detail" function tells Tableau to group by that variable! 
+
+[insert screenshot 2]
+
+Hovering over each section will populate a box that specifies district code and trees per square mile.
+
+## Bar plot: HVI and average number of trees per neighborhood
+
+### Step 5: Open HVI and join to geometry and trees
+
+Following the same workflow as in Step 1, I opened the HVI and Zip Code Tabulation Areas (ZCTA) data and joined them using a "relationship" on the `
+
+Tree census ZIP codes were matched to Census ZCTAs, which approximate ZIP code areas.
+
+what I did
+
+1. relationship between trees and hvi
+
+2. join between ztca and trees + hvi
+
+3. mapped trees per zip code 
+
+4. bar chart by hvi --> tells us that higher hvi = higher trees? but obviously not super accurate
+
+5. scatter by borough by hvi to show distribution (what is the distribution of hvi across boroughs and what is the number of trees associated with each borough zip code)?
+
+* and note what I dragged to column, etc
+
+other notes: titling is super easy
+dragging is intuitive
+customizations are pretty easy
+clicking between viz is definitely an easier interface than scrolling in a file or clicking between different files
+
+
+**AI Use Disclaimer:** This project was developed from Claude's response to the prompt
+
+*I want to learn Tableau for environmental data science/visualization, to get a job in local gov or nonprofits. I am interested in urban spaces, community health, public green space. Come up with a tableau project for me using nyc open data*
+
+As a Tableau newbie, it was definitely helpful to have a set project guide to work from as I build my skills!
